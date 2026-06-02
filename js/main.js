@@ -23,24 +23,24 @@ import {
 
 // Инициализируем всё после загрузки DOM
 document.addEventListener("DOMContentLoaded", () => {
-  // initCursor();
-  // initLoader();
-  // initClock();
-  // initScrollProgress();
-  // initHeaderScroll();
-  // initNavHighlight();
-  // initSmoothScroll();
-  // initScrollReveal();
-  // initCounters();
-  // initParallax();
-  // initCardTilt();
-  // initGlitch();
-  // initTyping();
-  // initLogoRipple();
-  // initBloodSplatter();
-  // initTitleSplit();
-  // initAlerts();
-  // initPlayer();
-  // initModal();
-  // initDiscordMembers();
+  initCursor();
+  initLoader();
+  initClock();
+  initScrollProgress();
+  initHeaderScroll();
+  initNavHighlight();
+  initSmoothScroll();
+  initScrollReveal();
+  initCounters();
+  initParallax();
+  initCardTilt();
+  initGlitch();
+  initTyping();
+  initLogoRipple();
+  initBloodSplatter();
+  initTitleSplit();
+  initAlerts();
+  initPlayer();
+  initModal();
+  initDiscordMembers();
 });
