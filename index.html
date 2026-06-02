@@ -401,7 +401,7 @@ Control over key districts
 </div>
 </section>
   <!-- СОСТАВ -->
-  <section class="composition"
+  <section class="composition" id="members"
     <div class="section-title">СОСТАВ</div>
     <div class="composition-grid">
 
@@ -494,7 +494,6 @@ Control over key districts
     </defs>
   </svg>
 
-  <script src="script.js"></script>
   <div class="alert-container" id="alertContainer"></div>
 <!-- APPLICATION MODAL -->
 <div class="modal-overlay" id="applyModal">
@@ -569,69 +568,6 @@ Control over key districts
     </form>
   </div>
 </div>
-<script>
-async function loadDiscordMembers() {
-
-    try {
-
-        const response = await fetch("api/discord.php");
-        const members = await response.json();
-
-        const list = document.getElementById("discordMembers");
-        const count = document.getElementById("memberCount");
-
-        count.textContent = members.length;
-
-        list.innerHTML = members.map(member => {
-
-            let statusColor = "#777";
-
-            if(member.status === "online")
-                statusColor = "#43b581";
-
-            if(member.status === "idle")
-                statusColor = "#faa61a";
-
-            if(member.status === "dnd")
-                statusColor = "#f04747";
-
-            return `
-                <div class="member-item">
-
-                    <span
-                        class="member-dot"
-                        style="background:${statusColor}">
-                    </span>
-
-                    <img
-                        src="${member.avatar}"
-                        style="
-                            width:28px;
-                            height:28px;
-                            border-radius:50%;
-                            margin-right:10px;
-                        ">
-
-                    <span class="member-name">
-                        ${member.name}
-                    </span>
-
-                </div>
-            `;
-
-        }).join("");
-
-    } catch(err) {
-
-        console.error(err);
-
-    }
-
-}
-
-loadDiscordMembers();
-
-setInterval(loadDiscordMembers, 10000);
-</script>
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
