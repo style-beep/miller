@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MILLER FAMILY | ALTA RP</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet"
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <div class="scroll-progress"></div>
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-outer" id="cursorOuter"></div>
+  <div class="cursor-inner" id="cursorInner"></div>
+
+  <!-- BACKGROUND -->
+  <div class="bg-overlay"></div>
+<div class="particles">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+  <div class="cursor-glow"></div>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-text">MILLER FAMILY</div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">MILLER FAMILY</div>
+    <nav>
+      <a href="#home" class="active">ГЛАВНАЯ</a>
+      <a href="#about">О НАС</a>
+      <a href="#structure">СТРУКТУРА</a>
+      <a href="#members">СОСТАВ</a>
+    </nav>
+  </header>
+
+  <!-- CLOCK -->
+  <div class="live-clock">00:00:00</div>
+
+<!-- MUSIC PLAYER -->
+<div class="music-player" id="musicPlayer">
+  <div class="player-header">
+    <span class="music-label">NOW PLAYING</span>
+    <button id="minimizeBtn" class="minimize-btn">−</button>
+  </div>
+
+  <div class="player-content">
+    <div class="music-art">
+      <img src="images/covers/cover1.png" alt="Cover" id="albumArt">
+    </div>
+    
+    <div class="music-info">
+      <h3 id="songTitle">GTA NIGHT DRIVE</h3>
+      <p id="songArtist">ALTA RP Theme</p>
+    </div>
+
+    <div class="music-progress">
+      <input type="range" id="progressBar" value="0" max="100">
+    </div>
+
+    <div class="time-box">
+  <span id="currentTime">0:00</span>
+  <span id="duration">0:00</span>
+</div>
+
+    <div class="music-controls">
+      <button id="prevBtn">⏮</button>
+      <button id="playBtn">▶</button>
+      <button id="nextBtn">⏭</button>
+    </div>
+
+    <div class="volume-box">
+      <span>🔊</span>
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.65">
+    </div>
+    <div class="playlist">
+  <div class="playlist-title">PLAYLIST</div>
+  <ul id="playlist"></ul>
+</div>
+  </div>
+</div>
+
+<audio id="audioPlayer"></audio>
+
+  <!-- HERO -->
+<section class="hero" id="home">
+<div class="hero-left">
+  <p class="hero-subtitle">ALTA GTA 5 ROLEPLAY</p>
+  
+  <h1 class="hero-title">
+    RULE THE<br>
+    <span>CITY</span>
+  </h1>
+  
+  <p class="hero-text">
+    Элитная семья сервера ALTA RP.<br>Власть. Деньги. Уважение.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="#" class="join-btn">ВСТУПИТЬ В СЕМЬЮ</a>
+    <a href="https://discord.gg/SaCXzgckS" target="_blank" class="discord-btn">DISCORD</a>
+  </div>
+</div>
+
+<div class="stats-grid">
+
+  <div class="stat-card premium-stat">
+    <div class="stat-header">
+      <div class="stat-icon">
+        <i class="fa-solid fa-users"></i>
+      </div>
+<div class="stat-title">FAMILY NETWORK</div>
+</div>
+    <div class="stat-number" data-target="70">0</div>
+
+<div class="stat-description">
+Trusted members of the organization
+</div>
+
+    <div class="stat-trend positive">
+      ▲ +8 THIS MONTH
+    </div>
+  </div>
+
+  <div class="stat-card premium-stat">
+    <div class="stat-header">
+      <div class="stat-icon">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+<div class="stat-title">ESTABLISHED</div>
+    </div>
+
+<div class="stat-number" data-target="2023">0</div>
+
+<div class="stat-description">
+Building a legacy since day one
+</div>
+
+    <div class="stat-trend">
+      LEGACY CONTINUES
+    </div>
+  </div>
+
+  <div class="stat-card premium-stat">
+    <div class="stat-header">
+      <div class="stat-icon">
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+<div class="stat-title">ENGAGEMENT</div>
+    </div>
+
+<div class="stat-number percent" data-target="95">0</div>
+
+<div class="stat-description">
+Weekly operational activity
+</div>
+
+    <div class="stat-trend positive">
+      ▲ +5%
+    </div>
+  </div>
+
+  <div class="stat-card premium-stat">
+    <div class="stat-header">
+      <div class="stat-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+<div class="stat-title">INFLUENCE</div>
+    </div>
+
+<div class="stat-number percent" data-target="87">0</div>
+
+<div class="stat-description">
+Control over key districts
+</div>
+
+    <div class="stat-trend positive">
+      ▲ +12%
+    </div>
+  </div>
+</div>
+  </section>
+  
+<!-- EMBLEM -->
+<section class="family-emblem">
+
+    <div class="emblem-particles"></div>
+
+    <div class="background-word">
+        MILLER
+    </div>
+
+    <!-- LEFT SIDE -->
+     <div class="family-side"></div>
+<div class="family-info-block">
+
+    <div class="panel-title">REQUIREMENTS</div>
+
+    <div class="info-row">
+        <span class="info-icon">
+            <i class="fa-brands fa-discord"></i>
+        </span>
+        <span>Discord Required</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-icon">
+            <i class="fa-solid fa-microphone"></i>
+        </span>
+        <span>Microphone</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-icon">
+            <i class="fa-solid fa-gamepad"></i>
+        </span>
+        <span>RP Experience</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-icon">
+            <i class="fa-solid fa-bolt"></i>
+        </span>
+        <span>Activity</span>
+    </div>
+
+</div>
+
+    <!-- LOGO -->
+    <div class="emblem-container">
+      <div class="orbit orbit-1"></div>
+<div class="orbit orbit-2"></div>
+<div class="orbit orbit-3"></div>
+        <img src="images/miller-emblem.png"
+        alt="Miller Family"
+        class="emblem-image">
+    </div>
+
+    <!-- RIGHT SIDE -->
+     <div class="family-side"></div>
+<div class="family-info-block">
+
+    <div class="panel-title">BENEFITS</div>
+
+    <div class="info-row">
+        <span class="info-icon benefit">
+            <i class="fa-solid fa-shield-halved"></i>
+        </span>
+        <span>Family Support</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-icon benefit">
+            <i class="fa-solid fa-calendar-days"></i>
+        </span>
+        <span>Daily Events</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-icon benefit">
+            <i class="fa-solid fa-trophy"></i>
+        </span>
+        <span>Reputation</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-icon benefit">
+            <i class="fa-solid fa-sack-dollar"></i>
+        </span>
+        <span>Opportunities</span>
+    </div>
+
+</div>
+
+</section>
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="background-title">
+    MILLER
+</div>
+    <div class="section-title">О НАС</div>
+    <div class="glass-card">
+      <p>Miller Family — это не просто организация. Это семья нового поколения, которая диктует правила на улицах Los Santos. Строгая иерархия, железная дисциплина и абсолютный контроль.</p>
+    </div>
+  </section>
+
+  <!-- STRUCTURE -->
+  <div class="structure" id="structure">
+    <div class="section-title">СТРУКТУРА</div>
+    <div class="structure-grid">
+      <!-- Eddie -->
+      <div class="rank-card">
+        <div class="rank-header">
+          <div class="rank-icon boss-icon">👑</div>
+          <div class="rank-text">
+            <h2>EDDIE MILLER</h2>
+            <span>FAMILY BOSS</span>
+          </div>
+        </div>
+        <img src="images/eddie.jpg" class="member-image" alt="Eddie Miller">
+        <div class="structure-info">
+          <div class="structure-box"><span>CAPITAL</span><h3>$520M</h3></div>
+          <div class="structure-box"><span>STATUS</span><h3>ELITE</h3></div>
+          <div class="structure-box"><span>FAMILY</span><h3>70</h3></div>
+          <div class="structure-box"><span>POWER</span><h3>98%</h3></div>
+        </div>
+        <div class="rank-description">Основатель и глава семьи. Стратегия, финансы и долгосрочное развитие.</div>
+        <div class="card-status">CREATOR ACCESS</div>
+      </div>
+
+      <!-- Adam -->
+      <div class="rank-card">
+        <div class="rank-header">
+          <div class="rank-icon deputy-icon">🛡</div>
+          <div class="rank-text">
+            <h2>ADAM MILLER</h2>
+            <span>DIRECTOR</span>
+          </div>
+        </div>
+        <img src="images/adam.jpg" class="member-image" alt="Adam Miller">
+        <div class="structure-info">
+          <div class="structure-box"><span>CONTROL</span><h3>94%</h3></div>
+          <div class="structure-box"><span>BUSINESS</span><h3>12</h3></div>
+          <div class="structure-box"><span>AUTHORITY</span><h3>MAX</h3></div>
+          <div class="structure-box"><span>SECURITY</span><h3>HIGH</h3></div>
+        </div>
+        <div class="rank-description">Управление внутренними процессами и персоналом.</div>
+        <div class="card-status">DIRECTOR ACCESS</div>
+      </div>
+
+      <!-- Roy -->
+      <div class="rank-card">
+        <div class="rank-header">
+          <div class="rank-icon commander-icon">⚔</div>
+          <div class="rank-text">
+            <h2>ROY MILLER</h2>
+            <span>DEPUTY DIRECTOR</span>
+          </div>
+        </div>
+        <img src="images/roy.jpg" class="member-image" alt="Roy Miller">
+        <div class="structure-info">
+          <div class="structure-box"><span>WARS</span><h3>84%</h3></div>
+          <div class="structure-box"><span>COMBAT</span><h3>96%</h3></div>
+          <div class="structure-box"><span>CONTROL</span><h3>TOP</h3></div>
+          <div class="structure-box"><span>GARAGE</span><h3>18</h3></div>
+        </div>
+        <div class="rank-description">Руководитель силовых операций и территориального контроля.</div>
+        <div class="card-status">TACTICAL ACCESS</div>
+      </div>
+    </div>
+
+<!-- SOLDIERS CARD -->
+<div class="soldiers-wrapper">
+<div class="rank-card soldiers-card">
+<div class="soldiers-top">
+    <div class="soldiers-left">
+
+        <div class="soldiers-badge">
+            ⚔
+        </div>
+
+        <div class="soldiers-info">
+            <h2>SOLDIER</h2>
+            <p>Основная сила семьи</p>
+        </div>
+    </div>
+
+<div class="soldiers-count">
+    <span id="memberCount">0</span>
+    MEMBERS
+</div>
+</div>
+
+    <div class="soldiers-divider"></div>
+   <div class="members-list" id="discordMembers">
+    <div class="member-item">
+        <span class="member-name">Loading Discord...</span>
+    </div>
+</div>
+    <div class="soldiers-footer">
+        ACTIVE FORCES • MILLER FAMILY
+    </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+  <!-- СОСТАВ -->
+  <section class="composition"
+    <div class="section-title">СОСТАВ</div>
+    <div class="composition-grid">
+
+      <!-- EDDIE -->
+      <div class="member-card">
+        <img src="images/miller1.jpeg" alt="Eddie Miller" class="member-photo">
+        <h2>EDDIE MILLER</h2>
+        <p class="role">FAMILY BOSS • Основатель</p>
+        <p class="description">
+          Основатель Miller Family. Отвечает за развитие, бизнес, финансы и стратегию организации. 
+          Имеет высший авторитет и полный контроль.
+        </p>
+        <div class="member-stats">
+          <div>💰 <strong>520M+</strong></div>
+          <div>👥 <strong>70+</strong></div>
+          <div>⚡ <strong>98%</strong></div>
+        </div>
+      </div>
+
+      <!-- ADAM -->
+      <div class="member-card">
+        <img src="images/miller2.jpeg" alt="Adam Miller" class="member-photo">
+        <h2>ADAM MILLER</h2>
+        <p class="role">DIRECTOR • Директор</p>
+        <p class="description">
+          Контролирует внутреннюю структуру, персонал и организационные процессы. 
+          Обеспечивает стабильность и дисциплину семьи.
+        </p>
+        <div class="member-stats">
+          <div>📊 <strong>94%</strong></div>
+          <div>💼 <strong>12</strong></div>
+          <div>🛡️ <strong>MAX</strong></div>
+        </div>
+      </div>
+
+      <!-- ROY -->
+      <div class="member-card">
+        <img src="images/miller3.jpeg" alt="Roy Miller" class="member-photo">
+        <h2>ROY MILLER</h2>
+        <p class="role">DEPUTY DIRECTOR • Зам. Директора</p>
+        <p class="description">
+          Руководит боевыми операциями, войнами и контролем территорий. 
+          Отвечает за безопасность и силовые действия семьи.
+        </p>
+        <div class="member-stats">
+          <div>⚔️ <strong>84%</strong></div>
+          <div>🔫 <strong>96%</strong></div>
+          <div>🚗 <strong>18</strong></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <section class="join" id="join">
+    <div class="join-box">
+      <h2>ХОЧЕШЬ В MILLER FAMILY?</h2>
+      <p>Стань частью элиты ALTA RP</p>
+      <button class="main-btn">ПОДАТЬ ЗАЯВКУ</button>
+    </div>
+  </section>
+
+</div>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h2>MILLER FAMILY</h2>
+        <span>GTA 5 RP | ALTA</span>
+      </div>
+      <div class="footer-center">
+        <h3>POWER • LOYALTY • RESPECT</h3>
+      </div>
+      <div class="footer-socials">
+        <a href="https://discord.gg/SaCXzgckS" target="_blank">DISCORD</a>
+        <a href="https://youtube.com/@eddiealta?si=-wB9Klp0bRynaCdCц" target="_blank">YOUTUBE</a>
+        <a href="https://www.twitch.tv/eddiemi11er" target="_blank">TWITCH</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SVG defs for territory ring gradient -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#8a0000"/>
+        <stop offset="100%" stop-color="#ff4040"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <script src="script.js"></script>
+  <div class="alert-container" id="alertContainer"></div>
+<!-- APPLICATION MODAL -->
+<div class="modal-overlay" id="applyModal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">✕</button>
+
+    <h2>ПОДАТЬ ЗАЯВКУ В MILLER FAMILY</h2>
+    <p class="modal-subtitle">Элитная семья ALTA RP</p>
+
+    <form id="applyForm">
+      <div class="form-group">
+        <label>Никнейм в игре</label>
+        <input
+          type="text"
+          id="nickname"
+          name="nickname"
+          placeholder="Например: Eddie_Miller"
+          required
+        >
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Возраст</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            placeholder="18+"
+            min="16"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Discord</label>
+          <input
+            type="text"
+            id="discord"
+            name="discord"
+            placeholder="username#0000"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Опыт в RP (сколько месяцев/лет)</label>
+        <input
+          type="text"
+          id="experience"
+          name="experience"
+          placeholder="1.5 года на ALTA RP"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label>Почему хочешь вступить в Miller Family?</label>
+        <textarea
+          id="reason"
+          name="reason"
+          rows="4"
+          placeholder="Напиши честно..."
+          required
+        ></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <span>ОТПРАВИТЬ ЗАЯВКУ</span>
+      </button>
+    </form>
+  </div>
+</div>
+<script>
+async function loadDiscordMembers() {
+
+    try {
+
+        const response = await fetch("api/discord.php");
+        const members = await response.json();
+
+        const list = document.getElementById("discordMembers");
+        const count = document.getElementById("memberCount");
+
+        count.textContent = members.length;
+
+        list.innerHTML = members.map(member => {
+
+            let statusColor = "#777";
+
+            if(member.status === "online")
+                statusColor = "#43b581";
+
+            if(member.status === "idle")
+                statusColor = "#faa61a";
+
+            if(member.status === "dnd")
+                statusColor = "#f04747";
+
+            return `
+                <div class="member-item">
+
+                    <span
+                        class="member-dot"
+                        style="background:${statusColor}">
+                    </span>
+
+                    <img
+                        src="${member.avatar}"
+                        style="
+                            width:28px;
+                            height:28px;
+                            border-radius:50%;
+                            margin-right:10px;
+                        ">
+
+                    <span class="member-name">
+                        ${member.name}
+                    </span>
+
+                </div>
+            `;
+
+        }).join("");
+
+    } catch(err) {
+
+        console.error(err);
+
+    }
+
+}
+
+loadDiscordMembers();
+
+setInterval(loadDiscordMembers, 10000);
+</script>
+</body>
+</html>
