@@ -5,11 +5,15 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "concurrently \"node --watch server.js\" \"browser-sync start --proxy localhost:3001 --files '**/*.html, **/*.css, js/**/*.js, roles.config.js' --no-open --no-ui --port 3000\""
   },
   "dependencies": {
     "discord.js": "^14.26.4",
     "dotenv": "^16.0.0",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "concurrently": "^10.0.3"
   }
 }

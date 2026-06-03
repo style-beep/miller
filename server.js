@@ -42,6 +42,10 @@ function updateCache(guild) {
     name: m.user.username,
     avatar: m.user.displayAvatarURL(),
     status: m.presence?.status || "offline",
+    roles: m.roles.cache
+      .filter(r => r.name !== "@everyone")
+      .sort((a, b) => b.position - a.position)
+      .map(r => ({ name: r.name, color: r.hexColor })),
   }));
 }
 
