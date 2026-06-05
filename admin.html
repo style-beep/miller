@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADMIN | MILLER FAMILY</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --red: #ff2a2a; --dark: #050505; }
+    body { font-family: 'Montserrat', sans-serif; background: #050505; color: #fff; min-height: 100vh; }
+
+    /* LOGIN */
+    #loginScreen {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at center, rgba(80,0,0,0.15), #050505);
+    }
+    .login-box {
+      width: 380px; padding: 40px;
+      background: rgba(0,0,0,0.8); border: 1px solid rgba(255,42,42,0.25);
+      border-radius: 16px; backdrop-filter: blur(12px);
+    }
+    .login-logo { text-align: center; margin-bottom: 28px; }
+    .login-logo-text { font-size: 18px; font-weight: 900; letter-spacing: 4px; color: var(--red); }
+    .login-logo-sub  { font-size: 9px; letter-spacing: 4px; color: rgba(255,255,255,0.2); margin-top: 4px; }
+    .login-label { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .login-input {
+      width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+      color: #fff; font-family: 'Montserrat', sans-serif; font-size: 14px;
+      outline: none; margin-bottom: 16px; transition: border-color 0.2s;
+    }
+    .login-input:focus { border-color: rgba(255,42,42,0.4); }
+    .login-btn {
+      width: 100%; padding: 14px; background: linear-gradient(90deg, #cc1111, #8a0000);
+      border: none; border-radius: 8px; color: #fff;
+      font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800;
+      letter-spacing: 3px; cursor: pointer; transition: opacity 0.2s;
+    }
+    .login-btn:hover { opacity: 0.85; }
+    .login-error { color: #f44336; font-size: 12px; text-align: center; margin-top: 10px; min-height: 18px; }
+
+    /* ADMIN PANEL */
+    #adminPanel { display: none; }
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; background: rgba(0,0,0,0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .admin-logo { font-size: 14px; font-weight: 900; letter-spacing: 3px; color: var(--red); }
+    .admin-logout { background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 11px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; transition: all 0.2s; }
+    .admin-logout:hover { border-color: var(--red); color: var(--red); }
+
+    .admin-body { padding: 32px; max-width: 1100px; margin: 0 auto; }
+
+    /* Stats */
+    .admin-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px; }
+    .as-card { padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; text-align: center; }
+    .as-val { font-size: 32px; font-weight: 900; color: #fff; display: block; }
+    .as-lbl { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+
+    /* Table */
+    .admin-section-title { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 14px; }
+    .apps-table { width: 100%; border-collapse: collapse; }
+    .apps-table th {
+      font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,0.25);
+      text-transform: uppercase; padding: 10px 14px; text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .apps-table td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; color: rgba(255,255,255,0.6); vertical-align: middle; }
+    .apps-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    }
+    .status-pending  { background: rgba(255,180,0,0.15); color: #f0c040; border: 1px solid rgba(255,180,0,0.3); }
+    .status-approved { background: rgba(76,175,80,0.12); color: #4caf50; border: 1px solid rgba(76,175,80,0.3); }
+    .status-rejected { background: rgba(244,67,54,0.12); color: #f44336; border: 1px solid rgba(244,67,54,0.3); }
+
+    .action-btn {
+      padding: 6px 12px; border-radius: 5px; font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer; border: 1px solid; margin-right: 4px;
+      font-family: 'Montserrat', sans-serif; transition: all 0.2s;
+    }
+    .btn-approve { background: rgba(76,175,80,0.1); border-color: rgba(76,175,80,0.3); color: #4caf50; }
+    .btn-approve:hover { background: rgba(76,175,80,0.25); }
+    .btn-reject  { background: rgba(244,67,54,0.1); border-color: rgba(244,67,54,0.3); color: #f44336; }
+    .btn-reject:hover { background: rgba(244,67,54,0.25); }
+
+    .no-apps { text-align: center; padding: 40px; color: rgba(255,255,255,0.2); font-size: 13px; }
+
+    /* Filter */
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 16px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.4); font-family: 'Montserrat', sans-serif; transition: all 0.2s; }
+    .filter-btn.active { background: rgba(255,42,42,0.15); border-color: rgba(255,42,42,0.4); color: var(--red); }
+
+    /* Detail modal */
+    .detail-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .detail-modal.active { opacity: 1; pointer-events: all; }
+    .detail-box { width: 500px; max-width: 90vw; background: #0a0000; border: 1px solid rgba(255,42,42,0.25); border-radius: 14px; padding: 28px; }
+    .detail-field { margin-bottom: 14px; }
+    .detail-field-label { font-size: 9px; letter-spacing: 3px; color: rgba(255,42,42,0.6); text-transform: uppercase; margin-bottom: 4px; }
+    .detail-field-val { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+    .detail-comment { width: 100%; padding: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px; resize: vertical; min-height: 60px; outline: none; margin: 10px 0; }
+    .detail-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .detail-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-text">MILLER FAMILY</div>
+      <div class="login-logo-sub">Admin Panel · Restricted Access</div>
+    </div>
+    <label class="login-label">Секретный ключ</label>
+    <input type="password" class="login-input" id="secretInput" placeholder="Введи ADMIN_SECRET" autocomplete="off">
+    <button class="login-btn" id="loginBtn">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- Admin panel -->
+<div id="adminPanel">
+  <div class="admin-header">
+    <div class="admin-logo">MILLER FAMILY · ADMIN</div>
+    <button class="admin-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button>
+  </div>
+  <div class="admin-body">
+    <div class="admin-stats" id="adminStats"></div>
+    <div class="admin-section-title">ЗАЯВКИ НА ВСТУПЛЕНИЕ</div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">ВСЕ</button>
+      <button class="filter-btn" data-filter="pending">ОЖИДАЮТ</button>
+      <button class="filter-btn" data-filter="approved">ОДОБРЕНЫ</button>
+      <button class="filter-btn" data-filter="rejected">ОТКЛОНЕНЫ</button>
+    </div>
+    <table class="apps-table">
+      <thead>
+        <tr>
+          <th>Никнейм</th><th>Discord</th><th>Возраст</th><th>Опыт</th><th>Дата</th><th>Статус</th><th>Действия</th>
+        </tr>
+      </thead>
+      <tbody id="appsBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="detail-modal" id="detailModal">
+  <div class="detail-box" style="position:relative" id="detailBox">
+    <button class="detail-close" id="detailClose">✕</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+let SECRET = "";
+let allApps = [];
+let currentFilter = "all";
+
+document.getElementById("loginBtn").addEventListener("click", tryLogin);
+document.getElementById("secretInput").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+
+async function tryLogin() {
+  const s = document.getElementById("secretInput").value.trim();
+  if (!s) return;
+  // Проверяем через API
+  const res = await fetch("/api/application-status?discord=__test__", {
+    headers: { "x-admin-secret": s }
+  });
+  // Если не 403 — секрет верный (сервер вернёт 200 или 404, но не 403)
+  if (res.status !== 403) {
+    SECRET = s;
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+    loadApps();
+  } else {
+    document.getElementById("loginError").textContent = "Неверный ключ доступа";
+    setTimeout(() => document.getElementById("loginError").textContent = "", 2500);
+  }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  SECRET = "";
+  document.getElementById("adminPanel").style.display = "none";
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("secretInput").value = "";
+});
+
+document.getElementById("filterBar").addEventListener("click", e => {
+  const btn = e.target.closest(".filter-btn");
+  if (!btn) return;
+  currentFilter = btn.dataset.filter;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTable();
+});
+
+document.getElementById("detailClose").addEventListener("click", () => {
+  document.getElementById("detailModal").classList.remove("active");
+});
+document.getElementById("detailModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("detailModal"))
+    document.getElementById("detailModal").classList.remove("active");
+});
+
+async function loadApps() {
+  // Загружаем все заявки через отдельный endpoint (нужно добавить в server.js)
+  try {
+    const res = await fetch("/api/applications", { headers: { "x-admin-secret": SECRET } });
+    if (res.ok) { allApps = await res.json(); }
+  } catch { allApps = []; }
+  renderStats();
+  renderTable();
+}
+
+function renderStats() {
+  const total    = allApps.length;
+  const pending  = allApps.filter(a => a.status === "pending").length;
+  const approved = allApps.filter(a => a.status === "approved").length;
+  const rejected = allApps.filter(a => a.status === "rejected").length;
+  document.getElementById("adminStats").innerHTML = [
+    { val: total,    lbl: "Всего заявок",  color: "#fff" },
+    { val: pending,  lbl: "Ожидают",       color: "#f0c040" },
+    { val: approved, lbl: "Одобрено",      color: "#4caf50" },
+    { val: rejected, lbl: "Отклонено",     color: "#f44336" },
+  ].map(s => `<div class="as-card"><span class="as-val" style="color:${s.color}">${s.val}</span><span class="as-lbl">${s.lbl}</span></div>`).join("");
+}
+
+function renderTable() {
+  const filtered = currentFilter === "all" ? allApps : allApps.filter(a => a.status === currentFilter);
+  const body = document.getElementById("appsBody");
+  if (!filtered.length) {
+    body.innerHTML = `<tr><td colspan="7" class="no-apps">Заявок нет</td></tr>`;
+    return;
+  }
+  const labels = { pending: "ОЖИДАЕТ", approved: "ОДОБРЕНО", rejected: "ОТКЛОНЕНО" };
+  body.innerHTML = filtered.map(a => `
+    <tr>
+      <td><b style="color:#fff">${a.nickname}</b></td>
+      <td>${a.discord}</td>
+      <td>${a.age}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.experience}</td>
+      <td>${new Date(a.createdAt).toLocaleDateString("ru-RU")}</td>
+      <td><span class="status-badge status-${a.status}">${labels[a.status]||a.status}</span></td>
+      <td>
+        <button class="action-btn btn-approve" onclick="setStatus('${a.id}','approved')">✓</button>
+        <button class="action-btn btn-reject"  onclick="setStatus('${a.id}','rejected')">✗</button>
+        <button class="action-btn" style="border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4)" onclick="showDetail('${a.id}')">···</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+async function setStatus(id, status) {
+  await fetch(`/api/application-status/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", "x-admin-secret": SECRET },
+    body: JSON.stringify({ status }),
+  });
+  const app = allApps.find(a => a.id === id);
+  if (app) app.status = status;
+  renderStats();
+  renderTable();
+}
+
+function showDetail(id) {
+  const a = allApps.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById("detailContent").innerHTML = `
+    <div style="font-size:16px;font-weight:900;letter-spacing:2px;margin-bottom:20px;color:#fff">${a.nickname}</div>
+    ${[
+      ["Discord", a.discord], ["Возраст", a.age],
+      ["RP Опыт", a.experience], ["Дата подачи", new Date(a.createdAt).toLocaleString("ru-RU")],
+      ["Причина", a.reason],
+    ].map(([l,v]) => `<div class="detail-field"><div class="detail-field-label">${l}</div><div class="detail-field-val">${v}</div></div>`).join("")}
+    <div class="detail-field">
+      <div class="detail-field-label">Комментарий администратора</div>
+      <textarea class="detail-comment" id="detailComment" placeholder="Оставь комментарий...">${a.comment||""}</textarea>
+    </div>
+    <div class="detail-actions">
+      <button class="action-btn btn-approve" style="flex:1;padding:10px" onclick="saveComment('${a.id}','approved')">✓ ОДОБРИТЬ</button>
+      <button class="action-btn btn-reject"  style="flex:1;padding:10px" onclick="saveComment('${a.id}','rejected')">✗ ОТКЛОНИТЬ</button>
+    </div>
+  `;
+  document.getElementById("detailModal").classList.add("active");
+}
+
+async function saveComment(id, status) {
+  const comment = document.getElementById("detailComment").value;
+  await fetch(`/api/application-status/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", "x-admin-secret": SECRET },
+    body: JSON.stringify({ status, comment }),
+  });
+  const app = allApps.find(a => a.id === id);
+  if (app) { app.status = status; app.comment = comment; }
+  document.getElementById("detailModal").classList.remove("active");
+  renderStats();
+  renderTable();
+}
+</script>
+</body>
+</html>

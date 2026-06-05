@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>ПРОФИЛЬ | MILLER FAMILY</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    .profile-wrap { max-width: 900px; margin: 0 auto; }
+
+    .profile-hero {
+      display: flex; align-items: center; gap: 40px;
+      padding: 40px; background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.07); border-radius: 20px;
+      margin-bottom: 20px; position: relative; overflow: hidden;
+    }
+    .profile-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at left, rgba(255,42,42,0.08), transparent 60%);
+      pointer-events: none;
+    }
+    .profile-photo {
+      width: 160px; height: 160px; border-radius: 16px;
+      object-fit: cover; border: 2px solid rgba(255,42,42,0.4);
+      box-shadow: 0 0 30px rgba(255,42,42,0.2); flex-shrink: 0;
+    }
+    .profile-info { flex: 1; }
+    .profile-rank { font-size: 10px; font-weight: 700; letter-spacing: 4px; color: rgba(255,42,42,0.7); text-transform: uppercase; margin-bottom: 8px; }
+    .profile-name { font-size: 36px; font-weight: 900; letter-spacing: 3px; color: #fff; margin-bottom: 6px; }
+    .profile-role { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 20px; }
+    .profile-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 6px;
+      background: rgba(255,42,42,0.1); border: 1px solid rgba(255,42,42,0.25);
+      font-size: 11px; font-weight: 700; letter-spacing: 2px; color: rgba(255,42,42,0.8);
+    }
+
+    .profile-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
+    .profile-stat {
+      padding: 20px; text-align: center;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; transition: border-color 0.3s;
+    }
+    .profile-stat:hover { border-color: rgba(255,42,42,0.2); }
+    .profile-stat-val { font-size: 28px; font-weight: 900; color: #fff; display: block; margin-bottom: 4px; }
+    .profile-stat-key { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase; }
+
+    .profile-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .profile-card {
+      padding: 24px; background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+    }
+    .profile-card-title { font-size: 10px; font-weight: 800; letter-spacing: 3px; color: rgba(255,42,42,0.7); text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .profile-card p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+    .profile-skill { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .profile-skill-name { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .profile-skill-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 0 12px; overflow: hidden; }
+    .profile-skill-fill { height: 100%; background: linear-gradient(90deg, #8a0000, #ff2a2a); border-radius: 2px; }
+    .profile-skill-val { font-size: 11px; font-weight: 700; color: rgba(255,42,42,0.8); min-width: 36px; text-align: right; }
+
+    @media (max-width: 768px) {
+      .profile-hero   { flex-direction: column; text-align: center; }
+      .profile-grid   { grid-template-columns: repeat(2,1fr); }
+      .profile-bottom { grid-template-columns: 1fr; }
+      .profile-name   { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-overlay"></div>
+<div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<header class="page-header">
+  <a href="index.html" class="page-logo">MILLER <span>FAMILY</span></a>
+  <nav class="page-nav">
+    <a href="map.html">Карта</a>
+    <a href="gallery.html">Галерея</a>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+  </nav>
+</header>
+
+<main id="pageContent" style="opacity:1;transform:none">
+  <section class="page-section">
+    <div class="page-bg-title">PROFILE</div>
+    <div id="profileContent" class="profile-wrap"></div>
+  </section>
+  <footer class="page-footer">
+    © 2023–2026 Miller Family · Del Perro RP · <span>dev by donskoyy</span>
+  </footer>
+</main>
+
+<script type="module">
+import { HALL_OF_FAME } from "./events.config.js";
+
+// Профили расширяем данными из HALL_OF_FAME + дополнительные поля
+const PROFILES = {
+  eddie: {
+    ...HALL_OF_FAME[0],
+    photo: "images/eddie.jpg",
+    bio: "Основатель и глава Miller Family. Опытный ролевик с многолетним стажем на серверах GTA. Отвечает за стратегию, финансы и развитие организации. Под его руководством семья выросла с 5 до 70+ участников.",
+    skills: [
+      { name: "Лидерство",    val: 98 },
+      { name: "Финансы",      val: 95 },
+      { name: "Стратегия",    val: 97 },
+      { name: "Боевые навыки",val: 85 },
+    ],
+    joined: "Январь 2023",
+    wars: "24 победы",
+    rep: "Легенда сервера",
+  },
+  adam: {
+    ...HALL_OF_FAME[1],
+    photo: "images/adam.jpg",
+    bio: "Директор Miller Family. Управляет внутренней структурой, набором персонала и организационными процессами. Обеспечивает стабильность и дисциплину в рядах семьи.",
+    skills: [
+      { name: "Менеджмент",   val: 94 },
+      { name: "Переговоры",   val: 90 },
+      { name: "Дисциплина",   val: 96 },
+      { name: "Боевые навыки",val: 80 },
+    ],
+    joined: "Февраль 2023",
+    wars: "18 победы",
+    rep: "Элита сервера",
+  },
+  roy: {
+    ...HALL_OF_FAME[2],
+    photo: "images/roy.jpg",
+    bio: "Заместитель директора. Руководит боевыми операциями, войнами и контролем территорий. Лучший боец семьи с непревзойдёнными показателями в PVP.",
+    skills: [
+      { name: "PVP",          val: 96 },
+      { name: "Тактика",      val: 88 },
+      { name: "Территории",   val: 84 },
+      { name: "Лидерство",    val: 82 },
+    ],
+    joined: "Март 2023",
+    wars: "31 победа",
+    rep: "Лучший боец",
+  },
+};
+
+// Читаем ?id= из URL
+const params = new URLSearchParams(location.search);
+const id = params.get("id") || "eddie";
+const p  = PROFILES[id] || PROFILES.eddie;
+
+// Обновляем title
+document.title = `${p.name} | MILLER FAMILY`;
+
+document.getElementById("profileContent").innerHTML = `
+  <div class="profile-hero">
+    <img src="${p.photo}" alt="${p.name}" class="profile-photo">
+    <div class="profile-info">
+      <div class="profile-rank">MILLER FAMILY · DEL PERRO RP</div>
+      <div class="profile-name">${p.name}</div>
+      <div class="profile-role">${p.role}</div>
+      <div class="profile-badge">${p.badge} ${p.role.toUpperCase()}</div>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    ${Object.entries(p.stats).map(([k,v]) => `
+      <div class="profile-stat">
+        <span class="profile-stat-val">${v}</span>
+        <span class="profile-stat-key">${k}</span>
+      </div>
+    `).join("")}
+    <div class="profile-stat">
+      <span class="profile-stat-val">${p.joined}</span>
+      <span class="profile-stat-key">В семье с</span>
+    </div>
+    <div class="profile-stat">
+      <span class="profile-stat-val">${p.wars}</span>
+      <span class="profile-stat-key">Войн</span>
+    </div>
+    <div class="profile-stat">
+      <span class="profile-stat-val" style="font-size:14px">${p.rep}</span>
+      <span class="profile-stat-key">Репутация</span>
+    </div>
+  </div>
+
+  <div class="profile-bottom">
+    <div class="profile-card">
+      <div class="profile-card-title">О УЧАСТНИКЕ</div>
+      <p>${p.bio}</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-card-title">НАВЫКИ</div>
+      ${p.skills.map(s => `
+        <div class="profile-skill">
+          <span class="profile-skill-name">${s.name}</span>
+          <div class="profile-skill-bar"><div class="profile-skill-fill" style="width:${s.val}%"></div></div>
+          <span class="profile-skill-val">${s.val}%</span>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+    ${Object.keys(PROFILES).map(pid => `
+      <a href="profile.html?id=${pid}" style="padding:10px 20px;border-radius:8px;background:${pid===id?'rgba(255,42,42,0.2)':'rgba(0,0,0,0.4)'};border:1px solid ${pid===id?'rgba(255,42,42,0.4)':'rgba(255,255,255,0.07)'};color:${pid===id?'#ff4444':'rgba(255,255,255,0.4)'};text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s">
+        ${PROFILES[pid].name.split(' ')[0]}
+      </a>
+    `).join("")}
+  </div>
+`;
+</script>
+</body>
+</html>

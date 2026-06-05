@@ -68,7 +68,7 @@ client.on("ready", async () => {
 function updateCache(guild) {
   membersCache = guild.members.cache.map(m => ({
     name:   m.user.username,
-    avatar: m.user.displayAvatarURL(),
+    avatar: m.user.displayAvatarURL({ extension: "png", size: 64, forceStatic: true }),
     status: m.presence?.status || "offline",
     roles:  m.roles.cache
       .filter(r => r.name !== "@everyone")
@@ -189,6 +189,14 @@ app.patch("/api/application-status/:id", (req, res) => {
     broadcast({ text: `❌ Заявка ${apps[idx].nickname} отклонена`, type: "warning" });
 
   res.json({ success: true });
+});
+
+// ── API: все заявки для админки ────────────────────────────
+app.get("/api/applications", (req, res) => {
+  const secret = req.headers["x-admin-secret"];
+  if (secret !== process.env.ADMIN_SECRET)
+    return res.status(403).json({ success: false });
+  res.json(loadApps());
 });
 
 // ── Запуск ──────────────────────────────────────────────────

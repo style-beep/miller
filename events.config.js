@@ -112,3 +112,49 @@ export const HALL_OF_FAME = [
     color:  "#888",
   },
 ];
+
+// ── Союзники ────────────────────────────────────────────────────
+export const ALLIES = [
+  {
+    name:    'ПРИМЕРНЫЙ СОЮЗНИК',
+    tag:     'ALLY',
+    desc:    'Дружественная организация. Пакт о ненападении подписан в 2024 году.',
+    discord: 'https://discord.gg/',
+    logo:    'images/miller-emblem.png',
+    status:  'active',
+    since:   'Март 2024',
+  },
+  // Добавляй союзников сюда
+];
+
+// ── Медиа ───────────────────────────────────────────────────────
+export const MEDIA = [
+  {
+    type:    'youtube',   // youtube | twitch | video
+    title:   'Война за Downtown LS',
+    desc:    'Эпичный рейд на территорию Los Diablos. Miller Family захватывает центр города.',
+    url:     'https://youtube.com/@eddiealta',
+    thumb:   'images/miller1.jpeg',
+    date:    'Декабрь 2024',
+    author:  'Eddie Miller',
+  },
+  {
+    type:    'youtube',
+    title:   'Семейный сбор 2024',
+    desc:    'Общий сбор 70+ участников Miller Family. Планирование стратегии на новый сезон.',
+    url:     'https://youtube.com/@eddiealta',
+    thumb:   'images/miller2.jpeg',
+    date:    'Ноябрь 2024',
+    author:  'Adam Miller',
+  },
+  {
+    type:    'twitch',
+    title:   'Ночной патруль',
+    desc:    'Стрим — контроль территорий Del Perro в ночное время.',
+    url:     'https://twitch.tv/eddiemi11er',
+    thumb:   'images/miller3.jpeg',
+    date:    'Октябрь 2024',
+    author:  'Roy Miller',
+  },
+  // Добавляй медиа сюда
+];

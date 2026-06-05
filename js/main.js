@@ -3,12 +3,12 @@ import { initPlayer }         from "./player.js";
 import { initModal }          from "./modal.js";
 import { initDiscordMembers } from "./discord.js";
 import { initVideo }          from "./video.js";
-import { initGame }           from "./game.js";
 import { initGallery }        from "./gallery.js";
 import { initHallOfFame }     from "./halloffame.js";
 import { initCountdown }      from "./countdown.js";
 import { initAppStatus }      from "./appstatus.js";
 import { initNotifications }  from "./notifications.js";
+import { initIntro }          from "./intro.js";
 import {
   initLoader,
   initClock,
@@ -28,8 +28,14 @@ import {
   initAlerts,
 } from "./animations.js";
 
+// Service Worker (PWA)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").catch(() => {});
+}
+
 // Инициализируем всё после загрузки DOM
 document.addEventListener("DOMContentLoaded", () => {
+  initIntro();       // первым — показываем интро
   initCursor();
   initLoader();
   initClock();
@@ -51,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initModal();
   initDiscordMembers();
   initVideo();
-  initGame();
   initGallery();
   initHallOfFame();
   initCountdown();

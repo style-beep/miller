@@ -10,6 +10,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none !important; /* Скрываем системный курсор — используем прицел */
 }
 
 html { scroll-behavior: smooth; }
@@ -25,51 +26,51 @@ overflow-x: hidden;
 /* ====================== 1.5. CUSTOM CURSOR ====================== */
 * { cursor: none !important; }
 
+/* ── Курсор-прицел ── */
 .cursor-outer {
   position: fixed;
-  width: 36px;
-  height: 36px;
-  border: 2px solid rgba(255, 42, 42, 0.7);
-  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   pointer-events: none;
-  z-index: 999999;
+  z-index: 2147483647;
   transform: translate(-50%, -50%);
-  transition: width 0.25s ease, height 0.25s ease,
-              border-color 0.25s ease, background 0.25s ease,
-              opacity 0.25s ease;
+  transition: transform 0.1s ease;
 }
 
 .cursor-inner {
-  position: fixed;
-  width: 7px;
-  height: 7px;
-  background: var(--red);
+  display: none; /* не используется в прицеле */
+}
+
+/* Линии прицела */
+.ch-line {
+  position: absolute;
+  background: rgba(255, 42, 42, 0.85);
+  border-radius: 1px;
+  transition: width 0.15s ease, height 0.15s ease;
+}
+.ch-top    { width: 1px; height: 10px; top: 0;    left: 50%; transform: translateX(-50%); }
+.ch-bottom { width: 1px; height: 10px; bottom: 0; left: 50%; transform: translateX(-50%); }
+.ch-left   { height: 1px; width: 10px; left: 0;   top: 50%;  transform: translateY(-50%); }
+.ch-right  { height: 1px; width: 10px; right: 0;  top: 50%;  transform: translateY(-50%); }
+.ch-center {
+  position: absolute;
+  width: 3px; height: 3px;
   border-radius: 50%;
-  pointer-events: none;
-  z-index: 999999;
+  background: rgba(255, 42, 42, 0.9);
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  transition: transform 0.08s ease, background 0.2s ease, opacity 0.2s ease;
-  box-shadow: 0 0 10px rgba(255, 42, 42, 0.9),
-              0 0 20px rgba(255, 42, 42, 0.5);
+  transition: width 0.15s ease, height 0.15s ease;
 }
 
-.cursor-outer.cursor-hover {
-  width: 56px;
-  height: 56px;
-  border-color: rgba(255, 42, 42, 1);
-  background: rgba(255, 42, 42, 0.08);
-}
+/* Hover — линии сжимаются к центру */
+.cursor-outer.cursor-hover .ch-top    { height: 6px; }
+.cursor-outer.cursor-hover .ch-bottom { height: 6px; }
+.cursor-outer.cursor-hover .ch-left   { width: 6px; }
+.cursor-outer.cursor-hover .ch-right  { width: 6px; }
+.cursor-outer.cursor-hover .ch-center { width: 5px; height: 5px; }
 
-.cursor-inner.cursor-hover {
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-}
-
-.cursor-outer.cursor-click {
-  width: 26px;
-  height: 26px;
-  background: rgba(255, 42, 42, 0.2);
-}
+/* Click */
+.cursor-outer.cursor-click { transform: translate(-50%, -50%) scale(0.75); }
 
 /* ====================== 1.6. CUSTOM SCROLLBAR ====================== */
 ::-webkit-scrollbar {
@@ -3903,23 +3904,7 @@ input:focus, textarea:focus {
   cursor: none !important;
 }
 
-/* Разрешаем нормальный курсор внутри модального окна */
-.modal-overlay,
-.modal-overlay * {
-  cursor: default !important;
-}
-
-.modal-content input,
-.modal-content textarea,
-.modal-content button,
-.modal-close {
-  cursor: text !important;
-}
-
-.submit-btn,
-.modal-close {
-  cursor: pointer !important;
-}
+/* Курсор-прицел работает везде через * { cursor: none } в reset */
 /* ================= PLAYLIST ================= */
 .playlist {
   margin-top: 15px;

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>КАРТА | MILLER FAMILY</title>
+  <meta name="description" content="Интерактивная карта территорий Los Santos — Miller Family Del Perro RP"/>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    /* ── MAP ── */
+    .map-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* SVG карта */
+    .map-svg-wrap {
+      position: relative;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      overflow: hidden;
+      padding: 4px;
+    }
+    #mapSvg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .map-district {
+      cursor: pointer;
+      transition: filter 0.2s, opacity 0.2s;
+    }
+    .map-district:hover { filter: brightness(1.4); }
+    .map-district.active { filter: brightness(1.6); stroke-width: 3px !important; }
+
+    .map-district-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      fill: rgba(255,255,255,0.85);
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+      letter-spacing: 0.5px;
+    }
+    .map-district-troops {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 900;
+      fill: #fff;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+    }
+
+    /* Сайдбар */
+    .map-sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+    .map-info-panel {
+      padding: 20px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      min-height: 160px;
+    }
+    .mip-title { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 14px; }
+    .mip-name  { font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #fff; margin-bottom: 6px; }
+    .mip-owner { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
+    .mip-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .mip-stat  { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px; text-align: center; }
+    .mip-stat-val { font-size: 18px; font-weight: 900; color: #fff; display: block; }
+    .mip-stat-key { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+    .mip-desc { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.6; margin-top: 10px; }
+
+    .map-legend {
+      padding: 16px 20px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+    }
+    .ml-title { font-size: 9px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.25); text-transform: uppercase; margin-bottom: 12px; }
+    .ml-item  { display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+    .ml-dot   { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    .map-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 10px;
+    }
+    .map-stat-card {
+      padding: 14px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      text-align: center;
+    }
+    .map-stat-card .val { font-size: 24px; font-weight: 900; color: #fff; display: block; }
+    .map-stat-card .lbl { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+
+    @media (max-width: 900px) {
+      .map-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="bg-overlay"></div>
+<div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- Loader -->
+<div id="pageLoaderOverlay">
+  <div class="loader-terminal">
+    <div class="loader-titlebar">
+      <div class="loader-dot red"></div><div class="loader-dot yellow"></div><div class="loader-dot green"></div>
+      <div class="loader-title">MILLER FAMILY · TACTICAL MAP</div>
+    </div>
+    <div class="loader-body">
+      <div class="loader-logo">
+        <div class="loader-logo-text">MILLER FAMILY</div>
+        <div class="loader-logo-sub">Tactical Terrain System</div>
+      </div>
+      <div class="loader-divider"></div>
+      <div class="loader-row">Система: <span>КАРТА ТЕРРИТОРИЙ</span></div>
+      <div id="loaderLabel">Загрузка данных...</div>
+      <div class="loader-pw-line">
+        <span class="loader-prompt">&gt;_</span>
+        <span id="loaderPassword"></span>
+        <span class="loader-cursor"></span>
+      </div>
+      <div class="loader-bar-wrap"><div id="loaderBar"></div></div>
+      <div class="loader-bar-meta"><span>СИНХРОНИЗАЦИЯ КАРТЫ</span><span id="loaderBarPct">0%</span></div>
+      <div class="loader-status" id="loaderStatus">ОЖИДАНИЕ...</div>
+    </div>
+  </div>
+</div>
+
+<header class="page-header">
+  <a href="index.html" class="page-logo">MILLER <span>FAMILY</span></a>
+  <nav class="page-nav">
+    <a href="gallery.html">Галерея</a>
+    <a href="history.html">История</a>
+    <a href="rules.html">Правила</a>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+  </nav>
+</header>
+
+<main id="pageContent">
+  <section class="page-section">
+    <div class="page-bg-title">MAP</div>
+    <h1 class="page-section-title">Карта Los Santos</h1>
+    <p class="page-section-sub">Контроль территорий · Miller Family</p>
+
+    <div class="map-layout">
+      <!-- SVG карта -->
+      <div class="map-svg-wrap">
+        <svg id="mapSvg" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+
+      <!-- Сайдбар -->
+      <div class="map-sidebar">
+        <div class="map-info-panel" id="mapInfoPanel">
+          <div class="mip-title">ИНФОРМАЦИЯ О РАЙОНЕ</div>
+          <div style="color:rgba(255,255,255,0.25);font-size:12px;margin-top:20px">Кликни на район для просмотра информации</div>
+        </div>
+
+        <div class="map-stats-grid" id="mapStatsGrid"></div>
+
+        <div class="map-legend">
+          <div class="ml-title">Фракции</div>
+          <div class="ml-item"><span class="ml-dot" style="background:#cc1111"></span>Miller Family</div>
+          <div class="ml-item"><span class="ml-dot" style="background:#7b2fbe"></span>Los Diablos</div>
+          <div class="ml-item"><span class="ml-dot" style="background:#c8960c"></span>Vagos</div>
+          <div class="ml-item"><span class="ml-dot" style="background:#1a4fa0"></span>Ballas</div>
+          <div class="ml-item"><span class="ml-dot" style="background:#1e1e1e;border:1px solid #333"></span>Нейтральные</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    © 2023–2026 Miller Family · Del Perro RP · <span>dev by donskoyy</span>
+  </footer>
+</main>
+
+<script type="module">
+import { initPageLoader } from "./js/page-loader.js";
+
+const FACTIONS = {
+  miller:  { name: 'MILLER FAMILY', color: '#8a0000', stroke: '#ff2a2a', light: '#ff4444' },
+  diablos: { name: 'LOS DIABLOS',   color: '#3d1070', stroke: '#b06fe8', light: '#b06fe8' },
+  vagos:   { name: 'VAGOS',         color: '#7a5800', stroke: '#f0c040', light: '#f0c040' },
+  ballas:  { name: 'BALLAS',        color: '#0d2558', stroke: '#5090f0', light: '#5090f0' },
+  neutral: { name: 'НЕЙТРАЛЬНЫЕ',   color: '#1a1a1a', stroke: '#444',    light: '#666'    },
+};
+
+const DISTRICTS = [
+  // row 0
+  { id:'paleto',    name:'Paleto Bay',     row:0, col:0, faction:'ballas',  troops:12, desc:'Северный портовый город. Стратегически важен для морских операций.' },
+  { id:'grapeseed', name:'Grapeseed',      row:0, col:1, faction:'neutral', troops:5,  desc:'Сельскохозяйственный район. Источник продовольствия и укрытий.' },
+  { id:'sandy',     name:'Sandy Shores',   row:0, col:2, faction:'vagos',   troops:9,  desc:'Пустынный район. Плохо охраняемая дорога для контрабанды.' },
+  { id:'alamo',     name:'Alamo Sea',      row:0, col:3, faction:'neutral', troops:4,  desc:'Водоём в пустыне. Используется для тайных встреч.' },
+  { id:'blaine',    name:'Blaine County',  row:0, col:4, faction:'diablos', troops:14, desc:'Крупный округ на севере. Штаб Los Diablos.' },
+  // row 1
+  { id:'zancudo',   name:'Ft. Zancudo',    row:1, col:0, faction:'neutral', troops:8,  desc:'Военная база. Нейтральная зона по соглашению всех фракций.' },
+  { id:'chumash',   name:'Chumash',        row:1, col:1, faction:'neutral', troops:3,  desc:'Тихий пляжный район. Мало стратегической ценности.' },
+  { id:'vinewood',  name:'Vinewood Hills', row:1, col:2, faction:'miller',  troops:11, desc:'Элитный район. Крупная недвижимость Miller Family.' },
+  { id:'rockford',  name:'Rockford Hills', row:1, col:3, faction:'miller',  troops:16, desc:'Богатый квартал. Бизнес и финансовые операции семьи.' },
+  { id:'harmony',   name:'Harmony',        row:1, col:4, faction:'vagos',   troops:7,  desc:'Пограничный район. Постоянные конфликты с Vagos.' },
+  // row 2
+  { id:'delperro',  name:'Del Perro',      row:2, col:0, faction:'miller',  troops:20, desc:'ШТАБ Miller Family. Главная база операций. Неприступна.' },
+  { id:'vespucci',  name:'Vespucci',       row:2, col:1, faction:'miller',  troops:13, desc:'Пляжный район под полным контролем семьи.' },
+  { id:'downtown',  name:'Downtown LS',    row:2, col:2, faction:'miller',  troops:18, desc:'Деловой центр города. Ключевой экономический узел.' },
+  { id:'eastls',    name:'East LS',        row:2, col:3, faction:'ballas',  troops:10, desc:'Восточные кварталы. Спорная территория.' },
+  { id:'lamesa',    name:'La Mesa',        row:2, col:4, faction:'neutral', troops:6,  desc:'Промышленный район. Нейтральная торговая зона.' },
+  // row 3
+  { id:'lsia',      name:'LSIA',           row:3, col:0, faction:'miller',  troops:9,  desc:'Международный аэропорт. Критически важен для логистики.' },
+  { id:'seoul',     name:'Little Seoul',   row:3, col:1, faction:'miller',  troops:8,  desc:'Деловой квартал. Ряд легальных бизнесов семьи.' },
+  { id:'strawberry',name:'Strawberry',     row:3, col:2, faction:'neutral', troops:5,  desc:'Жилой район. Вербовка новых участников.' },
+  { id:'davis',     name:'Davis',          row:3, col:3, faction:'vagos',   troops:11, desc:'Спорная зона. Постоянные столкновения с Vagos.' },
+  { id:'cypress',   name:'Cypress Flats',  row:3, col:4, faction:'diablos', troops:8,  desc:'Промзона у залива. Операционная база Los Diablos на юге.' },
+];
+
+const COLS = 5, ROWS = 4;
+const W = 500, H = 400;
+const CW = W / COLS, CH = H / ROWS;
+const PAD = 3;
+
+initPageLoader({
+  password: "MF·TACTICAL·MAP·2026",
+  label: "ЗАГРУЗКА ТАКТИЧЕСКОЙ КАРТЫ",
+  onComplete: renderMap,
+});
+
+function renderMap() {
+  const svg = document.getElementById("mapSvg");
+
+  DISTRICTS.forEach(d => {
+    const f  = FACTIONS[d.faction];
+    const x  = d.col * CW + PAD;
+    const y  = d.row * CH + PAD;
+    const rw = CW - PAD * 2;
+    const rh = CH - PAD * 2;
+    const cx = x + rw / 2;
+    const cy = y + rh / 2;
+
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.classList.add("map-district");
+
+    // Прямоугольник
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("x", x); rect.setAttribute("y", y);
+    rect.setAttribute("width", rw); rect.setAttribute("height", rh);
+    rect.setAttribute("rx", "6");
+    rect.setAttribute("fill", f.color);
+    rect.setAttribute("stroke", f.stroke);
+    rect.setAttribute("stroke-width", "1.5");
+    rect.setAttribute("stroke-opacity", "0.7");
+    g.appendChild(rect);
+
+    // Название
+    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    label.setAttribute("x", cx); label.setAttribute("y", cy - 10);
+    label.setAttribute("class", "map-district-label");
+    label.textContent = d.name.toUpperCase();
+    g.appendChild(label);
+
+    // Войска
+    const troops = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    troops.setAttribute("x", cx); troops.setAttribute("y", cy + 12);
+    troops.setAttribute("class", "map-district-troops");
+    troops.setAttribute("fill", f.light);
+    troops.textContent = d.troops;
+    g.appendChild(troops);
+
+    g.addEventListener("click", () => showInfo(d));
+    svg.appendChild(g);
+  });
+
+  renderStats();
+}
+
+function showInfo(d) {
+  const f = FACTIONS[d.faction];
+  const panel = document.getElementById("mapInfoPanel");
+
+  // Снимаем active со всех
+  document.querySelectorAll(".map-district").forEach(g => g.classList.remove("active"));
+  // Находим текущий
+  const all = document.querySelectorAll(".map-district");
+  const idx = DISTRICTS.indexOf(d);
+  if (all[idx]) all[idx].classList.add("active");
+
+  panel.innerHTML = `
+    <div class="mip-title">РАЙОН</div>
+    <div class="mip-name">${d.name.toUpperCase()}</div>
+    <div class="mip-owner" style="color:${f.light}">${f.name}</div>
+    <div class="mip-stats">
+      <div class="mip-stat">
+        <span class="mip-stat-val" style="color:${f.light}">${d.troops}</span>
+        <span class="mip-stat-key">Войска</span>
+      </div>
+      <div class="mip-stat">
+        <span class="mip-stat-val">${d.faction === 'miller' ? '✓' : '✗'}</span>
+        <span class="mip-stat-key">Под контролем</span>
+      </div>
+    </div>
+    <div class="mip-desc">${d.desc}</div>
+  `;
+}
+
+function renderStats() {
+  const grid = document.getElementById("mapStatsGrid");
+  const miller  = DISTRICTS.filter(d => d.faction === 'miller').length;
+  const total   = DISTRICTS.length;
+  const troops  = DISTRICTS.filter(d => d.faction === 'miller').reduce((s,d) => s + d.troops, 0);
+  const control = Math.round((miller / total) * 100);
+
+  grid.innerHTML = [
+    { val: miller,  lbl: 'Районов',    color: '#ff4444' },
+    { val: control+'%', lbl: 'Контроль', color: '#ff4444' },
+    { val: troops,  lbl: 'Войска',     color: '#fff' },
+    { val: total - miller, lbl: 'Спорных', color: '#888' },
+  ].map(s => `
+    <div class="map-stat-card">
+      <span class="val" style="color:${s.color}">${s.val}</span>
+      <span class="lbl">${s.lbl}</span>
+    </div>
+  `).join("");
+}
+</script>
+</body>
+</html>

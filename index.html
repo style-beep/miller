@@ -4,17 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>MILLER FAMILY | DEL PERRO RP</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Официальный сайт Miller Family — элитная игровая семья сервера Del Perro RP (GTA 5 Roleplay). Власть. Деньги. Уважение."/>
+  <meta name="keywords" content="Miller Family, Del Perro RP, GTA 5 RP, GTA roleplay, Miller"/>
+  <meta name="robots" content="index, follow"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website"/>
+  <meta property="og:title"       content="MILLER FAMILY | DEL PERRO RP"/>
+  <meta property="og:description" content="Элитная семья сервера Del Perro RP. Власть. Деньги. Уважение."/>
+  <meta property="og:image"       content="images/miller-emblem.png"/>
+  <meta property="og:site_name"   content="Miller Family"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="MILLER FAMILY | DEL PERRO RP"/>
+  <meta name="twitter:description" content="Элитная семья сервера Del Perro RP. Власть. Деньги. Уважение."/>
+  <meta name="twitter:image"       content="images/miller-emblem.png"/>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#ff2a2a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Miller Family"/>
+
   <link rel="icon" type="image/png" href="images/family-logo.jpeg" />
+  <link rel="apple-touch-icon"      href="images/family-logo.jpeg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="new-features.css" />
-<link rel="stylesheet"
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
 </head>
 <body>
+  <!-- INTRO OVERLAY -->
+  <div id="introOverlay" style="display:none;position:fixed;inset:0;z-index:999999;background:#020000;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s">
+    <div class="intro-logo" style="opacity:0;transform:translateY(20px);transition:opacity 0.8s,transform 0.8s;text-align:center">
+      <img src="images/miller-emblem.png" alt="" style="width:100px;height:100px;object-fit:contain;margin-bottom:24px;filter:drop-shadow(0 0 20px rgba(255,42,42,0.4))">
+      <div style="font-size:36px;font-weight:900;letter-spacing:8px;color:#fff;font-family:'Montserrat',sans-serif">MILLER FAMILY</div>
+      <div style="font-size:11px;letter-spacing:6px;color:rgba(255,42,42,0.7);margin-top:8px;text-transform:uppercase">Del Perro RP · GTA 5 Roleplay</div>
+    </div>
+    <div class="intro-tagline" style="opacity:0;transition:opacity 0.8s 0.3s;margin-top:32px;font-size:13px;letter-spacing:6px;color:rgba(255,255,255,0.3);text-transform:uppercase;font-family:'Montserrat',sans-serif">
+      Power &nbsp;·&nbsp; Loyalty &nbsp;·&nbsp; Respect
+    </div>
+    <div style="width:240px;height:2px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:32px;overflow:hidden">
+      <div class="intro-bar-fill" style="height:100%;width:0%;background:linear-gradient(90deg,#8a0000,#ff2a2a);border-radius:2px;transition:width 2.5s ease"></div>
+    </div>
+    <button class="intro-skip" style="position:absolute;bottom:32px;right:32px;background:none;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.2);padding:8px 20px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer">ПРОПУСТИТЬ</button>
+  </div>
+  <style>
+    .intro-logo.intro-visible { opacity:1 !important; transform:translateY(0) !important; }
+    .intro-tagline.intro-visible { opacity:1 !important; }
+    #introOverlay.intro-exit { opacity:0 !important; pointer-events:none; }
+    /* Стили курсора-прицела перенесены в style.css */
+  </style>
+
   <div class="scroll-progress"></div>
   <!-- CUSTOM CURSOR -->
   <div class="cursor-outer" id="cursorOuter"></div>
@@ -47,7 +95,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       <a href="#about">О НАС</a>
       <a href="#structure">СТРУКТУРА</a>
       <a href="#members">СОСТАВ</a>
-      <a href="#game">ИГРА</a>
+      <a href="map.html">КАРТА</a>
       <a href="gallery.html">ГАЛЕРЕЯ</a>
     </nav>
   </header>
@@ -545,6 +593,42 @@ Control over key districts
         </div>
       </a>
 
+      <a href="game.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon">🎮</div>
+        <div class="cc-title">ИГРА</div>
+        <div class="cc-desc">Захвати все 20 районов Los Santos. 4 фракции, AI противники, реальное время.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·TACTICAL·GAME·2026</span>
+          <span class="cc-enter">ИГРАТЬ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="allies.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon">🤝</div>
+        <div class="cc-title">СОЮЗНИКИ</div>
+        <div class="cc-desc">Организации с пактом о ненападении. Союзные кланы и дружественные структуры Del Perro RP.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·ALLIANCE·PACT·2026</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="media.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon">🎬</div>
+        <div class="cc-title">МЕДИА</div>
+        <div class="cc-desc">Видео, стримы и клипы Miller Family. YouTube, Twitch и эксклюзивные записи операций.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·MEDIA·ARCHIVE·2026</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
     </div>
   </section>
 
@@ -611,87 +695,6 @@ Control over key districts
     </div>
   </section>
 
-  <!-- GAME -->
-  <section class="game-section" id="game">
-    <div class="background-title">MILLER</div>
-    <div class="section-title">ЗАХВАТ ТЕРРИТОРИЙ</div>
-    <p class="game-subtitle">Захвати Los Santos под контроль Miller Family</p>
-
-    <div class="game-container">
-
-      <!-- HUD Top -->
-      <div class="game-hud-top">
-        <div class="game-faction-hud">
-          <div class="ghud-dot" style="background:#cc1111"></div>
-          <div class="ghud-info">
-            <div class="ghud-name">MILLER FAMILY</div>
-            <div class="ghud-count"><i class="fa-solid fa-map-location-dot"></i> <span id="hud-count-player">1</span> / 20</div>
-          </div>
-          <div class="ghud-progress"><div class="ghud-bar" id="playerProgressBar"></div></div>
-        </div>
-        <div class="game-timer-wrap">
-          <i class="fa-regular fa-clock"></i>
-          <span id="gameTimerEl">00:00</span>
-        </div>
-        <div class="game-enemies-hud">
-          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#7b2fbe"></span>Diablos <b id="hud-count-diablos">1</b></div>
-          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#c8960c"></span>Vagos <b id="hud-count-vagos">1</b></div>
-          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#1a4fa0"></span>Ballas <b id="hud-count-ballas">1</b></div>
-          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#2a2a2a;border:1px solid #444"></span>Нейтр. <b id="hud-count-neutral">16</b></div>
-        </div>
-      </div>
-
-      <!-- Map -->
-      <div class="game-map-wrap">
-        <div class="game-map" id="gameMap"></div>
-        <div class="game-overlay" id="gameOverlay">
-          <div class="go-content">
-            <div class="go-title" id="gameOverlayTitle">ПОБЕДА</div>
-            <div class="go-msg"   id="gameOverlayMsg"></div>
-            <button class="game-restart-btn">ИГРАТЬ СНОВА</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom bar: info + restart -->
-      <div class="game-bottom-bar">
-        <div class="game-info-panel gip-default" id="gameInfoPanel">
-          <div class="gip-title">ВЫБЕРИ ТЕРРИТОРИЮ</div>
-          <div class="gip-body">Кликни на красную территорию и атакуй соседей</div>
-        </div>
-        <button class="game-restart-btn" style="width:auto;padding:12px 32px;white-space:nowrap">НОВАЯ ИГРА</button>
-      </div>
-
-      <!-- Below-game panels -->
-      <div class="game-below">
-
-        <div class="game-below-card">
-          <div class="game-below-title">ФРАКЦИИ</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#cc1111"></span><b>Miller Family</b> — ты</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#7b2fbe"></span>Los Diablos</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#c8960c"></span>Vagos</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#1a4fa0"></span>Ballas</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#1c1c1c;border:1px solid #444"></span>Нейтральные</div>
-        </div>
-
-        <div class="game-below-card">
-          <div class="game-below-title">КАК ИГРАТЬ</div>
-          <div class="rule-item"><span class="rule-n">①</span> Кликни свою территорию</div>
-          <div class="rule-item"><span class="rule-n">②</span> Наведи курсор — увидишь превью атаки</div>
-          <div class="rule-item"><span class="rule-n">③</span> Кликни врага чтобы атаковать</div>
-          <div class="rule-item"><span class="rule-n">④</span> Войска регенерируются каждые 3 сек</div>
-          <div class="rule-item"><span class="rule-n">⑤</span> Захвати все 20 территорий!</div>
-        </div>
-
-        <div class="game-below-card game-below-log">
-          <div class="game-below-title">ЖУРНАЛ СОБЫТИЙ</div>
-          <div class="game-log" id="gameLog"></div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
 
   <!-- JOIN -->
   <section class="join" id="join">
