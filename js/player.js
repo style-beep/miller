@@ -1,8 +1,8 @@
 // ── Музыкальный плеер ──────────────────────────────────────
 const songs = [
-  { title: "GTA NIGHT DRIVE",          artist: "ALTA RP Theme",                     src: "music/theme1.mp3",         cover: "images/covers/cover1.png" },
+  { title: "GTA NIGHT DRIVE",          artist: "DEL PERRO RP Theme",                     src: "music/theme1.mp3",         cover: "images/covers/cover1.png" },
   { title: "LOS SANTOS VIBES",          artist: "Night Drive",                       src: "music/theme2.mp3",         cover: "images/covers/cover2.png" },
-  { title: "BIG ROOM BEATS",            artist: "ALTA RP",                           src: "music/theme3.mp3",         cover: "images/covers/cover3.png" },
+  { title: "BIG ROOM BEATS",            artist: "DEL PERRO RP",                           src: "music/theme3.mp3",         cover: "images/covers/cover3.png" },
   { title: "Некрасивый",                artist: "Автостопом по фазе сна",            src: "music/nekrasiviy.mp3",     cover: "images/covers/cover1.png" },
   { title: "Когда я умер",              artist: "Кишлак",                            src: "music/kogda-ya-umer.mp3",  cover: "images/covers/cover2.png" },
   { title: "Темная ночь холодный дождь",artist: "Гурпал Абдулкеримов",              src: "music/temnaya-noch.mp3",   cover: "images/covers/cover2.png" },
@@ -74,8 +74,7 @@ export function initPlayer() {
       li.addEventListener("click", () => {
         currentSong = i;
         loadSong(currentSong);
-        audio.play();
-        playBtn.innerHTML = "❚❚";
+        playSong();
       });
       playlistEl.appendChild(li);
     });
@@ -83,33 +82,46 @@ export function initPlayer() {
 
   function loadSong(index) {
     localStorage.setItem("currentSong", index);
-    audio.src          = songs[index].src;
+    audio.src = songs[index].src;
+    audio.load();
     songTitle.textContent  = songs[index].title;
     songArtist.textContent = songs[index].artist;
     if (albumArt) albumArt.src = songs[index].cover;
     renderPlaylist();
   }
 
+  function playSong() {
+    audio.play().then(() => {
+      playBtn.innerHTML = "❚❚";
+    }).catch(err => {
+      console.warn("Autoplay blocked:", err);
+      playBtn.innerHTML = "▶";
+    });
+  }
+
   loadSong(currentSong);
 
   playBtn.addEventListener("click", () => {
-    if (audio.paused) { audio.play();  playBtn.innerHTML = "❚❚"; }
-    else              { audio.pause(); playBtn.innerHTML = "▶";  }
+    if (audio.paused) { playSong(); }
+    else              { audio.pause(); playBtn.innerHTML = "▶"; }
   });
 
   nextBtn?.addEventListener("click", () => {
     currentSong = (currentSong + 1) % songs.length;
-    loadSong(currentSong); audio.play(); playBtn.innerHTML = "❚❚";
+    loadSong(currentSong);
+    playSong();
   });
 
   prevBtn?.addEventListener("click", () => {
     currentSong = (currentSong - 1 + songs.length) % songs.length;
-    loadSong(currentSong); audio.play(); playBtn.innerHTML = "❚❚";
+    loadSong(currentSong);
+    playSong();
   });
 
   audio.addEventListener("ended", () => {
     currentSong = (currentSong + 1) % songs.length;
-    loadSong(currentSong); audio.play();
+    loadSong(currentSong);
+    playSong();
   });
 
   audio.addEventListener("timeupdate", () => {

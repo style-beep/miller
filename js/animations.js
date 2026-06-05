@@ -193,7 +193,7 @@ export function initGlitch() {
 export function initTyping() {
   const el = document.querySelector(".hero-subtitle");
   if (!el) return;
-  const phrases = ["ALTA GTA 5 ROLEPLAY", "ВЛАСТЬ НАД LOS SANTOS", "ЭЛИТА СЕРВЕРА", "MILLER FAMILY"];
+  const phrases = ["DEL PERRO GTA 5 ROLEPLAY", "ВЛАСТЬ НАД LOS SANTOS", "ЭЛИТА СЕРВЕРА", "MILLER FAMILY"];
   let pIdx = 0, cIdx = 0, deleting = false;
   el.textContent = "";
   function tick() {

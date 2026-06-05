@@ -2,13 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MILLER FAMILY | ALTA RP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MILLER FAMILY | DEL PERRO RP</title>
   <link rel="icon" type="image/png" href="images/family-logo.jpeg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="new-features.css" />
 <link rel="stylesheet"
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -46,6 +47,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
       <a href="#about">О НАС</a>
       <a href="#structure">СТРУКТУРА</a>
       <a href="#members">СОСТАВ</a>
+      <a href="#game">ИГРА</a>
+      <a href="gallery.html">ГАЛЕРЕЯ</a>
     </nav>
   </header>
 
@@ -66,7 +69,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     
     <div class="music-info">
       <h3 id="songTitle">GTA NIGHT DRIVE</h3>
-      <p id="songArtist">ALTA RP Theme</p>
+      <p id="songArtist">DEL PERRO RP Theme</p>
     </div>
 
     <div class="music-progress">
@@ -100,7 +103,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
   <!-- HERO -->
 <section class="hero" id="home">
 <div class="hero-left">
-  <p class="hero-subtitle">ALTA GTA 5 ROLEPLAY</p>
+  <p class="hero-subtitle">DEL PERRO GTA 5 ROLEPLAY</p>
   
   <h1 class="hero-title">
     RULE THE<br>
@@ -108,7 +111,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
   </h1>
   
   <p class="hero-text">
-    Элитная семья сервера ALTA RP.<br>Власть. Деньги. Уважение.
+    Элитная семья сервера DEL PERRO RP.<br>Власть. Деньги. Уважение.
   </p>
 
   <div class="hero-buttons">
@@ -401,7 +404,8 @@ Control over key districts
 </div>
 </section>
   <!-- СОСТАВ -->
-  <section class="composition" id="members"
+  <section class="composition" id="members">
+    <div class="background-title">MILLER</div>
     <div class="section-title">СОСТАВ</div>
     <div class="composition-grid">
 
@@ -456,11 +460,244 @@ Control over key districts
     </div>
   </section>
 
+  <!-- COUNTDOWN -->
+  <section class="countdown-section" id="countdown">
+    <div class="countdown-inner">
+      <div class="cd-left">
+        <div class="cd-label countdown-label-top">СЛЕДУЮЩЕЕ СОБЫТИЕ</div>
+        <div class="cd-event-name" id="countdownEventName">СЕМЕЙНЫЙ СБОР</div>
+        <div class="cd-event-desc" id="countdownEventDesc"></div>
+      </div>
+      <div class="cd-right">
+        <div class="cd-units">
+          <div class="cd-unit">
+            <div class="cd-num" id="cdDays">00</div>
+            <div class="cd-lbl">дней</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num" id="cdHours">00</div>
+            <div class="cd-lbl">часов</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num" id="cdMinutes">00</div>
+            <div class="cd-lbl">минут</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num" id="cdSeconds">00</div>
+            <div class="cd-lbl">секунд</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HALL OF FAME -->
+  <section class="hof-section" id="fame">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ДОСКА ПОЧЁТА</div>
+    <p class="hof-subtitle">Лучшие участники Miller Family этого месяца</p>
+    <div class="hof-grid" id="hofGrid"></div>
+  </section>
+
+  <!-- CLASSIFIED PAGES -->
+  <section class="classified-section" id="classified">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ЗАКРЫТЫЕ РАЗДЕЛЫ</div>
+    <p class="classified-sub">Доступ по коду. Каждый раздел защищён уникальным паролем</p>
+    <div class="classified-grid">
+
+      <a href="gallery.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon">📸</div>
+        <div class="cc-title">ГАЛЕРЕЯ</div>
+        <div class="cc-desc">Визуальный архив Miller Family. Фото с операций, портреты бойцов и памятные моменты.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·VISUAL·ACCESS·2026</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="history.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon">📜</div>
+        <div class="cc-title">ИСТОРИЯ</div>
+        <div class="cc-desc">Хроника Miller Family с момента основания. Войны, победы и ключевые события организации.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·CHRONICLE·CLASSIFIED</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="rules.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon">⚖️</div>
+        <div class="cc-title">ПРАВИЛА</div>
+        <div class="cc-desc">Кодекс Miller Family. Обязателен к исполнению каждым членом организации без исключений.</div>
+        <div class="cc-meta">
+          <span class="cc-code">CODEX·FAMILIA·ALPHA</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- APPLICATION STATUS -->
+  <section class="appstatus-section" id="status">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">СТАТУС ЗАЯВКИ</div>
+    <p class="appstatus-sub">Проверь статус своей заявки по Discord тегу</p>
+    <div class="appstatus-wrap">
+      <form class="appstatus-form" id="statusForm">
+        <div class="appstatus-input-wrap">
+          <i class="fa-brands fa-discord"></i>
+          <input type="text" id="statusDiscord" placeholder="Введи Discord username" required>
+          <button type="submit">ПРОВЕРИТЬ <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </form>
+      <div class="status-result" id="statusResult" style="display:none"></div>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video-section" id="video">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ТРЕЙЛЕР</div>
+    <div class="video-frame">
+      <div class="video-wrapper">
+        <video id="mainVideo" class="main-video" preload="metadata" poster="images/miller-emblem.png">
+          <source src="video/millers.mp4" type="video/mp4">
+        </video>
+
+        <div class="video-badge"><span>MILLER</span> FAMILY • DEL PERRO RP</div>
+
+        <div class="video-overlay" id="videoOverlay">
+          <button class="video-play-btn" id="videoPlayBtn">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          <div class="video-overlay-label">нажми для просмотра</div>
+        </div>
+
+        <div class="video-controls" id="videoControls">
+          <div class="vc-progress-wrap">
+            <input type="range" class="vc-progress" id="vcProgress" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="vc-bottom">
+            <div class="vc-left">
+              <button class="vc-btn" id="vcPlay"><i class="fa-solid fa-play"></i></button>
+              <div class="vc-time">
+                <span id="vcCurrent">0:00</span>
+                <span>/</span>
+                <span id="vcDuration">0:00</span>
+              </div>
+            </div>
+            <div class="vc-right">
+              <div class="vc-volume-wrap">
+                <button class="vc-btn" id="vcMute"><i class="fa-solid fa-volume-high"></i></button>
+                <input type="range" class="vc-volume" id="vcVolume" min="0" max="1" step="0.01" value="1">
+              </div>
+              <button class="vc-btn" id="vcFullscreen"><i class="fa-solid fa-expand"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="game-section" id="game">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ЗАХВАТ ТЕРРИТОРИЙ</div>
+    <p class="game-subtitle">Захвати Los Santos под контроль Miller Family</p>
+
+    <div class="game-container">
+
+      <!-- HUD Top -->
+      <div class="game-hud-top">
+        <div class="game-faction-hud">
+          <div class="ghud-dot" style="background:#cc1111"></div>
+          <div class="ghud-info">
+            <div class="ghud-name">MILLER FAMILY</div>
+            <div class="ghud-count"><i class="fa-solid fa-map-location-dot"></i> <span id="hud-count-player">1</span> / 20</div>
+          </div>
+          <div class="ghud-progress"><div class="ghud-bar" id="playerProgressBar"></div></div>
+        </div>
+        <div class="game-timer-wrap">
+          <i class="fa-regular fa-clock"></i>
+          <span id="gameTimerEl">00:00</span>
+        </div>
+        <div class="game-enemies-hud">
+          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#7b2fbe"></span>Diablos <b id="hud-count-diablos">1</b></div>
+          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#c8960c"></span>Vagos <b id="hud-count-vagos">1</b></div>
+          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#1a4fa0"></span>Ballas <b id="hud-count-ballas">1</b></div>
+          <div class="ghud-mini"><span class="ghud-mini-dot" style="background:#2a2a2a;border:1px solid #444"></span>Нейтр. <b id="hud-count-neutral">16</b></div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="game-map-wrap">
+        <div class="game-map" id="gameMap"></div>
+        <div class="game-overlay" id="gameOverlay">
+          <div class="go-content">
+            <div class="go-title" id="gameOverlayTitle">ПОБЕДА</div>
+            <div class="go-msg"   id="gameOverlayMsg"></div>
+            <button class="game-restart-btn">ИГРАТЬ СНОВА</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar: info + restart -->
+      <div class="game-bottom-bar">
+        <div class="game-info-panel gip-default" id="gameInfoPanel">
+          <div class="gip-title">ВЫБЕРИ ТЕРРИТОРИЮ</div>
+          <div class="gip-body">Кликни на красную территорию и атакуй соседей</div>
+        </div>
+        <button class="game-restart-btn" style="width:auto;padding:12px 32px;white-space:nowrap">НОВАЯ ИГРА</button>
+      </div>
+
+      <!-- Below-game panels -->
+      <div class="game-below">
+
+        <div class="game-below-card">
+          <div class="game-below-title">ФРАКЦИИ</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#cc1111"></span><b>Miller Family</b> — ты</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#7b2fbe"></span>Los Diablos</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#c8960c"></span>Vagos</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#1a4fa0"></span>Ballas</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#1c1c1c;border:1px solid #444"></span>Нейтральные</div>
+        </div>
+
+        <div class="game-below-card">
+          <div class="game-below-title">КАК ИГРАТЬ</div>
+          <div class="rule-item"><span class="rule-n">①</span> Кликни свою территорию</div>
+          <div class="rule-item"><span class="rule-n">②</span> Наведи курсор — увидишь превью атаки</div>
+          <div class="rule-item"><span class="rule-n">③</span> Кликни врага чтобы атаковать</div>
+          <div class="rule-item"><span class="rule-n">④</span> Войска регенерируются каждые 3 сек</div>
+          <div class="rule-item"><span class="rule-n">⑤</span> Захвати все 20 территорий!</div>
+        </div>
+
+        <div class="game-below-card game-below-log">
+          <div class="game-below-title">ЖУРНАЛ СОБЫТИЙ</div>
+          <div class="game-log" id="gameLog"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
   <!-- JOIN -->
   <section class="join" id="join">
     <div class="join-box">
       <h2>ХОЧЕШЬ В MILLER FAMILY?</h2>
-      <p>Стань частью элиты ALTA RP</p>
+      <p>Стань частью элиты DEL PERRO RP</p>
       <button class="main-btn">ПОДАТЬ ЗАЯВКУ</button>
     </div>
   </section>
@@ -468,20 +705,79 @@ Control over key districts
 </div>
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-logo">
-        <h2>MILLER FAMILY</h2>
-        <span>GTA 5 RP | ALTA</span>
+
+    <!-- TOP: логотип + колонки -->
+    <div class="footer-top">
+
+      <!-- Бренд -->
+      <div class="footer-brand">
+        <img src="images/background.png" alt="Miller Family" class="footer-logo-img">
+        <div>
+          <div class="footer-brand-name">MILLER FAMILY</div>
+          <div class="footer-brand-sub">GTA 5 Roleplay · Del Perro RP</div>
+          <p class="footer-brand-desc">
+            Элитная организация сервера Del Perro RP.<br>
+            Власть. Деньги. Уважение.
+          </p>
+        </div>
       </div>
-      <div class="footer-center">
-        <h3>POWER • LOYALTY • RESPECT</h3>
+
+      <!-- Навигация -->
+      <div class="footer-col">
+        <div class="footer-col-title">Навигация</div>
+        <a href="#home">Главная</a>
+        <a href="#about">О нас</a>
+        <a href="#structure">Структура</a>
+        <a href="#members">Состав</a>
+        <a href="#video">Трейлер</a>
       </div>
-      <div class="footer-socials">
-        <a href="https://discord.gg/SaCXzgckS" target="_blank">DISCORD</a>
-        <a href="https://youtube.com/@eddiealta?si=-wB9Klp0bRynaCdCц" target="_blank">YOUTUBE</a>
-        <a href="https://www.twitch.tv/eddiemi11er" target="_blank">TWITCH</a>
+
+      <!-- Организация -->
+      <div class="footer-col">
+        <div class="footer-col-title">Организация</div>
+        <a href="#join">Вступить в семью</a>
+        <a href="https://discord.gg/SaCXzgckS" target="_blank">Discord сервер</a>
+        <a href="https://www.twitch.tv/eddiemi11er" target="_blank">Трансляции</a>
+        <a href="https://youtube.com/@eddiealta" target="_blank">YouTube канал</a>
+      </div>
+
+      <!-- Контакты -->
+      <div class="footer-col">
+        <div class="footer-col-title">Сообщество</div>
+        <div class="footer-socials-grid">
+          <a href="https://discord.gg/SaCXzgckS" target="_blank" class="footer-social-btn">
+            <i class="fa-brands fa-discord"></i>
+            <span>Discord</span>
+          </a>
+          <a href="https://youtube.com/@eddiealta" target="_blank" class="footer-social-btn">
+            <i class="fa-brands fa-youtube"></i>
+            <span>YouTube</span>
+          </a>
+          <a href="https://www.twitch.tv/eddiemi11er" target="_blank" class="footer-social-btn">
+            <i class="fa-brands fa-twitch"></i>
+            <span>Twitch</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="footer-divider"></div>
+
+    <!-- BOTTOM: копирайт + дев -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <span>© 2023–2026 Miller Family. All rights reserved.</span>
+        <span class="footer-dot">·</span>
+        <span>Del Perro RP · GTA 5 Roleplay</span>
+      </div>
+      <div class="footer-bottom-right">
+        <span class="footer-motto">POWER · LOYALTY · RESPECT</span>
+        <span class="footer-dev-inline">dev by <span>donskoyy</span></span>
       </div>
     </div>
+
   </footer>
 
   <!-- SVG defs for territory ring gradient -->
@@ -501,7 +797,7 @@ Control over key districts
     <button class="modal-close" id="modalClose">✕</button>
 
     <h2>ПОДАТЬ ЗАЯВКУ В MILLER FAMILY</h2>
-    <p class="modal-subtitle">Элитная семья ALTA RP</p>
+    <p class="modal-subtitle">Элитная семья DEL PERRO RP</p>
 
     <form id="applyForm">
       <div class="form-group">
@@ -546,7 +842,7 @@ Control over key districts
           type="text"
           id="experience"
           name="experience"
-          placeholder="1.5 года на ALTA RP"
+          placeholder="1.5 года на DEL PERRO RP"
           required
         >
       </div>

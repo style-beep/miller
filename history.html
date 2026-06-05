@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>ИСТОРИЯ | MILLER FAMILY</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    .timeline-wrap { position: relative; max-width: 860px; margin: 0 auto; }
+    .tl-line {
+      position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(to bottom, transparent, rgba(255,42,42,0.4) 8%, rgba(255,42,42,0.4) 92%, transparent);
+      transform: translateX(-50%);
+    }
+    .tl-item {
+      display: flex; align-items: flex-start; gap: 32px;
+      margin-bottom: 52px; opacity: 0;
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .tl-left  { flex-direction: row;         transform: translateX(-40px); }
+    .tl-right { flex-direction: row-reverse; transform: translateX(40px);  }
+    .tl-item.tl-visible { opacity: 1; transform: translateX(0) !important; }
+
+    .tl-dot {
+      flex-shrink: 0; width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(0,0,0,0.85); border: 2px solid rgba(255,42,42,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; box-shadow: 0 0 18px rgba(255,42,42,0.15);
+      position: relative; z-index: 2;
+    }
+    .tl-active .tl-dot {
+      border-color: #ff2a2a;
+      box-shadow: 0 0 28px rgba(255,42,42,0.5);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%,100% { box-shadow: 0 0 16px rgba(255,42,42,0.4); }
+      50%      { box-shadow: 0 0 36px rgba(255,42,42,0.7); }
+    }
+    .tl-card {
+      flex: 1; padding: 24px 28px; max-width: calc(50% - 60px);
+      background: rgba(5,0,0,0.6); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; backdrop-filter: blur(12px);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .tl-card:hover { border-color: rgba(255,42,42,0.2); box-shadow: 0 4px 24px rgba(255,42,42,0.08); }
+    .tl-active .tl-card { border-color: rgba(255,42,42,0.25); }
+    .tl-date  { font-size: 10px; font-weight: 700; letter-spacing: 4px; color: rgba(255,42,42,0.7); text-transform: uppercase; margin-bottom: 8px; }
+    .tl-title { font-size: 17px; font-weight: 800; letter-spacing: 1px; color: #fff; margin-bottom: 10px; }
+    .tl-text  { font-size: 13px; color: rgba(255,255,255,0.42); line-height: 1.7; }
+
+    @media (max-width: 768px) {
+      .tl-line { left: 26px; }
+      .tl-item, .tl-right { flex-direction: row !important; }
+      .tl-left  { transform: translateX(-20px) !important; }
+      .tl-right { transform: translateX(-20px) !important; }
+      .tl-card  { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-overlay"></div>
+<div class="particles">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<!-- Loader -->
+<div id="pageLoaderOverlay">
+  <div class="loader-terminal">
+    <div class="loader-titlebar">
+      <div class="loader-dot red"></div>
+      <div class="loader-dot yellow"></div>
+      <div class="loader-dot green"></div>
+      <div class="loader-title">MILLER FAMILY · SECURE ACCESS</div>
+    </div>
+    <div class="loader-body">
+      <div class="loader-logo">
+        <div class="loader-logo-text">MILLER FAMILY</div>
+        <div class="loader-logo-sub">Chronicle Archive System</div>
+      </div>
+      <div class="loader-divider"></div>
+      <div class="loader-row">Раздел: <span>ИСТОРИЯ</span></div>
+      <div id="loaderLabel">Запрос доступа...</div>
+      <div class="loader-pw-line">
+        <span class="loader-prompt">&gt;_</span>
+        <span id="loaderPassword"></span>
+        <span class="loader-cursor"></span>
+      </div>
+      <div class="loader-bar-wrap"><div id="loaderBar"></div></div>
+      <div class="loader-bar-meta">
+        <span>РАСШИФРОВКА АРХИВА</span>
+        <span id="loaderBarPct">0%</span>
+      </div>
+      <div class="loader-status" id="loaderStatus">ОЖИДАНИЕ...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="page-header">
+  <a href="index.html" class="page-logo">MILLER <span>FAMILY</span></a>
+  <nav class="page-nav">
+    <a href="gallery.html">Галерея</a>
+    <a href="rules.html">Правила</a>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+  </nav>
+</header>
+
+<!-- Content -->
+<main id="pageContent">
+  <section class="page-section">
+    <div class="page-bg-title">HISTORY</div>
+    <h1 class="page-section-title">История</h1>
+    <p class="page-section-sub">Хроника Miller Family · Del Perro RP</p>
+    <div class="timeline-wrap">
+      <div class="tl-line"></div>
+      <div id="timelineList"></div>
+    </div>
+  </section>
+  <footer class="page-footer">
+    © 2023–2026 Miller Family · Del Perro RP · <span>dev by donskoyy</span>
+  </footer>
+</main>
+
+<script type="module">
+  import { initPageLoader } from "./js/page-loader.js";
+  import { TIMELINE }       from "./events.config.js";
+
+  initPageLoader({
+    password: "MF·CHRONICLE·CLASSIFIED",
+    label:    "ВВОД КОДА ДОСТУПА К ХРОНИКЕ",
+    onComplete: renderTimeline,
+  });
+
+  function renderTimeline() {
+    const list = document.getElementById("timelineList");
+    list.innerHTML = TIMELINE.map((ev, i) => `
+      <div class="tl-item tl-${ev.side} ${ev.active ? "tl-active" : ""}" data-i="${i}">
+        <div class="tl-dot"><span>${ev.icon}</span></div>
+        <div class="tl-card">
+          <div class="tl-date">${ev.date}</div>
+          <div class="tl-title">${ev.title}</div>
+          <div class="tl-text">${ev.text}</div>
+        </div>
+      </div>
+    `).join("");
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("tl-visible"); obs.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    list.querySelectorAll(".tl-item").forEach(el => obs.observe(el));
+  }
+</script>
+</body>
+</html>

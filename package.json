@@ -1,7 +1,7 @@
 {
   "name": "miller-family",
   "version": "1.0.0",
-  "description": "Miller Family — ALTA RP website",
+  "description": "Miller Family — DEL PERRO RP website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
