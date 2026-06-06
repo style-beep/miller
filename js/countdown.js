@@ -1,15 +1,19 @@
-import { NEXT_EVENT } from "../events.config.js";
+import { NEXT_EVENT } from "./config/events.js";
 
 export function initCountdown() {
   const el = document.getElementById("countdownWidget");
   if (!el) return;
 
-  document.getElementById("countdownEventName")
-    && (document.getElementById("countdownEventName").textContent = NEXT_EVENT.title);
-  document.getElementById("countdownEventDesc")
-    && (document.getElementById("countdownEventDesc").textContent = NEXT_EVENT.description);
+  // Берём событие из localStorage (если изменено в админке), иначе из конфига
+  const stored = JSON.parse(localStorage.getItem("miller_event") || "null");
+  const event  = stored || { title: NEXT_EVENT.title, desc: NEXT_EVENT.description, date: NEXT_EVENT.date };
 
-  const target = new Date(NEXT_EVENT.date).getTime();
+  document.getElementById("countdownEventName")
+    && (document.getElementById("countdownEventName").textContent = event.title);
+  document.getElementById("countdownEventDesc")
+    && (document.getElementById("countdownEventDesc").textContent = event.desc || "");
+
+  const target = new Date(event.date).getTime();
 
   function pad(n) { return String(n).padStart(2, "0"); }
 

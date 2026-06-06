@@ -1,8 +1,15 @@
-import { ROLE_ORDER } from "../roles.config.js";
+import { ROLE_ORDER } from "./config/roles.js";
 
 const INITIAL_LIMIT = 50;
 let allMembers = [];
 let expanded = false;
+
+// ── Статичный fallback список (показывается если API недоступен) ──
+const FALLBACK_MEMBERS = [
+  { name: "Eddie Miller",  status: "online", avatar: "images/eddie.jpg", roles: [{ name: "Создатель",        color: "#ff2a2a" }] },
+  { name: "Adam Miller",   status: "online", avatar: "images/adam.jpg",  roles: [{ name: "꒰👑꒱ Director  ✦", color: "#c0a030" }] },
+  { name: "Roy Miller",    status: "online", avatar: "images/roy.jpg",   roles: [{ name: "✦🦢୧﹕Deputy Director", color: "#888" }] },
+];
 
 function memberPriority(member) {
   if (!member.roles?.length) return ROLE_ORDER.length;
@@ -18,26 +25,24 @@ function renderMembers() {
   if (!list) return;
 
   const visible = expanded ? allMembers : allMembers.slice(0, INITIAL_LIMIT);
+  const colors  = { online: "#43b581", idle: "#faa61a", dnd: "#f04747" };
 
-  const colors = { online: "#43b581", idle: "#faa61a", dnd: "#f04747" };
-
-  const items = visible.map((member) => {
-    const color     = colors[member.status] || "#777";
-    const name      = document.createTextNode(member.name).textContent;
-    const topRole   = member.roles?.[0];
-    const roleHtml  = topRole
+  const items = visible.map(member => {
+    const color   = colors[member.status] || "#777";
+    const name    = document.createTextNode(member.name).textContent;
+    const topRole = member.roles?.[0];
+    const roleHtml = topRole
       ? `<span class="member-role" style="color:${topRole.color === '#000000' ? '#888' : topRole.color}">${topRole.name}</span>`
       : "";
     return `
       <div class="member-item">
         <span class="member-dot" style="background:${color}"></span>
-        <img src="${member.avatar}" style="width:28px;height:28px;border-radius:50%;margin-right:10px;">
+        <img src="${member.avatar}" style="width:28px;height:28px;border-radius:50%;margin-right:10px;object-fit:cover;">
         <span class="member-name-wrap">
           <span class="member-name">${name}</span>
           ${roleHtml}
         </span>
-      </div>
-    `;
+      </div>`;
   }).join("");
 
   const hasMore = allMembers.length > INITIAL_LIMIT;
@@ -50,18 +55,13 @@ function renderMembers() {
   list.innerHTML = items + btnHtml;
 
   const btn = document.getElementById("loadMoreBtn");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      expanded = !expanded;
-      renderMembers();
-    });
-  }
+  if (btn) btn.addEventListener("click", () => { expanded = !expanded; renderMembers(); });
 }
 
-// ── Загрузка участников Discord ────────────────────────────
 export async function loadDiscordMembers() {
   try {
-    const res     = await fetch("/api/members");
+    const res = await fetch("/api/members");
+    if (!res.ok) throw new Error("API недоступен");
     const members = await res.json();
 
     const count = document.getElementById("memberCount");
@@ -71,12 +71,16 @@ export async function loadDiscordMembers() {
       .filter(m => m.roles?.some(r => ROLE_ORDER.includes(r.name)))
       .sort((a, b) => memberPriority(a) - memberPriority(b));
     renderMembers();
-  } catch (err) {
-    console.error("Discord members error:", err);
+  } catch {
+    // API недоступен — показываем fallback
+    const count = document.getElementById("memberCount");
+    if (count) count.textContent = FALLBACK_MEMBERS.length;
+    allMembers = FALLBACK_MEMBERS;
+    renderMembers();
   }
 }
 
 export function initDiscordMembers() {
   loadDiscordMembers();
-  setInterval(loadDiscordMembers, 10000);
+  setInterval(loadDiscordMembers, 30000);
 }

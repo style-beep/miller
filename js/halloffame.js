@@ -1,4 +1,4 @@
-import { HALL_OF_FAME } from "../events.config.js";
+import { HALL_OF_FAME } from "./config/events.js";
 
 export function initHallOfFame() {
   const grid = document.getElementById("hofGrid");

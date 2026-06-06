@@ -57,6 +57,30 @@
 
     .admin-body { padding: 32px; max-width: 1100px; margin: 0 auto; }
 
+    /* Tabs */
+    .admin-tabs { display: flex; gap: 4px; margin-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .admin-tab { padding: 10px 20px; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border: none; background: none; color: rgba(255,255,255,0.3); font-family: 'Montserrat',sans-serif; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; }
+    .admin-tab:hover { color: rgba(255,255,255,0.6); }
+    .admin-tab.active { color: var(--red); border-bottom-color: var(--red); }
+    .admin-tab-content { display: none; }
+    .admin-tab-content.active { display: block; }
+
+    /* Content editor */
+    .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .content-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 24px; }
+    .content-card-title { font-size: 10px; font-weight: 800; letter-spacing: 3px; color: rgba(255,42,42,0.7); text-transform: uppercase; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .content-field { margin-bottom: 14px; }
+    .content-label { font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 6px; display: block; }
+    .content-input { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'Montserrat',sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+    .content-input:focus { border-color: rgba(255,42,42,0.4); }
+    .content-textarea { width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-family: 'Montserrat',sans-serif; font-size: 13px; outline: none; resize: vertical; min-height: 80px; box-sizing: border-box; }
+    .content-textarea:focus { border-color: rgba(255,42,42,0.4); }
+    .content-save { padding: 10px 24px; background: linear-gradient(90deg,#cc1111,#8a0000); border: none; border-radius: 8px; color: #fff; font-family: 'Montserrat',sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 2px; cursor: pointer; transition: opacity 0.2s; margin-top: 4px; }
+    .content-save:hover { opacity: 0.85; }
+    .content-saved { color: #4caf50; font-size: 11px; letter-spacing: 1px; margin-left: 10px; opacity: 0; transition: opacity 0.3s; }
+    .hof-editor-item { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 16px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.04); }
+    .hof-editor-head { grid-column: 1/-1; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: rgba(255,42,42,0.6); margin-bottom: 6px; }
+
     /* Stats */
     .admin-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 28px; }
     .as-card { padding: 20px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; text-align: center; }
@@ -124,6 +148,9 @@
     <input type="password" class="login-input" id="secretInput" placeholder="Введи ADMIN_SECRET" autocomplete="off">
     <button class="login-btn" id="loginBtn">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></button>
     <div class="login-error" id="loginError"></div>
+    <a href="index.html" style="display:block;text-align:center;margin-top:16px;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">
+      <i class="fa-solid fa-arrow-left"></i> ВЕРНУТЬСЯ НА САЙТ
+    </a>
   </div>
 </div>
 
@@ -131,25 +158,85 @@
 <div id="adminPanel">
   <div class="admin-header">
     <div class="admin-logo">MILLER FAMILY · ADMIN</div>
-    <button class="admin-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <a href="index.html" class="admin-logout" title="На главную"><i class="fa-solid fa-house"></i> На сайт</a>
+      <button class="admin-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button>
+    </div>
   </div>
   <div class="admin-body">
     <div class="admin-stats" id="adminStats"></div>
-    <div class="admin-section-title">ЗАЯВКИ НА ВСТУПЛЕНИЕ</div>
-    <div class="filter-bar" id="filterBar">
-      <button class="filter-btn active" data-filter="all">ВСЕ</button>
-      <button class="filter-btn" data-filter="pending">ОЖИДАЮТ</button>
-      <button class="filter-btn" data-filter="approved">ОДОБРЕНЫ</button>
-      <button class="filter-btn" data-filter="rejected">ОТКЛОНЕНЫ</button>
+
+    <!-- Вкладки -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="applications">📋 Заявки</button>
+      <button class="admin-tab" data-tab="hof">🏆 Доска почёта</button>
+      <button class="admin-tab" data-tab="event">📅 Событие</button>
+      <button class="admin-tab" data-tab="allies">🤝 Союзники</button>
     </div>
-    <table class="apps-table">
-      <thead>
-        <tr>
-          <th>Никнейм</th><th>Discord</th><th>Возраст</th><th>Опыт</th><th>Дата</th><th>Статус</th><th>Действия</th>
-        </tr>
-      </thead>
-      <tbody id="appsBody"></tbody>
-    </table>
+
+    <!-- Вкладка: Заявки -->
+    <div class="admin-tab-content active" id="tab-applications">
+      <div class="admin-section-title">ЗАЯВКИ НА ВСТУПЛЕНИЕ</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap">
+        <div class="filter-bar" id="filterBar" style="margin:0">
+          <button class="filter-btn active" data-filter="all">ВСЕ</button>
+          <button class="filter-btn" data-filter="pending">ОЖИДАЮТ</button>
+          <button class="filter-btn" data-filter="approved">ОДОБРЕНЫ</button>
+          <button class="filter-btn" data-filter="rejected">ОТКЛОНЕНЫ</button>
+        </div>
+        <button class="action-btn btn-reject" id="clearAppsBtn" style="margin-left:auto">🗑 Очистить все</button>
+      </div>
+      <table class="apps-table">
+        <thead>
+          <tr><th>Никнейм</th><th>Discord</th><th>Возраст</th><th>Опыт</th><th>Дата</th><th>Статус</th><th>Действия</th></tr>
+        </thead>
+        <tbody id="appsBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Вкладка: Доска почёта -->
+    <div class="admin-tab-content" id="tab-hof">
+      <div class="admin-section-title">РЕДАКТОР ДОСКИ ПОЧЁТА</div>
+      <div id="hofEditorWrap"></div>
+      <button class="content-save" id="saveHof">💾 СОХРАНИТЬ</button>
+      <span class="content-saved" id="hofSaved">✓ Сохранено</span>
+      <p style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.2)">⚠ Изменения сохраняются в браузере и применятся при перезагрузке страницы.</p>
+    </div>
+
+    <!-- Вкладка: Событие/Таймер -->
+    <div class="admin-tab-content" id="tab-event">
+      <div class="admin-section-title">СЛЕДУЮЩЕЕ СОБЫТИЕ</div>
+      <div class="content-grid" style="max-width:700px">
+        <div class="content-card" style="grid-column:1/-1">
+          <div class="content-card-title">⏱ Таймер обратного отсчёта</div>
+          <div class="content-field">
+            <label class="content-label">Название события</label>
+            <input class="content-input" id="evtTitle" placeholder="СЕМЕЙНЫЙ СБОР">
+          </div>
+          <div class="content-field">
+            <label class="content-label">Описание</label>
+            <input class="content-input" id="evtDesc" placeholder="Описание события">
+          </div>
+          <div class="content-field">
+            <label class="content-label">Дата и время (формат: 2026-06-20T20:00:00)</label>
+            <input class="content-input" id="evtDate" placeholder="2026-06-20T20:00:00" type="datetime-local">
+          </div>
+          <button class="content-save" id="saveEvent">💾 СОХРАНИТЬ</button>
+          <span class="content-saved" id="evtSaved">✓ Сохранено</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Вкладка: Союзники -->
+    <div class="admin-tab-content" id="tab-allies">
+      <div class="admin-section-title">УПРАВЛЕНИЕ СОЮЗНИКАМИ</div>
+      <div id="alliesEditorWrap"></div>
+      <button class="content-save" id="addAlly" style="background:rgba(255,255,255,0.08);margin-bottom:16px">+ ДОБАВИТЬ СОЮЗНИКА</button>
+      <br>
+      <button class="content-save" id="saveAllies">💾 СОХРАНИТЬ</button>
+      <span class="content-saved" id="alliesSaved">✓ Сохранено</span>
+    </div>
+
   </div>
 </div>
 
@@ -162,26 +249,35 @@
 </div>
 
 <script>
-let SECRET = "";
+// ══════════════════════════════════════════════════════════
+//  MILLER FAMILY ADMIN PANEL — localStorage версия
+// ══════════════════════════════════════════════════════════
+
 let allApps = [];
 let currentFilter = "all";
 
+// ── Дефолты для контента ──────────────────────────────────
+const DEFAULT_HOF = [
+  { name:"EDDIE MILLER", role:"Family Boss",       reason:"Основатель и лидер организации", photo:"images/eddie.jpg", badge:"👑" },
+  { name:"ADAM MILLER",  role:"Director",           reason:"Лучший менеджер месяца",         photo:"images/adam.jpg",  badge:"🛡️" },
+  { name:"ROY MILLER",   role:"Deputy Director",    reason:"Лучший боец месяца",             photo:"images/roy.jpg",   badge:"⚔️" },
+];
+const DEFAULT_EVENT = { title:"СЕМЕЙНЫЙ СБОР", desc:"Общий сбор Miller Family", date:"2026-06-20T20:00" };
+const DEFAULT_ALLIES = [
+  { name:"ПРИМЕРНЫЙ СОЮЗНИК", tag:"ALLY", desc:"Дружественная организация. Пакт о ненападении подписан в 2024 году.", discord:"https://discord.gg/", since:"Март 2024", status:"active" },
+];
+
+// ── Login ─────────────────────────────────────────────────
 document.getElementById("loginBtn").addEventListener("click", tryLogin);
 document.getElementById("secretInput").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
 
-async function tryLogin() {
+function tryLogin() {
   const s = document.getElementById("secretInput").value.trim();
   if (!s) return;
-  // Проверяем через API
-  const res = await fetch("/api/application-status?discord=__test__", {
-    headers: { "x-admin-secret": s }
-  });
-  // Если не 403 — секрет верный (сервер вернёт 200 или 404, но не 403)
-  if (res.status !== 403) {
-    SECRET = s;
+  if (s === "donskoyy") {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("adminPanel").style.display = "block";
-    loadApps();
+    initAdmin();
   } else {
     document.getElementById("loginError").textContent = "Неверный ключ доступа";
     setTimeout(() => document.getElementById("loginError").textContent = "", 2500);
@@ -189,37 +285,40 @@ async function tryLogin() {
 }
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
-  SECRET = "";
   document.getElementById("adminPanel").style.display = "none";
   document.getElementById("loginScreen").style.display = "flex";
   document.getElementById("secretInput").value = "";
 });
 
-document.getElementById("filterBar").addEventListener("click", e => {
-  const btn = e.target.closest(".filter-btn");
-  if (!btn) return;
-  currentFilter = btn.dataset.filter;
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-  renderTable();
+// ── Tabs ──────────────────────────────────────────────────
+document.querySelectorAll(".admin-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".admin-tab-content").forEach(c => c.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
+  });
 });
 
-document.getElementById("detailClose").addEventListener("click", () => {
-  document.getElementById("detailModal").classList.remove("active");
-});
-document.getElementById("detailModal").addEventListener("click", e => {
-  if (e.target === document.getElementById("detailModal"))
-    document.getElementById("detailModal").classList.remove("active");
-});
+// ── Init ──────────────────────────────────────────────────
+function initAdmin() {
+  loadApps();
+  initHofEditor();
+  initEventEditor();
+  initAlliesEditor();
+}
 
-async function loadApps() {
-  // Загружаем все заявки через отдельный endpoint (нужно добавить в server.js)
-  try {
-    const res = await fetch("/api/applications", { headers: { "x-admin-secret": SECRET } });
-    if (res.ok) { allApps = await res.json(); }
-  } catch { allApps = []; }
+// ══════════════════════════════════════════════════════════
+//  ЗАЯВКИ
+// ══════════════════════════════════════════════════════════
+function loadApps() {
+  allApps = JSON.parse(localStorage.getItem("miller_applications") || "[]");
   renderStats();
   renderTable();
+}
+
+function saveApps() {
+  localStorage.setItem("miller_applications", JSON.stringify(allApps));
 }
 
 function renderStats() {
@@ -228,10 +327,10 @@ function renderStats() {
   const approved = allApps.filter(a => a.status === "approved").length;
   const rejected = allApps.filter(a => a.status === "rejected").length;
   document.getElementById("adminStats").innerHTML = [
-    { val: total,    lbl: "Всего заявок",  color: "#fff" },
-    { val: pending,  lbl: "Ожидают",       color: "#f0c040" },
-    { val: approved, lbl: "Одобрено",      color: "#4caf50" },
-    { val: rejected, lbl: "Отклонено",     color: "#f44336" },
+    { val: total,    lbl: "Всего заявок", color: "#fff"     },
+    { val: pending,  lbl: "Ожидают",      color: "#f0c040"  },
+    { val: approved, lbl: "Одобрено",     color: "#4caf50"  },
+    { val: rejected, lbl: "Отклонено",    color: "#f44336"  },
   ].map(s => `<div class="as-card"><span class="as-val" style="color:${s.color}">${s.val}</span><span class="as-lbl">${s.lbl}</span></div>`).join("");
 }
 
@@ -242,7 +341,7 @@ function renderTable() {
     body.innerHTML = `<tr><td colspan="7" class="no-apps">Заявок нет</td></tr>`;
     return;
   }
-  const labels = { pending: "ОЖИДАЕТ", approved: "ОДОБРЕНО", rejected: "ОТКЛОНЕНО" };
+  const labels = { pending:"ОЖИДАЕТ", approved:"ОДОБРЕНО", rejected:"ОТКЛОНЕНО" };
   body.innerHTML = filtered.map(a => `
     <tr>
       <td><b style="color:#fff">${a.nickname}</b></td>
@@ -255,22 +354,45 @@ function renderTable() {
         <button class="action-btn btn-approve" onclick="setStatus('${a.id}','approved')">✓</button>
         <button class="action-btn btn-reject"  onclick="setStatus('${a.id}','rejected')">✗</button>
         <button class="action-btn" style="border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4)" onclick="showDetail('${a.id}')">···</button>
+        <button class="action-btn btn-reject" onclick="deleteApp('${a.id}')" title="Удалить">🗑</button>
       </td>
     </tr>
   `).join("");
 }
 
-async function setStatus(id, status) {
-  await fetch(`/api/application-status/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json", "x-admin-secret": SECRET },
-    body: JSON.stringify({ status }),
-  });
+function setStatus(id, status) {
   const app = allApps.find(a => a.id === id);
-  if (app) app.status = status;
-  renderStats();
-  renderTable();
+  if (app) { app.status = status; saveApps(); renderStats(); renderTable(); }
 }
+
+function deleteApp(id) {
+  if (!confirm("Удалить заявку?")) return;
+  allApps = allApps.filter(a => a.id !== id);
+  saveApps(); renderStats(); renderTable();
+}
+
+document.getElementById("filterBar").addEventListener("click", e => {
+  const btn = e.target.closest(".filter-btn");
+  if (!btn) return;
+  currentFilter = btn.dataset.filter;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTable();
+});
+
+document.getElementById("clearAppsBtn").addEventListener("click", () => {
+  if (!confirm("Очистить ВСЕ заявки? Действие необратимо.")) return;
+  allApps = [];
+  saveApps(); renderStats(); renderTable();
+});
+
+document.getElementById("detailClose").addEventListener("click", () => {
+  document.getElementById("detailModal").classList.remove("active");
+});
+document.getElementById("detailModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("detailModal"))
+    document.getElementById("detailModal").classList.remove("active");
+});
 
 function showDetail(id) {
   const a = allApps.find(x => x.id === id);
@@ -294,18 +416,155 @@ function showDetail(id) {
   document.getElementById("detailModal").classList.add("active");
 }
 
-async function saveComment(id, status) {
+function saveComment(id, status) {
   const comment = document.getElementById("detailComment").value;
-  await fetch(`/api/application-status/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json", "x-admin-secret": SECRET },
-    body: JSON.stringify({ status, comment }),
-  });
   const app = allApps.find(a => a.id === id);
   if (app) { app.status = status; app.comment = comment; }
+  saveApps();
   document.getElementById("detailModal").classList.remove("active");
-  renderStats();
-  renderTable();
+  renderStats(); renderTable();
+}
+
+// ══════════════════════════════════════════════════════════
+//  ДОСКА ПОЧЁТА
+// ══════════════════════════════════════════════════════════
+function initHofEditor() {
+  const saved = JSON.parse(localStorage.getItem("miller_hof") || "null") || DEFAULT_HOF;
+  renderHofEditor(saved);
+
+  document.getElementById("saveHof").addEventListener("click", () => {
+    const items = [...document.querySelectorAll(".hof-editor-item")].map(el => ({
+      name:   el.querySelector("[data-field=name]").value,
+      role:   el.querySelector("[data-field=role]").value,
+      reason: el.querySelector("[data-field=reason]").value,
+      photo:  el.querySelector("[data-field=photo]").value,
+      badge:  el.querySelector("[data-field=badge]").value,
+    }));
+    localStorage.setItem("miller_hof", JSON.stringify(items));
+    const saved = document.getElementById("hofSaved");
+    saved.style.opacity = 1;
+    setTimeout(() => saved.style.opacity = 0, 2500);
+  });
+}
+
+function renderHofEditor(data) {
+  document.getElementById("hofEditorWrap").innerHTML = data.map((m, i) => `
+    <div class="hof-editor-item">
+      <div class="hof-editor-head">#${i+1} МЕСТО</div>
+      <div class="content-field">
+        <label class="content-label">Имя</label>
+        <input class="content-input" data-field="name" value="${m.name}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Роль</label>
+        <input class="content-input" data-field="role" value="${m.role}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">За что награждён</label>
+        <input class="content-input" data-field="reason" value="${m.reason}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Фото (путь)</label>
+        <input class="content-input" data-field="photo" value="${m.photo}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Бейдж (эмодзи)</label>
+        <input class="content-input" data-field="badge" value="${m.badge}" style="width:80px">
+      </div>
+    </div>
+  `).join("");
+}
+
+// ══════════════════════════════════════════════════════════
+//  СОБЫТИЕ / ТАЙМЕР
+// ══════════════════════════════════════════════════════════
+function initEventEditor() {
+  const saved = JSON.parse(localStorage.getItem("miller_event") || "null") || DEFAULT_EVENT;
+  document.getElementById("evtTitle").value = saved.title || "";
+  document.getElementById("evtDesc").value  = saved.desc  || "";
+  document.getElementById("evtDate").value  = saved.date  || "";
+
+  document.getElementById("saveEvent").addEventListener("click", () => {
+    const data = {
+      title: document.getElementById("evtTitle").value,
+      desc:  document.getElementById("evtDesc").value,
+      date:  document.getElementById("evtDate").value,
+    };
+    localStorage.setItem("miller_event", JSON.stringify(data));
+    const saved = document.getElementById("evtSaved");
+    saved.style.opacity = 1;
+    setTimeout(() => saved.style.opacity = 0, 2500);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  СОЮЗНИКИ
+// ══════════════════════════════════════════════════════════
+let alliesData = [];
+
+function initAlliesEditor() {
+  alliesData = JSON.parse(localStorage.getItem("miller_allies") || "null") || DEFAULT_ALLIES;
+  renderAlliesEditor();
+
+  document.getElementById("addAlly").addEventListener("click", () => {
+    alliesData.push({ name:"НОВЫЙ СОЮЗНИК", tag:"ALLY", desc:"Описание организации", discord:"https://discord.gg/", since:"2026", status:"active" });
+    renderAlliesEditor();
+  });
+
+  document.getElementById("saveAllies").addEventListener("click", () => {
+    const items = [...document.querySelectorAll(".ally-editor-item")].map(el => ({
+      name:    el.querySelector("[data-field=name]").value,
+      tag:     el.querySelector("[data-field=tag]").value,
+      desc:    el.querySelector("[data-field=desc]").value,
+      discord: el.querySelector("[data-field=discord]").value,
+      since:   el.querySelector("[data-field=since]").value,
+      status:  el.querySelector("[data-field=status]").value,
+    }));
+    localStorage.setItem("miller_allies", JSON.stringify(items));
+    const saved = document.getElementById("alliesSaved");
+    saved.style.opacity = 1;
+    setTimeout(() => saved.style.opacity = 0, 2500);
+  });
+}
+
+function renderAlliesEditor() {
+  document.getElementById("alliesEditorWrap").innerHTML = alliesData.map((a, i) => `
+    <div class="hof-editor-item ally-editor-item" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="hof-editor-head" style="display:flex;justify-content:space-between;align-items:center">
+        <span>СОЮЗНИК #${i+1}</span>
+        <button onclick="removeAlly(${i})" style="background:rgba(244,67,54,0.1);border:1px solid rgba(244,67,54,0.3);color:#f44336;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:10px">✗ Удалить</button>
+      </div>
+      <div class="content-field">
+        <label class="content-label">Название</label>
+        <input class="content-input" data-field="name" value="${a.name}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Тег</label>
+        <input class="content-input" data-field="tag" value="${a.tag}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Дата союза</label>
+        <input class="content-input" data-field="since" value="${a.since}">
+      </div>
+      <div class="content-field" style="grid-column:1/-1">
+        <label class="content-label">Описание</label>
+        <input class="content-input" data-field="desc" value="${a.desc}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Discord ссылка</label>
+        <input class="content-input" data-field="discord" value="${a.discord}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Статус (active / inactive)</label>
+        <input class="content-input" data-field="status" value="${a.status}">
+      </div>
+    </div>
+  `).join("");
+}
+
+function removeAlly(i) {
+  alliesData.splice(i, 1);
+  renderAlliesEditor();
 }
 </script>
 </body>

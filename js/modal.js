@@ -1,48 +1,63 @@
-// ── Модалка заявки ─────────────────────────────────────────
+// ── Модалка заявки — localStorage версия ─────────────────────
 export function initModal() {
-  const modal      = document.getElementById("applyModal");
-  const closeBtn   = document.getElementById("modalClose");
-  const form       = document.getElementById("applyForm");
-  const openBtns   = document.querySelectorAll(".join-btn, .main-btn");
+  const modal    = document.getElementById("applyModal");
+  const closeBtn = document.getElementById("modalClose");
+  const form     = document.getElementById("applyForm");
+  const openBtns = document.querySelectorAll(".join-btn, .main-btn");
 
   if (!modal) return;
 
   const open  = () => { modal.classList.add("show");    document.body.style.overflow = "hidden";  };
   const close = () => { modal.classList.remove("show"); document.body.style.overflow = "visible"; };
 
-  openBtns.forEach((btn) => btn.addEventListener("click", (e) => { e.preventDefault(); open(); }));
+  openBtns.forEach(btn => btn.addEventListener("click", e => { e.preventDefault(); open(); }));
   closeBtn?.addEventListener("click", close);
-  modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+  modal.addEventListener("click", e => { if (e.target === modal) close(); });
 
-  form?.addEventListener("submit", async (e) => {
+  form?.addEventListener("submit", e => {
     e.preventDefault();
 
     const data = {
-      nickname:   document.getElementById("nickname").value,
-      age:        document.getElementById("age").value,
-      discord:    document.getElementById("discord").value,
-      experience: document.getElementById("experience").value,
-      reason:     document.getElementById("reason").value,
+      id:         Date.now().toString(),
+      nickname:   document.getElementById("nickname").value.trim(),
+      age:        document.getElementById("age").value.trim(),
+      discord:    document.getElementById("discord").value.trim(),
+      experience: document.getElementById("experience").value.trim(),
+      reason:     document.getElementById("reason").value.trim(),
+      status:     "pending",
+      comment:    "",
+      createdAt:  new Date().toISOString(),
     };
 
-    try {
-      const res    = await fetch("/api/apply", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify(data),
-      });
-      const result = await res.json();
-
-      if (result.success) {
-        alert("✅ Заявка успешно отправлена! Мы свяжемся с тобой в Discord.");
-        close();
-        form.reset();
-      } else {
-        alert("Ошибка отправки заявки: " + (result.message || ""));
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Не удалось отправить заявку.");
+    // Проверка дубликата по Discord
+    const apps = JSON.parse(localStorage.getItem("miller_applications") || "[]");
+    const duplicate = apps.find(a => a.discord.toLowerCase() === data.discord.toLowerCase());
+    if (duplicate) {
+      showNotification("⚠️ Заявка с этим Discord уже подана!", "warning");
+      return;
     }
+
+    apps.push(data);
+    localStorage.setItem("miller_applications", JSON.stringify(apps));
+
+    showNotification("✅ Заявка успешно отправлена! Ожидай ответа в Discord.", "success");
+    close();
+    form.reset();
   });
+}
+
+function showNotification(msg, type) {
+  const n = document.createElement("div");
+  n.style.cssText = `
+    position:fixed;bottom:30px;right:30px;z-index:999999;
+    padding:16px 24px;border-radius:10px;
+    background:${type === "success" ? "rgba(20,80,20,0.95)" : "rgba(80,50,0,0.95)"};
+    border:1px solid ${type === "success" ? "rgba(76,175,80,0.5)" : "rgba(255,160,0,0.5)"};
+    color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;
+    box-shadow:0 8px 32px rgba(0,0,0,0.5);
+    animation:fadeInUp 0.3s ease;
+  `;
+  n.textContent = msg;
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 4000);
 }

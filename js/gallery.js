@@ -1,4 +1,4 @@
-import { GALLERY } from "../events.config.js";
+import { GALLERY } from "./config/events.js";
 
 export function initGallery() {
   const grid = document.getElementById("galleryGrid");

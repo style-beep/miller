@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
     .timeline-wrap { position: relative; max-width: 860px; margin: 0 auto; }
@@ -131,9 +131,13 @@
 
 <script type="module">
   import { initPageLoader } from "./js/page-loader.js";
-  import { TIMELINE }       from "./events.config.js";
+import { initPageTransition } from "./js/page-transition.js";
+import { initEasterEgg }      from "./js/easter-egg.js";
+  import { TIMELINE }       from "./js/config/events.js";
 
-  initPageLoader({
+  initPageTransition();
+initEasterEgg();
+initPageLoader({
     password: "MF·CHRONICLE·CLASSIFIED",
     label:    "ВВОД КОДА ДОСТУПА К ХРОНИКЕ",
     onComplete: renderTimeline,

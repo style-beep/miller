@@ -36,8 +36,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="new-features.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/extras.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
 </head>
 <body>
@@ -88,17 +88,62 @@
   </div>
 
   <!-- HEADER -->
-  <header>
-    <div class="logo">MILLER FAMILY</div>
-    <nav>
-      <a href="#home" class="active">ГЛАВНАЯ</a>
-      <a href="#about">О НАС</a>
-      <a href="#structure">СТРУКТУРА</a>
-      <a href="#members">СОСТАВ</a>
-      <a href="map.html">КАРТА</a>
-      <a href="gallery.html">ГАЛЕРЕЯ</a>
+  <header id="mainHeader">
+    <!-- Анимированная граница -->
+    <div class="header-border-anim" aria-hidden="true"></div>
+
+    <!-- Логотип -->
+    <a href="#home" class="header-logo" aria-label="Miller Family — на главную">
+      <div class="header-logo-emblem">
+        <img src="images/miller-emblem.png" alt="" class="header-logo-emblem-img"/>
+        <div class="header-logo-emblem-glow" aria-hidden="true"></div>
+      </div>
+      <div class="header-logo-text">
+        <span class="header-logo-main">MILLER</span>
+        <span class="header-logo-divider" aria-hidden="true"></span>
+        <span class="header-logo-sub">FAMILY</span>
+      </div>
+    </a>
+
+    <!-- Навигация -->
+    <nav id="mainNav">
+      <a href="#home" class="active">Главная</a>
+      <a href="#about">О нас</a>
+      <a href="#structure">Структура</a>
+      <a href="#members">Состав</a>
+      <a href="map.html">Карта</a>
+      <a href="gallery.html">Галерея</a>
+      <a href="dossier.html">Досье</a>
     </nav>
+
+    <!-- Правый блок -->
+    <div class="header-right">
+      <div class="header-status" id="headerStatus" title="Discord статус">
+        <span class="header-status-dot"></span>
+        <span class="header-status-label">ОНЛАЙН</span>
+      </div>
+      <a href="#apply" class="header-cta">
+        Вступить
+        <i class="fa-solid fa-arrow-right-long header-cta-icon"></i>
+      </a>
+      <!-- Бургер (мобильный) -->
+      <button class="header-burger" id="headerBurger" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
+
+  <!-- Мобильное меню -->
+  <div class="header-mobile-menu" id="headerMobileMenu" aria-hidden="true">
+    <a href="#home">Главная</a>
+    <a href="#about">О нас</a>
+    <a href="#structure">Структура</a>
+    <a href="#members">Состав</a>
+    <a href="map.html">Карта</a>
+    <a href="gallery.html">Галерея</a>
+    <a href="dossier.html">Досье</a>
+    <a href="#apply" class="header-mobile-cta">Вступить →</a>
+  </div>
 
   <!-- CLOCK -->
   <div class="live-clock">00:00:00</div>
@@ -293,13 +338,16 @@ Control over key districts
 </div>
 
     <!-- LOGO -->
-    <div class="emblem-container">
+    <div class="emblem-container" id="emblemContainer">
+      <canvas id="fireCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
       <div class="orbit orbit-1"></div>
-<div class="orbit orbit-2"></div>
-<div class="orbit orbit-3"></div>
-        <img src="images/miller-emblem.png"
+      <div class="orbit orbit-2"></div>
+      <div class="orbit orbit-3"></div>
+      <img src="images/miller-emblem.png"
         alt="Miller Family"
-        class="emblem-image">
+        class="emblem-image"
+        id="emblemImg"
+        style="position:relative;z-index:1">
     </div>
 
     <!-- RIGHT SIDE -->
@@ -471,6 +519,7 @@ Control over key districts
           <div>👥 <strong>70+</strong></div>
           <div>⚡ <strong>98%</strong></div>
         </div>
+        <a href="profile.html?id=eddie" class="member-profile-btn">ОТКРЫТЬ ПРОФИЛЬ <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       <!-- ADAM -->
@@ -479,7 +528,7 @@ Control over key districts
         <h2>ADAM MILLER</h2>
         <p class="role">DIRECTOR • Директор</p>
         <p class="description">
-          Контролирует внутреннюю структуру, персонал и организационные процессы. 
+          Контролирует внутреннюю структуру, персонал и организационные процессы.
           Обеспечивает стабильность и дисциплину семьи.
         </p>
         <div class="member-stats">
@@ -487,6 +536,7 @@ Control over key districts
           <div>💼 <strong>12</strong></div>
           <div>🛡️ <strong>MAX</strong></div>
         </div>
+        <a href="profile.html?id=adam" class="member-profile-btn">ОТКРЫТЬ ПРОФИЛЬ <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
       <!-- ROY -->
@@ -495,7 +545,7 @@ Control over key districts
         <h2>ROY MILLER</h2>
         <p class="role">DEPUTY DIRECTOR • Зам. Директора</p>
         <p class="description">
-          Руководит боевыми операциями, войнами и контролем территорий. 
+          Руководит боевыми операциями, войнами и контролем территорий.
           Отвечает за безопасность и силовые действия семьи.
         </p>
         <div class="member-stats">
@@ -503,6 +553,7 @@ Control over key districts
           <div>🔫 <strong>96%</strong></div>
           <div>🚗 <strong>18</strong></div>
         </div>
+        <a href="profile.html?id=roy" class="member-profile-btn">ОТКРЫТЬ ПРОФИЛЬ <i class="fa-solid fa-arrow-right"></i></a>
       </div>
 
     </div>
@@ -868,5 +919,170 @@ Control over key districts
   </div>
 </div>
 <script type="module" src="js/main.js"></script>
+<script>
+  // Секретный вход в админку: Ctrl + Shift + A
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && (e.key === 'Z' || e.key === 'z')) {
+      e.preventDefault();
+      window.location.href = 'admin.html';
+    }
+  });
+</script>
+
+<!-- ═══ FIRE EMBLEM ANIMATION ═══ -->
+<script>
+(function() {
+  const canvas = document.getElementById('fireCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const img  = document.getElementById('emblemImg');
+
+  let W, H, cx, cy, IR; // inner radius of emblem
+  let particles = [];
+  let embers = [];
+  let drips = [];
+  let raf;
+
+  function setup() {
+    const wrap = canvas.parentElement;
+    W = wrap.offsetWidth;
+    H = wrap.offsetHeight;
+    canvas.width  = W;
+    canvas.height = H;
+    cx = W / 2;
+    cy = H / 2;
+    IR = Math.min(W, H) * 0.34; // approximate emblem radius
+  }
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  // ── Fire particle ─────────────────────────────
+  function spawnFire() {
+    const angle = rand(Math.PI * 0.55, Math.PI * 0.95); // bottom arc
+    const r = IR * rand(0.85, 1.05);
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    particles.push({
+      x, y,
+      vx: rand(-0.6, 0.6),
+      vy: rand(-2.8, -1.2),
+      life: rand(0.6, 1.0),
+      maxLife: 1,
+      size: rand(4, 11),
+    });
+  }
+
+  // ── Ember spark ───────────────────────────────
+  function spawnEmber() {
+    const angle = rand(Math.PI * 0.5, Math.PI);
+    const r = IR * rand(0.9, 1.1);
+    embers.push({
+      x: cx + Math.cos(angle) * r,
+      y: cy + Math.sin(angle) * r,
+      vx: rand(-1.2, 1.2),
+      vy: rand(-3, -1),
+      life: rand(0.4, 0.9),
+      size: rand(1.5, 3.5),
+    });
+  }
+
+  // ── Blood drip ────────────────────────────────
+  function spawnDrip() {
+    const angle = rand(Math.PI * 0.6, Math.PI * 0.92);
+    const r = IR * rand(0.92, 1.0);
+    drips.push({
+      x: cx + Math.cos(angle) * r,
+      y: cy + Math.sin(angle) * r,
+      vy: rand(1.5, 3.5),
+      len: rand(10, 35),
+      life: rand(0.7, 1.2),
+      maxLife: 1,
+      w: rand(2, 5),
+    });
+  }
+
+  let t = 0;
+  function frame() {
+    raf = requestAnimationFrame(frame);
+    t += 0.016;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Spawn
+    if (Math.random() < 0.55) spawnFire();
+    if (Math.random() < 0.18) spawnEmber();
+    if (Math.random() < 0.06) spawnDrip();
+
+    const DT = 0.018;
+
+    // ── Draw fire ──
+    particles.forEach((p, i) => {
+      p.x  += p.vx; p.y  += p.vy;
+      p.vx += rand(-0.15, 0.15);
+      p.life -= DT * 1.1;
+      if (p.life <= 0) { particles.splice(i, 1); return; }
+      const a = p.life;
+      const pct = 1 - p.life;
+      // colour: white → orange → red → dark
+      let r2, g, b;
+      if (pct < 0.25)      { r2=255; g=Math.round(200+55*(1-pct/0.25)); b=Math.round(180*(1-pct/0.25)); }
+      else if (pct < 0.55) { r2=255; g=Math.round(160*(1-(pct-0.25)/0.3)); b=0; }
+      else                  { r2=Math.round(255*(1-(pct-0.55)/0.45)); g=0; b=0; }
+
+      ctx.globalAlpha = a * 0.85;
+      ctx.shadowBlur  = 14; ctx.shadowColor = `rgba(255,60,0,${a})`;
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      grad.addColorStop(0, `rgba(${r2},${g},${b},${a})`);
+      grad.addColorStop(1, `rgba(${r2},0,0,0)`);
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // ── Draw embers ──
+    embers.forEach((e, i) => {
+      e.x += e.vx; e.y += e.vy; e.vy += 0.04;
+      e.life -= DT * 1.4;
+      if (e.life <= 0) { embers.splice(i, 1); return; }
+      ctx.globalAlpha = e.life;
+      ctx.shadowBlur  = 8; ctx.shadowColor = '#ff6600';
+      ctx.fillStyle = `rgba(255,${Math.round(100+e.life*100)},0,1)`;
+      ctx.beginPath(); ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // ── Draw blood drips ──
+    drips.forEach((d, i) => {
+      d.y  += d.vy; d.len += d.vy * 0.5;
+      d.life -= DT * 0.9;
+      if (d.life <= 0) { drips.splice(i, 1); return; }
+      const a = Math.min(d.life, 0.85);
+      ctx.globalAlpha = a;
+      ctx.shadowBlur  = 6; ctx.shadowColor = 'rgba(180,0,0,0.8)';
+      ctx.strokeStyle = `rgba(160,0,0,${a})`;
+      ctx.lineWidth   = d.w;
+      ctx.lineCap     = 'round';
+      ctx.beginPath(); ctx.moveTo(d.x, d.y - d.len * 0.3); ctx.lineTo(d.x, d.y + d.len);
+      ctx.stroke();
+      // drop head
+      ctx.fillStyle = `rgba(140,0,0,${a})`;
+      ctx.beginPath(); ctx.arc(d.x, d.y + d.len, d.w * 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1; ctx.lineCap = 'butt';
+  }
+
+  // Start when emblem image is loaded
+  function start() {
+    setup();
+    window.addEventListener('resize', setup);
+    frame();
+  }
+
+  if (img.complete) start();
+  else img.addEventListener('load', start);
+})();
+</script>
 </body>
 </html>

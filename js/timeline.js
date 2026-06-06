@@ -1,4 +1,4 @@
-import { TIMELINE } from "../events.config.js";
+import { TIMELINE } from "./config/events.js";
 
 export function initTimeline() {
   const container = document.getElementById("timelineList");

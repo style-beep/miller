@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.json"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
     /* ── MAP ── */
@@ -193,6 +193,8 @@
 
 <script type="module">
 import { initPageLoader } from "./js/page-loader.js";
+import { initPageTransition } from "./js/page-transition.js";
+import { initEasterEgg }      from "./js/easter-egg.js";
 
 const FACTIONS = {
   miller:  { name: 'MILLER FAMILY', color: '#8a0000', stroke: '#ff2a2a', light: '#ff4444' },
@@ -234,6 +236,8 @@ const W = 500, H = 400;
 const CW = W / COLS, CH = H / ROWS;
 const PAD = 3;
 
+initPageTransition();
+initEasterEgg();
 initPageLoader({
   password: "MF·TACTICAL·MAP·2026",
   label: "ЗАГРУЗКА ТАКТИЧЕСКОЙ КАРТЫ",

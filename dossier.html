@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>CLASSIFIED | MILLER FAMILY DOSSIER</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&family=Special+Elite&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/page.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    /* ── Typewriter font ── */
+    .dos-font { font-family: 'Special Elite', cursive; }
+
+    /* ── Warning tape top ── */
+    .dos-tape {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(220,0,0,0.9) 0px, rgba(220,0,0,0.9) 20px,
+        rgba(0,0,0,0.85)  20px, rgba(0,0,0,0.85) 40px
+      );
+      height: 6px;
+      animation: tape-flicker 4s ease-in-out infinite;
+    }
+    @keyframes tape-flicker { 0%,100%{opacity:1} 50%{opacity:0.8} }
+
+    /* ── Page header ── */
+    .dos-header {
+      text-align: center; padding: 60px 20px 30px;
+      border-bottom: 1px solid rgba(255,42,42,0.15);
+      position: relative;
+    }
+    .dos-header-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(180,0,0,0.15); border: 1px solid rgba(255,42,42,0.3);
+      border-radius: 4px; padding: 6px 18px; margin-bottom: 20px;
+      font-size: 11px; font-weight: 700; letter-spacing: 4px;
+      color: rgba(255,42,42,0.8);
+      animation: badge-pulse 2s ease-in-out infinite;
+    }
+    @keyframes badge-pulse { 0%,100%{box-shadow:0 0 8px rgba(255,0,0,0.2)} 50%{box-shadow:0 0 20px rgba(255,0,0,0.5)} }
+    .dos-header h1 {
+      font-size: clamp(24px, 5vw, 52px); font-weight: 900; letter-spacing: 6px;
+      color: #fff; margin-bottom: 8px;
+    }
+    .dos-header h1 span { color: #ff2a2a; }
+    .dos-header-sub { font-size: 11px; letter-spacing: 4px; color: rgba(255,255,255,0.2); }
+    .dos-case-id {
+      position: absolute; right: 30px; top: 60px;
+      font-family: 'Special Elite', cursive; font-size: 12px;
+      color: rgba(255,255,255,0.1); letter-spacing: 2px; line-height: 1.8;
+      text-align: right;
+    }
+
+    /* ── Grid ── */
+    .dos-grid {
+      max-width: 1200px; margin: 0 auto; padding: 40px 20px 60px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 28px;
+    }
+
+    /* Эдди — весь первый ряд */
+    .dos-card-boss    { grid-column: 1 / -1; grid-row: 1; }
+    /* Адам, Рой, Unknown — второй ряд по три колонки */
+    .dos-card-adam    { grid-column: 1; grid-row: 2; }
+    .dos-card-roy     { grid-column: 2; grid-row: 2; }
+    .dos-card-unknown { grid-column: 3; grid-row: 2; }
+
+    /* ── Card ── */
+    .dos-card {
+      position: relative; border-radius: 4px; overflow: hidden;
+      background: rgba(8,2,2,0.92);
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 60px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .dos-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 60px rgba(180,0,0,0.25), 0 20px 60px rgba(0,0,0,0.8);
+    }
+
+    /* Paper grain texture */
+    .dos-card::before {
+      content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    /* Scan lines */
+    .dos-card::after {
+      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+      );
+    }
+
+    /* ── Card top stripe ── */
+    .dos-card-stripe {
+      position: relative; z-index: 2;
+      padding: 10px 16px; font-size: 9px; letter-spacing: 4px; font-weight: 800;
+      text-transform: uppercase; display: flex; justify-content: space-between; align-items: center;
+      background: rgba(180,0,0,0.12); border-bottom: 1px solid rgba(255,42,42,0.12);
+      color: rgba(255,255,255,0.2);
+    }
+    .dos-card-stripe .dos-blink {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-weight: 700; font-size: 9px; letter-spacing: 3px;
+    }
+    .dos-blink-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #ff2a2a;
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+    /* ── Card body ── */
+    .dos-card-body { position: relative; z-index: 2; padding: 20px; }
+
+    /* ── Photo + info layout ── */
+    .dos-top { display: flex; gap: 16px; margin-bottom: 18px; }
+    .dos-photo-wrap {
+      position: relative; flex-shrink: 0;
+      width: 100px; height: 120px;
+    }
+    .dos-photo {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+      filter: grayscale(1) contrast(1.1) brightness(0.85) sepia(0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: block;
+    }
+    .dos-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(180,0,0,0.15) 0%, transparent 60%);
+      mix-blend-mode: multiply;
+    }
+    .dos-photo-id {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.75); padding: 3px 5px;
+      font-family: 'Special Elite', cursive; font-size: 9px;
+      color: rgba(255,255,255,0.5); text-align: center; letter-spacing: 1px;
+    }
+
+    .dos-info { flex: 1; min-width: 0; }
+    .dos-name {
+      font-size: 20px; font-weight: 900; letter-spacing: 2px;
+      color: #fff; margin-bottom: 2px; line-height: 1.1;
+    }
+    .dos-alias {
+      font-family: 'Special Elite', cursive; font-size: 11px;
+      color: rgba(255,255,255,0.35); margin-bottom: 10px; letter-spacing: 1px;
+    }
+    .dos-status {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 3px; font-size: 9px;
+      font-weight: 800; letter-spacing: 3px; margin-bottom: 10px;
+    }
+    .dos-status.active   { background: rgba(180,0,0,0.25); color: #ff4444; border: 1px solid rgba(255,0,0,0.3); }
+    .dos-status.wanted   { background: rgba(200,100,0,0.25); color: #ff9800; border: 1px solid rgba(255,150,0,0.3); }
+    .dos-status.shadow   { background: rgba(40,40,100,0.25); color: #8888ff; border: 1px solid rgba(100,100,255,0.3); }
+
+    .dos-rank {
+      font-size: 10px; font-weight: 700; letter-spacing: 3px;
+      color: rgba(255,215,0,0.6); text-transform: uppercase;
+    }
+
+    /* ── Danger level ── */
+    .dos-danger-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+      padding: 8px 10px; border-radius: 3px; background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .dos-danger-label { font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.2); font-weight: 700; flex-shrink: 0; }
+    .dos-skulls { display: flex; gap: 4px; }
+    .dos-skull { font-size: 14px; filter: grayscale(1); opacity: 0.2; transition: all 0.2s; }
+    .dos-skull.active { filter: none; opacity: 1; animation: skull-pulse 2s ease-in-out infinite; }
+    @keyframes skull-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+    .dos-danger-text { margin-left: auto; font-size: 9px; letter-spacing: 2px; font-weight: 800; }
+
+    /* ── Divider ── */
+    .dos-divider {
+      height: 1px; background: rgba(255,255,255,0.05);
+      margin: 14px 0; position: relative;
+    }
+    .dos-divider::before {
+      content: 'EVIDENCE FILE'; position: absolute; left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      font-size: 8px; letter-spacing: 4px; color: rgba(255,255,255,0.1);
+      background: rgba(8,2,2,0.92); padding: 0 8px; font-weight: 700;
+    }
+
+    /* ── Charges ── */
+    .dos-section-title {
+      font-size: 8px; letter-spacing: 4px; font-weight: 800;
+      color: rgba(255,255,255,0.15); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .dos-charges { list-style: none; margin-bottom: 14px; }
+    .dos-charge {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 11px; color: rgba(255,255,255,0.45); padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03); font-family: 'Special Elite', cursive;
+      line-height: 1.3;
+    }
+    .dos-charge::before { content: '▸'; color: rgba(255,42,42,0.5); flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Notes ── */
+    .dos-notes {
+      background: rgba(255,255,0,0.02); border: 1px solid rgba(255,255,0,0.05);
+      border-radius: 2px; padding: 10px 12px;
+      font-family: 'Special Elite', cursive; font-size: 11px;
+      color: rgba(255,255,180,0.35); line-height: 1.7;
+    }
+
+    /* ── Stats row ── */
+    .dos-stats-row {
+      display: flex; gap: 6px; margin-top: 14px;
+    }
+    .dos-stat-box {
+      flex: 1; padding: 8px 10px; text-align: center;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 3px;
+    }
+    .dos-stat-box-val { font-size: 18px; font-weight: 900; color: #fff; line-height: 1; }
+    .dos-stat-box-lbl { font-size: 8px; letter-spacing: 2px; color: rgba(255,255,255,0.2); font-weight: 700; margin-top: 3px; }
+
+    /* ── CLASSIFIED stamp ── */
+    .dos-stamp {
+      position: absolute; z-index: 5;
+      font-family: 'Special Elite', cursive; font-weight: 700;
+      border: 3px solid; border-radius: 4px;
+      padding: 4px 10px; letter-spacing: 4px;
+      transform-origin: center;
+      pointer-events: none;
+    }
+    .dos-stamp-red {
+      top: 22px; right: 16px;
+      font-size: 18px; color: rgba(255,0,0,0.55); border-color: rgba(255,0,0,0.4);
+      transform: rotate(-12deg);
+      text-shadow: 0 0 8px rgba(255,0,0,0.4);
+    }
+    .dos-stamp-top-secret {
+      top: 55px; right: 10px;
+      font-size: 11px; color: rgba(255,150,0,0.45); border-color: rgba(255,150,0,0.3);
+      transform: rotate(7deg);
+    }
+    .dos-stamp-active-warrant {
+      bottom: 50px; left: 12px;
+      font-size: 13px; color: rgba(255,0,0,0.35); border-color: rgba(255,0,0,0.25);
+      transform: rotate(-5deg);
+    }
+
+    /* ── Barcode ── */
+    .dos-barcode {
+      margin-top: 14px; height: 28px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.12) 1px,
+        transparent 1px, transparent 3px,
+        rgba(255,255,255,0.06) 3px, rgba(255,255,255,0.06) 4px,
+        transparent 4px, transparent 7px,
+        rgba(255,255,255,0.10) 7px, rgba(255,255,255,0.10) 9px,
+        transparent 9px, transparent 11px
+      );
+      border-radius: 2px;
+    }
+    .dos-barcode-label {
+      font-family: 'Special Elite', cursive; font-size: 8px;
+      color: rgba(255,255,255,0.1); text-align: center; letter-spacing: 5px;
+      margin-top: 3px;
+    }
+
+    /* ── Page title section ── */
+    .dos-section-header {
+      max-width: 1200px; margin: 0 auto; padding: 0 20px 16px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .dos-section-line { flex: 1; height: 1px; background: rgba(255,42,42,0.12); }
+    .dos-section-label {
+      font-size: 9px; letter-spacing: 5px; color: rgba(255,42,42,0.35);
+      font-weight: 800; text-transform: uppercase;
+    }
+
+    /* ── Footer note ── */
+    .dos-footer-note {
+      max-width: 1200px; margin: 0 auto; padding: 20px;
+      font-family: 'Special Elite', cursive; font-size: 11px;
+      color: rgba(255,255,255,0.1); line-height: 1.8; text-align: center;
+    }
+    .dos-footer-note b { color: rgba(255,42,42,0.3); }
+
+    /* ── Glitch hover effect ── */
+    .dos-card:hover .dos-name {
+      animation: glitch-name 0.4s ease;
+    }
+    @keyframes glitch-name {
+      0%   { transform: none; }
+      20%  { transform: translateX(-2px); color: #ff4444; }
+      40%  { transform: translateX(2px); color: #fff; }
+      60%  { transform: translateX(-1px); }
+      80%  { transform: translateX(1px); }
+      100% { transform: none; }
+    }
+
+    /* ══════════════════════════════════════
+       BOSS CARD — Eddie (Director)
+    ══════════════════════════════════════ */
+
+    /* Карточка занимает всю ширину сетки */
+    .dos-card-boss {
+      grid-column: 1 / -1;
+      background: radial-gradient(ellipse at 20% 50%, rgba(80,0,0,0.18) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(120,0,0,0.12) 0%, transparent 50%),
+                  rgba(12,2,2,0.97);
+      border: 1px solid rgba(255,42,42,0.35);
+      box-shadow:
+        0 0 0 1px rgba(255,42,42,0.08),
+        0 0 50px rgba(180,0,0,0.3),
+        0 0 100px rgba(100,0,0,0.15),
+        inset 0 0 80px rgba(140,0,0,0.06);
+      animation: boss-pulse 3.5s ease-in-out infinite;
+    }
+    @keyframes boss-pulse {
+      0%,100% { box-shadow: 0 0 0 1px rgba(255,42,42,0.08), 0 0 50px rgba(180,0,0,0.3),  0 0 100px rgba(100,0,0,0.15); }
+      50%      { box-shadow: 0 0 0 1px rgba(255,42,42,0.22), 0 0 80px rgba(220,0,0,0.45), 0 0 140px rgba(150,0,0,0.25); }
+    }
+
+    /* Бегущая строка угрозы */
+    .dos-marquee-wrap {
+      overflow: hidden; background: rgba(180,0,0,0.18);
+      border-bottom: 1px solid rgba(255,42,42,0.2);
+      padding: 7px 0; position: relative; z-index: 3;
+    }
+    .dos-marquee {
+      display: inline-block; white-space: nowrap;
+      animation: marquee-scroll 18s linear infinite;
+      font-size: 9px; font-weight: 800; letter-spacing: 4px;
+      color: rgba(255,42,42,0.8); text-transform: uppercase;
+    }
+    @keyframes marquee-scroll { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+
+    /* Полоска заголовка */
+    .dos-card-boss .dos-card-stripe {
+      background: rgba(180,0,0,0.22);
+      border-bottom: 1px solid rgba(255,42,42,0.25);
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Двухколоночный layout внутри карточки */
+    .dos-boss-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 28px;
+      padding: 24px;
+      position: relative; z-index: 2;
+    }
+    @media (max-width: 660px) {
+      .dos-boss-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Левая колонка */
+    .dos-boss-left { display: flex; flex-direction: column; gap: 14px; }
+
+    /* Большое фото */
+    .dos-boss-photo-wrap {
+      position: relative; width: 100%; padding-top: 120%;
+      border: 1px solid rgba(255,42,42,0.25);
+      border-radius: 4px; overflow: hidden;
+    }
+    .dos-boss-photo {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: top center;
+      filter: grayscale(0.6) contrast(1.15) brightness(0.8) sepia(0.25);
+      transition: filter 0.5s;
+    }
+    .dos-card-boss:hover .dos-boss-photo {
+      filter: grayscale(0.3) contrast(1.1) brightness(0.9);
+    }
+    /* Уголки фото */
+    .dos-boss-photo-wrap::before,
+    .dos-boss-photo-wrap::after {
+      content: '';
+      position: absolute; z-index: 2; pointer-events: none;
+      width: 16px; height: 16px;
+      border-color: rgba(255,42,42,0.8); border-style: solid;
+    }
+    .dos-boss-photo-wrap::before { top: 4px; left: 4px; border-width: 2px 0 0 2px; }
+    .dos-boss-photo-wrap::after  { bottom: 4px; right: 4px; border-width: 0 2px 2px 0; }
+    .dos-boss-photo-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(180deg, transparent 60%, rgba(12,2,2,0.85) 100%),
+                  linear-gradient(135deg, rgba(180,0,0,0.12) 0%, transparent 50%);
+    }
+    .dos-boss-photo-id {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      background: rgba(0,0,0,0.8); padding: 4px 8px;
+      font-family: 'Special Elite', cursive; font-size: 9px;
+      color: rgba(255,255,255,0.4); text-align: center; letter-spacing: 2px;
+    }
+
+    /* Danger meter (левый блок) */
+    .dos-boss-danger {
+      background: rgba(255,0,0,0.06); border: 1px solid rgba(255,42,42,0.2);
+      border-radius: 3px; padding: 10px 12px;
+    }
+    .dos-boss-danger-title {
+      font-size: 8px; letter-spacing: 4px; font-weight: 800;
+      color: rgba(255,255,255,0.2); margin-bottom: 8px;
+    }
+    .dos-boss-skulls {
+      display: flex; gap: 5px; justify-content: center; margin-bottom: 6px;
+    }
+    .dos-boss-skull {
+      font-size: 22px;
+      animation: boss-skull 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 6px rgba(255,0,0,0.8));
+    }
+    .dos-boss-skull:nth-child(2) { animation-delay: 0.15s; }
+    .dos-boss-skull:nth-child(3) { animation-delay: 0.30s; }
+    .dos-boss-skull:nth-child(4) { animation-delay: 0.45s; }
+    .dos-boss-skull:nth-child(5) { animation-delay: 0.60s; }
+    @keyframes boss-skull {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.2) translateY(-2px); opacity: 0.75; }
+    }
+    .dos-boss-danger-label {
+      text-align: center; font-size: 11px; font-weight: 900;
+      letter-spacing: 3px; color: #ff2a2a;
+      text-shadow: 0 0 10px rgba(255,42,42,0.6);
+      animation: danger-flicker 2.5s ease-in-out infinite;
+    }
+    @keyframes danger-flicker {
+      0%,95%,100% { opacity: 1; }
+      96%,98% { opacity: 0.4; }
+      97%,99% { opacity: 1; }
+    }
+
+    /* Mini stats (левый блок) */
+    .dos-boss-mini-stats { display: flex; flex-direction: column; gap: 5px; }
+    .dos-boss-mini-stat {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 5px 8px; background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04); border-radius: 3px;
+      font-size: 10px;
+    }
+    .dos-boss-mini-stat-key { color: rgba(255,255,255,0.25); letter-spacing: 1px; font-weight: 600; }
+    .dos-boss-mini-stat-val { color: #fff; font-weight: 900; letter-spacing: 1px; }
+
+    /* Правая колонка */
+    .dos-boss-right { display: flex; flex-direction: column; gap: 14px; }
+
+    /* Шапка субъекта */
+    .dos-boss-header { border-bottom: 1px solid rgba(255,42,42,0.12); padding-bottom: 14px; }
+    .dos-boss-crown {
+      font-size: 10px; font-weight: 800; letter-spacing: 6px;
+      color: rgba(255,215,0,0.7); text-transform: uppercase; margin-bottom: 4px;
+      text-shadow: 0 0 12px rgba(255,215,0,0.3);
+    }
+    .dos-boss-name {
+      font-size: clamp(32px, 5vw, 52px); font-weight: 900; letter-spacing: 4px;
+      line-height: 1;
+      background: linear-gradient(135deg, #ffffff 0%, #ffaaaa 40%, #ff2a2a 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      margin-bottom: 4px;
+    }
+    .dos-boss-alias {
+      font-family: 'Special Elite', cursive; font-size: 12px;
+      color: rgba(255,255,255,0.3); margin-bottom: 10px; letter-spacing: 1px;
+    }
+    .dos-boss-status-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .dos-boss-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 3px;
+      background: rgba(200,0,0,0.25); border: 1px solid rgba(255,42,42,0.5);
+      font-size: 10px; font-weight: 800; letter-spacing: 3px; color: #ff4444;
+      text-transform: uppercase;
+      box-shadow: 0 0 12px rgba(200,0,0,0.25), inset 0 0 8px rgba(200,0,0,0.1);
+    }
+    .dos-boss-rank-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px; border-radius: 3px;
+      background: rgba(255,215,0,0.08); border: 1px solid rgba(255,215,0,0.2);
+      font-size: 10px; font-weight: 800; letter-spacing: 2px;
+      color: rgba(255,215,0,0.7);
+    }
+    .dos-boss-threat {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 3px;
+      background: rgba(255,80,0,0.1); border: 1px solid rgba(255,80,0,0.25);
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      color: rgba(255,120,0,0.8); margin-top: 4px;
+    }
+
+    /* Charges boss */
+    .dos-boss-charges { list-style: none; }
+    .dos-boss-charge {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 11px; color: rgba(255,255,255,0.5); padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-family: 'Special Elite', cursive; line-height: 1.4;
+    }
+    .dos-boss-charge::before {
+      content: '▸'; color: #ff2a2a; flex-shrink: 0; margin-top: 1px;
+      filter: drop-shadow(0 0 4px rgba(255,42,42,0.6));
+    }
+
+    /* Notes boss */
+    .dos-boss-notes {
+      background: rgba(255,255,0,0.02); border: 1px solid rgba(255,255,0,0.06);
+      border-left: 3px solid rgba(255,42,42,0.4);
+      border-radius: 2px; padding: 12px 14px;
+      font-family: 'Special Elite', cursive; font-size: 11px;
+      color: rgba(255,255,180,0.4); line-height: 1.8;
+    }
+
+    /* Stats grid boss */
+    .dos-boss-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+    }
+    @media (max-width: 500px) { .dos-boss-stats { grid-template-columns: repeat(2, 1fr); } }
+    .dos-boss-stat {
+      padding: 10px 8px; text-align: center;
+      background: rgba(255,42,42,0.04); border: 1px solid rgba(255,42,42,0.1);
+      border-radius: 3px;
+    }
+    .dos-boss-stat-val {
+      font-size: 22px; font-weight: 900; color: #fff; line-height: 1;
+      text-shadow: 0 0 8px rgba(255,42,42,0.4);
+    }
+    .dos-boss-stat-lbl {
+      font-size: 8px; letter-spacing: 2px; color: rgba(255,255,255,0.2);
+      font-weight: 700; margin-top: 4px; text-transform: uppercase;
+    }
+
+    /* Barcode boss */
+    .dos-boss-barcode {
+      height: 32px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(255,42,42,0.18) 0px, rgba(255,42,42,0.18) 1px,
+        transparent 1px, transparent 3px,
+        rgba(255,42,42,0.08) 3px, rgba(255,42,42,0.08) 4px,
+        transparent 4px, transparent 7px,
+        rgba(255,42,42,0.14) 7px, rgba(255,42,42,0.14) 9px,
+        transparent 9px, transparent 11px
+      );
+      border-radius: 2px; margin-top: auto;
+    }
+    .dos-boss-barcode-label {
+      font-family: 'Special Elite', cursive; font-size: 8px;
+      color: rgba(255,42,42,0.25); text-align: center;
+      letter-spacing: 5px; margin-top: 4px;
+    }
+
+    /* Stamps for boss */
+    .dos-boss-stamp {
+      position: absolute; z-index: 5;
+      font-family: 'Special Elite', cursive; font-weight: 700;
+      border: 3px solid; border-radius: 4px;
+      padding: 5px 12px; letter-spacing: 4px;
+      pointer-events: none;
+    }
+    .dos-boss-stamp-1 {
+      top: 28px; right: 20px;
+      font-size: 22px; color: rgba(255,0,0,0.6); border-color: rgba(255,0,0,0.45);
+      transform: rotate(-11deg);
+      text-shadow: 0 0 12px rgba(255,0,0,0.5);
+      animation: stamp-flicker 4s ease-in-out infinite;
+    }
+    .dos-boss-stamp-2 {
+      top: 76px; right: 12px;
+      font-size: 12px; color: rgba(255,150,0,0.5); border-color: rgba(255,150,0,0.35);
+      transform: rotate(6deg);
+    }
+    .dos-boss-stamp-3 {
+      bottom: 40px; left: 14px;
+      font-size: 14px; color: rgba(255,0,0,0.4); border-color: rgba(255,0,0,0.28);
+      transform: rotate(-4deg);
+    }
+    @keyframes stamp-flicker {
+      0%,90%,100% { opacity: 1; }
+      91%,93%,95% { opacity: 0.3; }
+      92%,94%     { opacity: 1; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .dos-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .dos-card-boss    { grid-column: 1 / -1; grid-row: 1; }
+      .dos-card-adam    { grid-column: 1;       grid-row: 2; }
+      .dos-card-roy     { grid-column: 2;       grid-row: 2; }
+      .dos-card-unknown { grid-column: 1 / -1;  grid-row: 3; max-width: 100%; }
+    }
+    @media (max-width: 560px) {
+      .dos-grid { grid-template-columns: 1fr; }
+      .dos-card-adam,
+      .dos-card-roy,
+      .dos-card-boss,
+      .dos-card-unknown {
+        grid-column: 1; grid-row: auto; max-width: 100%;
+      }
+      .dos-stamp-red { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="dos-tape"></div>
+<div class="bg-overlay"></div>
+<div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<!-- Loader -->
+<div id="pageLoaderOverlay">
+  <div class="loader-terminal">
+    <div class="loader-titlebar">
+      <div class="loader-dot red"></div><div class="loader-dot yellow"></div><div class="loader-dot green"></div>
+      <div class="loader-title">CLASSIFIED · FBI DATABASE · MILLER FAMILY</div>
+    </div>
+    <div class="loader-body">
+      <div class="loader-logo">
+        <div class="loader-logo-text">DOSSIER</div>
+        <div class="loader-logo-sub">Miller Family · Del Perro RP</div>
+      </div>
+      <div class="loader-divider"></div>
+      <div class="loader-row">Доступ: <span>LEVEL-5 CLEARANCE</span></div>
+      <div id="loaderLabel">Расшифровка засекреченных файлов...</div>
+      <div class="loader-pw-line">
+        <span class="loader-prompt">&gt;_</span>
+        <span id="loaderPassword"></span>
+        <span class="loader-cursor"></span>
+      </div>
+      <div class="loader-bar-wrap"><div id="loaderBar"></div></div>
+      <div class="loader-bar-meta"><span>ДЕШИФРОВКА ДАННЫХ</span><span id="loaderBarPct">0%</span></div>
+      <div class="loader-status" id="loaderStatus">ОЖИДАНИЕ...</div>
+    </div>
+  </div>
+</div>
+
+<header class="page-header">
+  <a href="index.html" class="page-logo">MILLER <span>FAMILY</span></a>
+  <nav class="page-nav">
+    <a href="index.html#structure">Структура</a>
+    <a href="allies.html">Союзники</a>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+  </nav>
+</header>
+
+<main id="pageContent">
+<section class="page-section" style="padding-bottom:0">
+
+  <div class="page-bg-title">FILES</div>
+  <h1 class="page-section-title">Досье</h1>
+  <p class="page-section-sub">Classified · FBI Level 5 · Miller Family Files</p>
+
+  <!-- Section header -->
+  <div class="dos-section-header">
+    <div class="dos-section-line"></div>
+    <div class="dos-section-label">Активные субъекты наблюдения</div>
+    <div class="dos-section-line"></div>
+  </div>
+
+  <!-- Header block -->
+  <div class="dos-header" style="padding-top:0">
+    <div class="dos-badge-row" style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+      <span class="dos-header-badge"><span class="dos-blink-dot"></span> АКТИВНОЕ РАССЛЕДОВАНИЕ</span>
+      <span class="dos-header-badge" style="border-color:rgba(255,150,0,0.3);color:rgba(255,150,0,0.7)">⚠ ВЫСШАЯ СТЕПЕНЬ ОПАСНОСТИ</span>
+    </div>
+    <div class="dos-case-id dos-font">
+      CASE №: MF-2026-0001<br>
+      FILED: 01/01/2026<br>
+      STATUS: OPEN
+    </div>
+  </div>
+
+</section>
+
+<!-- Cards grid -->
+<div class="dos-grid">
+
+  <!-- ─── ADAM ─── -->
+  <div class="dos-card dos-card-adam">
+    <div class="dos-stamp dos-stamp-red dos-font">CLASSIFIED</div>
+    <div class="dos-stamp dos-stamp-top-secret dos-font">TOP SECRET</div>
+    <div class="dos-stamp dos-stamp-active-warrant dos-font">ACTIVE WARRANT</div>
+
+    <div class="dos-card-stripe">
+      <span>CASE №: MF-001 · SUBJECT ALPHA</span>
+      <span class="dos-blink"><span class="dos-blink-dot"></span>LIVE</span>
+    </div>
+
+    <div class="dos-card-body">
+      <div class="dos-top">
+        <div class="dos-photo-wrap">
+          <img src="images/adam.jpg" alt="Adam" class="dos-photo"/>
+          <div class="dos-photo-overlay"></div>
+          <div class="dos-photo-id">ID: MF-001-A</div>
+        </div>
+        <div class="dos-info">
+          <div class="dos-name">ADAM</div>
+          <div class="dos-alias dos-font">"The Director" · "Il Capo"</div>
+          <div class="dos-status active"><span class="dos-blink-dot"></span> ACTIVE THREAT</div>
+          <div class="dos-rank">👑 Director · Miller Family</div>
+        </div>
+      </div>
+
+      <div class="dos-danger-row">
+        <div class="dos-danger-label">DANGER LEVEL</div>
+        <div class="dos-skulls">
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+        </div>
+        <div class="dos-danger-text" style="color:#ff2a2a">МАКСИМАЛЬНЫЙ</div>
+      </div>
+
+      <div class="dos-divider"></div>
+
+      <div class="dos-section-title">Известные обвинения</div>
+      <ul class="dos-charges">
+        <li class="dos-charge">Организация и руководство ОПГ на территории Del Perro</li>
+        <li class="dos-charge">Рэкет, незаконное обогащение, уклонение от налогов</li>
+        <li class="dos-charge">Подстрекательство к вооружённому нападению</li>
+        <li class="dos-charge">Контроль над нелегальным бизнесом района</li>
+        <li class="dos-charge">Сокрытие доказательств · Подкуп должностных лиц</li>
+      </ul>
+
+      <div class="dos-section-title">Примечания следователя</div>
+      <div class="dos-notes dos-font">
+        Субъект демонстрирует высокий интеллект и навыки манипуляции. Контролирует
+        всю цепочку командования. Крайне осторожен — улики устраняет до появления
+        свидетелей. Не приближаться без поддержки.
+      </div>
+
+      <div class="dos-stats-row">
+        <div class="dos-stat-box">
+          <div class="dos-stat-box-val">70+</div>
+          <div class="dos-stat-box-lbl">Бойцов</div>
+        </div>
+        <div class="dos-stat-box">
+          <div class="dos-stat-box-val">3+</div>
+          <div class="dos-stat-box-lbl">лет актив.</div>
+        </div>
+        <div class="dos-stat-box">
+          <div class="dos-stat-box-val">5</div>
+          <div class="dos-stat-box-lbl">Районов</div>
+        </div>
+      </div>
+
+      <div class="dos-barcode"></div>
+      <div class="dos-barcode-label">MF 0 0 1 · D I R E C T O R · 2 0 2 6</div>
+    </div>
+  </div>
+
+  <!-- ─── ROY ─── -->
+  <div class="dos-card dos-card-roy">
+    <div class="dos-stamp dos-stamp-red dos-font" style="color:rgba(255,150,0,0.6);border-color:rgba(255,150,0,0.4);transform:rotate(10deg)">WANTED</div>
+    <div class="dos-stamp dos-stamp-top-secret dos-font">CONFIDENTIAL</div>
+
+    <div class="dos-card-stripe">
+      <span>CASE №: MF-002 · SUBJECT BETA</span>
+      <span class="dos-blink"><span class="dos-blink-dot" style="background:#ff9800"></span>WANTED</span>
+    </div>
+
+    <div class="dos-card-body">
+      <div class="dos-top">
+        <div class="dos-photo-wrap">
+          <img src="images/roy.jpg" alt="Roy" class="dos-photo"/>
+          <div class="dos-photo-overlay"></div>
+          <div class="dos-photo-id">ID: MF-002-R</div>
+        </div>
+        <div class="dos-info">
+          <div class="dos-name">ROY</div>
+          <div class="dos-alias dos-font">"The Enforcer" · "R.M."</div>
+          <div class="dos-status wanted">⚠ WANTED</div>
+          <div class="dos-rank">⚔️ Enforcer · Miller Family</div>
+        </div>
+      </div>
+
+      <div class="dos-danger-row">
+        <div class="dos-danger-label">DANGER LEVEL</div>
+        <div class="dos-skulls">
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active">💀</span>
+          <span class="dos-skull" style="opacity:0.1">💀</span>
+        </div>
+        <div class="dos-danger-text" style="color:#ff9800">ВЫСОКИЙ</div>
+      </div>
+
+      <div class="dos-divider"></div>
+
+      <div class="dos-section-title">Известные обвинения</div>
+      <ul class="dos-charges">
+        <li class="dos-charge">Вооружённое нападение с применением огнестрельного оружия</li>
+        <li class="dos-charge">Торговля запрещёнными веществами в зонах Del Perro</li>
+        <li class="dos-charge">Угон транспортных средств — более 30 эпизодов</li>
+        <li class="dos-charge">Участие в организованных перестрелках между группировками</li>
+      </ul>
+
+      <div class="dos-section-title">Примечания следователя</div>
+      <div class="dos-notes dos-font">
+        Непосредственный исполнитель приказов Директора. Специализируется на
+        силовом давлении. Известен агрессивной тактикой. Неоднократно скрывался
+        от наблюдения — смена маршрутов хаотична.
+      </div>
+
+      <div class="dos-stats-row">
+        <div class="dos-stat-box">
+          <div class="dos-stat-box-val">30+</div>
+          <div class="dos-stat-box-lbl">Операций</div>
+        </div>
+        <div class="dos-stat-box">
+          <div class="dos-stat-box-val">2</div>
+          <div class="dos-stat-box-lbl">Побега</div>
+        </div>
+        <div class="dos-stat-box">
+          <div class="dos-stat-box-val">HIGH</div>
+          <div class="dos-stat-box-lbl">Угроза</div>
+        </div>
+      </div>
+
+      <div class="dos-barcode"></div>
+      <div class="dos-barcode-label">MF 0 0 2 · E N F O R C E R · 2 0 2 6</div>
+    </div>
+  </div>
+
+  <!-- ─── EDDIE — CREATOR / BOSS ─── -->
+  <div class="dos-card dos-card-boss">
+
+    <!-- Штампы -->
+    <div class="dos-boss-stamp dos-boss-stamp-1 dos-font">MOST WANTED</div>
+    <div class="dos-boss-stamp dos-boss-stamp-2 dos-font">TOP SECRET</div>
+    <div class="dos-boss-stamp dos-boss-stamp-3 dos-font">PRIORITY ALPHA</div>
+
+    <!-- Бегущая строка угрозы -->
+    <div class="dos-marquee-wrap">
+      <span class="dos-marquee">
+        ⚠ ВООРУЖЁН И КРАЙНЕ ОПАСЕН &nbsp;·&nbsp; НЕ ПРИБЛИЖАТЬСЯ БЕЗ ПОДДЕРЖКИ &nbsp;·&nbsp;
+        SUBJECT OF MAXIMUM INTEREST &nbsp;·&nbsp; CREATOR OF MILLER FAMILY &nbsp;·&nbsp;
+        ARMED AND EXTREMELY DANGEROUS &nbsp;·&nbsp; ALL UNITS ON HIGH ALERT &nbsp;·&nbsp;
+        ПРИКАЗ О НЕМЕДЛЕННОМ ЗАДЕРЖАНИИ &nbsp;·&nbsp; PRIORITY ALPHA THREAT &nbsp;·&nbsp; ⚠
+      </span>
+    </div>
+
+    <!-- Полоска -->
+    <div class="dos-card-stripe">
+      <span>★ &nbsp; CASE №: MF-000 &nbsp;·&nbsp; SUBJECT OMEGA &nbsp;·&nbsp; CREATOR &nbsp; ★</span>
+      <span class="dos-blink"><span class="dos-blink-dot"></span>LIVE · PRIORITY</span>
+    </div>
+
+    <!-- Двухколоночный layout -->
+    <div class="dos-boss-layout">
+
+      <!-- ── Левая колонка ── -->
+      <div class="dos-boss-left">
+
+        <!-- Фото -->
+        <div class="dos-boss-photo-wrap">
+          <img src="images/eddie.jpg" alt="Eddie" class="dos-boss-photo"/>
+          <div class="dos-boss-photo-overlay"></div>
+          <div class="dos-boss-photo-id">ID: MF-000 · CREATOR</div>
+        </div>
+
+        <!-- Уровень опасности -->
+        <div class="dos-boss-danger">
+          <div class="dos-boss-danger-title">THREAT ASSESSMENT</div>
+          <div class="dos-boss-skulls">
+            <span class="dos-boss-skull">💀</span>
+            <span class="dos-boss-skull">💀</span>
+            <span class="dos-boss-skull">💀</span>
+            <span class="dos-boss-skull">💀</span>
+            <span class="dos-boss-skull">💀</span>
+          </div>
+          <div class="dos-boss-danger-label">КРИТИЧЕСКИЙ</div>
+        </div>
+
+        <!-- Мини-статистика -->
+        <div class="dos-boss-mini-stats">
+          <div class="dos-boss-mini-stat">
+            <span class="dos-boss-mini-stat-key">Операций</span>
+            <span class="dos-boss-mini-stat-val">100+</span>
+          </div>
+          <div class="dos-boss-mini-stat">
+            <span class="dos-boss-mini-stat-key">Арестов</span>
+            <span class="dos-boss-mini-stat-val" style="color:#4caf50">0</span>
+          </div>
+          <div class="dos-boss-mini-stat">
+            <span class="dos-boss-mini-stat-key">Актив с</span>
+            <span class="dos-boss-mini-stat-val">2023</span>
+          </div>
+          <div class="dos-boss-mini-stat">
+            <span class="dos-boss-mini-stat-key">Угроза</span>
+            <span class="dos-boss-mini-stat-val" style="color:#ff2a2a">EXTREME</span>
+          </div>
+        </div>
+
+        <!-- Штрих-код -->
+        <div class="dos-boss-barcode"></div>
+        <div class="dos-boss-barcode-label">MF · 0 0 0 · D I R E C T O R · 2 0 2 6</div>
+
+      </div>
+
+      <!-- ── Правая колонка ── -->
+      <div class="dos-boss-right">
+
+        <!-- Заголовок субъекта -->
+        <div class="dos-boss-header">
+          <div class="dos-boss-crown">★ &nbsp; CREATOR · MILLER FAMILY · DEL PERRO RP &nbsp; ★</div>
+          <div class="dos-boss-name">EDDIE</div>
+          <div class="dos-boss-alias dos-font">"The King" &nbsp;·&nbsp; "Il Direttore" &nbsp;·&nbsp; "The First"</div>
+          <div class="dos-boss-status-row">
+            <div class="dos-boss-status"><span class="dos-blink-dot"></span> MOST WANTED</div>
+            <div class="dos-boss-rank-badge">👑 CREATOR</div>
+          </div>
+          <div class="dos-boss-threat">⚠ ВООРУЖЁН &nbsp;·&nbsp; КРАЙНЕ ОПАСЕН &nbsp;·&nbsp; НЕ ПОДХОДИТЬ В ОДИНОЧКУ</div>
+        </div>
+
+        <!-- Обвинения -->
+        <div>
+          <div class="dos-section-title">Предъявленные обвинения</div>
+          <ul class="dos-boss-charges">
+            <li class="dos-boss-charge">Создание и руководство организованной преступной группой на территории Del Perro</li>
+            <li class="dos-boss-charge">Организация вооружённых нападений и заказные операции против конкурирующих группировок</li>
+            <li class="dos-boss-charge">Контроль над всеми нелегальными бизнес-структурами района — рэкет, отмывание денег</li>
+            <li class="dos-boss-charge">Подкуп государственных чиновников, должностных лиц и силовых структур</li>
+            <li class="dos-boss-charge">Незаконный оборот оружия, торговля запрещёнными веществами в промышленных масштабах</li>
+            <li class="dos-boss-charge">Похищение людей, принуждение к сотрудничеству, сокрытие тел — более 12 эпизодов</li>
+            <li class="dos-boss-charge">Финансирование терроризма и дестабилизация криминального баланса Los Santos</li>
+          </ul>
+        </div>
+
+        <!-- Заметки -->
+        <div>
+          <div class="dos-section-title">Примечания старшего следователя</div>
+          <div class="dos-boss-notes dos-font">
+            Субъект является верховным лидером организации Miller Family — самой влиятельной
+            ОПГ в районе Del Perro. Обладает исключительным стратегическим мышлением и
+            полным контролем над всей цепочкой командования. Лично ни разу не был
+            задержан — все улики устраняются до поступления к следствию.<br><br>
+            Приближение без группы захвата из 5+ офицеров — строго запрещено.
+            Субъект признан приоритетной угрозой уровня ALPHA. Дело находится под
+            личным контролем руководства.
+          </div>
+        </div>
+
+        <!-- Большая статистика -->
+        <div>
+          <div class="dos-section-title">Оперативные данные</div>
+          <div class="dos-boss-stats">
+            <div class="dos-boss-stat">
+              <div class="dos-boss-stat-val">70+</div>
+              <div class="dos-boss-stat-lbl">Бойцов под командованием</div>
+            </div>
+            <div class="dos-boss-stat">
+              <div class="dos-boss-stat-val">5</div>
+              <div class="dos-boss-stat-lbl">Районов под контролем</div>
+            </div>
+            <div class="dos-boss-stat">
+              <div class="dos-boss-stat-val" style="color:#4caf50">0</div>
+              <div class="dos-boss-stat-lbl">Арестов за всё время</div>
+            </div>
+            <div class="dos-boss-stat">
+              <div class="dos-boss-stat-val" style="color:#ff2a2a">∞</div>
+              <div class="dos-boss-stat-lbl">Уровень угрозы</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── UNKNOWN ─── -->
+  <div class="dos-card dos-card-unknown" style="opacity:0.7">
+    <div class="dos-stamp dos-stamp-red dos-font" style="transform:rotate(-15deg);top:40px;right:20px">REDACTED</div>
+
+    <div class="dos-card-stripe">
+      <span>CASE №: MF-??? · SUBJECT UNKNOWN</span>
+      <span class="dos-blink"><span class="dos-blink-dot" style="background:#666"></span>PENDING</span>
+    </div>
+
+    <div class="dos-card-body">
+      <div class="dos-top">
+        <div class="dos-photo-wrap" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center">
+          <i class="fa-solid fa-user-secret" style="font-size:40px;color:rgba(255,255,255,0.08)"></i>
+          <div class="dos-photo-id">ID: MF-???</div>
+        </div>
+        <div class="dos-info">
+          <!-- Частично установленное имя — ФБР знает только первые буквы -->
+          <div style="margin-bottom:6px">
+            <div class="dos-name" style="letter-spacing:4px">
+              <span style="color:#fff">Its</span><span style="color:rgba(255,255,255,0.18)">██████</span>
+            </div>
+            <div style="font-size:8px;letter-spacing:2px;color:rgba(255,150,0,0.5);font-weight:700;margin-top:3px;font-family:'Special Elite',cursive">
+              ⚠ Частичная идентификация — установлено ФБР после длительного расследования
+            </div>
+          </div>
+          <div class="dos-alias dos-font" style="color:rgba(255,255,255,0.12)">████████ · ██████</div>
+          <div class="dos-status" style="background:rgba(60,60,60,0.3);color:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.1)">🔒 CLASSIFIED</div>
+          <div class="dos-rank" style="color:rgba(255,255,255,0.15)">██████████</div>
+        </div>
+      </div>
+
+      <div class="dos-danger-row">
+        <div class="dos-danger-label">DANGER LEVEL</div>
+        <div class="dos-skulls">
+          <span class="dos-skull" style="opacity:0.08">💀</span>
+          <span class="dos-skull" style="opacity:0.08">💀</span>
+          <span class="dos-skull" style="opacity:0.08">💀</span>
+          <span class="dos-skull" style="opacity:0.08">💀</span>
+          <span class="dos-skull" style="opacity:0.08">💀</span>
+        </div>
+        <div class="dos-danger-text" style="color:rgba(255,255,255,0.2)">██████</div>
+      </div>
+
+      <div class="dos-divider"></div>
+
+      <div class="dos-section-title">Известные обвинения</div>
+      <ul class="dos-charges">
+        <li class="dos-charge" style="color:rgba(255,255,255,0.15)">████████████████████████████████</li>
+        <li class="dos-charge" style="color:rgba(255,255,255,0.1)">██████████████████████████</li>
+        <li class="dos-charge" style="color:rgba(255,255,255,0.08)">████████████████████████████████████</li>
+      </ul>
+
+      <div class="dos-notes dos-font" style="color:rgba(255,255,0,0.12)">
+        Файл засекречен по запросу ████████. Доступ ограничен уровнем ██.
+        Сведения переданы в ████████. Дальнейшие комментарии — ████████.
+      </div>
+
+      <div class="dos-barcode" style="opacity:0.25"></div>
+      <div class="dos-barcode-label" style="color:rgba(255,255,255,0.05)">█ █ █ · R E D A C T E D · █ █ █ █</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer note -->
+<div class="dos-footer-note dos-font">
+  <b>ПРЕДУПРЕЖДЕНИЕ:</b> Данный документ является строго конфиденциальным материалом организации
+  Miller Family. Несанкционированное распространение информации карается по законам семьи.<br>
+  <b>Power · Loyalty · Respect</b> — Miller Family © 2023–2026
+</div>
+
+<footer class="page-footer">© 2023–2026 Miller Family · Del Perro RP · <span>dev by donskoyy</span></footer>
+</main>
+
+<script type="module">
+import { initPageLoader } from "./js/page-loader.js";
+import { initPageTransition } from "./js/page-transition.js";
+import { initEasterEgg }      from "./js/easter-egg.js";
+initPageTransition();
+initEasterEgg();
+initPageLoader({
+  password: "MF·CLASSIFIED·DOSSIER·2026",
+  label: "РАСШИФРОВКА СЕКРЕТНЫХ ФАЙЛОВ",
+  onComplete: () => {},
+});
+</script>
+</body>
+</html>

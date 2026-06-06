@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
     .profile-wrap { max-width: 900px; margin: 0 auto; }
@@ -94,10 +94,72 @@
   </footer>
 </main>
 
-<script type="module">
-import { HALL_OF_FAME } from "./events.config.js";
+<style>
+  /* ── Achievements ── */
+  .achievements-section { margin-top: 14px; }
+  .achievements-title {
+    font-size: 10px; font-weight: 800; letter-spacing: 3px;
+    color: rgba(255,42,42,0.7); text-transform: uppercase;
+    margin-bottom: 14px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .achievements-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .achievement-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 16px 10px; text-align: center;
+    background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .achievement-item:hover { border-color: rgba(255,42,42,0.3); transform: translateY(-3px); }
+  .achievement-item.locked { opacity: 0.3; filter: grayscale(1); }
+  .achievement-item.locked:hover { transform: none; border-color: rgba(255,255,255,0.06); }
+  .achievement-icon { font-size: 28px; line-height: 1; }
+  .achievement-name { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+  .achievement-desc { font-size: 10px; color: rgba(255,255,255,0.3); line-height: 1.4; }
+  .achievement-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at top, rgba(255,42,42,0.07), transparent 70%);
+    pointer-events: none;
+  }
+  .achievement-badge {
+    position: absolute; top: 6px; right: 6px;
+    font-size: 8px; font-weight: 800; letter-spacing: 1px;
+    padding: 2px 6px; border-radius: 4px;
+    background: rgba(255,42,42,0.15); color: rgba(255,42,42,0.7);
+  }
+</style>
 
-// Профили расширяем данными из HALL_OF_FAME + дополнительные поля
+<script type="module">
+import { HALL_OF_FAME } from "./js/config/events.js";
+
+// ── Достижения ──────────────────────────────────────────────────
+const ALL_ACHIEVEMENTS = [
+  { id: "founder",    icon: "👑", name: "Основатель",    desc: "Создал Miller Family",          rare: "RARE"      },
+  { id: "boss",       icon: "🔱", name: "Босс",          desc: "Получил ранг Family Boss",       rare: "EPIC"      },
+  { id: "war100",     icon: "⚔️", name: "Ветеран войн",  desc: "Участник 10+ войн",              rare: "UNCOMMON"  },
+  { id: "rich",       icon: "💰", name: "Миллиардер",    desc: "Капитал 500M+",                  rare: "EPIC"      },
+  { id: "loyal",      icon: "🤝", name: "Верность",      desc: "1 год в составе семьи",          rare: "UNCOMMON"  },
+  { id: "terror",     icon: "🔥", name: "Гроза улиц",    desc: "Лучший боец месяца",             rare: "RARE"      },
+  { id: "diplomat",   icon: "🕊️", name: "Дипломат",      desc: "Заключил союзный пакт",          rare: "UNCOMMON"  },
+  { id: "legend",     icon: "⭐", name: "Легенда",        desc: "Признан легендой сервера",       rare: "LEGENDARY" },
+  { id: "builder",    icon: "🏗️", name: "Строитель",     desc: "Открыл 10+ бизнесов",           rare: "RARE"      },
+  { id: "ghost",      icon: "👻", name: "Призрак",        desc: "Ни одного провала операции",     rare: "EPIC"      },
+  { id: "commander",  icon: "🎖️", name: "Командир",      desc: "Руководил 5+ операциями",        rare: "UNCOMMON"  },
+  { id: "ironwill",   icon: "🛡️", name: "Железная воля", desc: "Не нарушил кодекс ни разу",     rare: "RARE"      },
+];
+
+const RARE_COLORS = {
+  UNCOMMON:  "#4caf50",
+  RARE:      "#2196f3",
+  EPIC:      "#9c27b0",
+  LEGENDARY: "#ff9800",
+};
+
+// Профили с данными включая достижения
 const PROFILES = {
   eddie: {
     ...HALL_OF_FAME[0],
@@ -112,6 +174,7 @@ const PROFILES = {
     joined: "Январь 2023",
     wars: "24 победы",
     rep: "Легенда сервера",
+    achievements: ["founder","boss","war100","rich","loyal","legend","builder","ghost","ironwill"],
   },
   adam: {
     ...HALL_OF_FAME[1],
@@ -126,6 +189,7 @@ const PROFILES = {
     joined: "Февраль 2023",
     wars: "18 победы",
     rep: "Элита сервера",
+    achievements: ["war100","loyal","diplomat","commander","ironwill","builder"],
   },
   roy: {
     ...HALL_OF_FAME[2],
@@ -140,6 +204,7 @@ const PROFILES = {
     joined: "Март 2023",
     wars: "31 победа",
     rep: "Лучший боец",
+    achievements: ["war100","terror","loyal","commander","ghost","ironwill"],
   },
 };
 
@@ -148,8 +213,23 @@ const params = new URLSearchParams(location.search);
 const id = params.get("id") || "eddie";
 const p  = PROFILES[id] || PROFILES.eddie;
 
-// Обновляем title
 document.title = `${p.name} | MILLER FAMILY`;
+
+// Рендер достижений
+function renderAchievements(unlocked) {
+  return ALL_ACHIEVEMENTS.map(a => {
+    const isUnlocked = unlocked.includes(a.id);
+    const color = RARE_COLORS[a.rare] || "#fff";
+    return `
+      <div class="achievement-item${isUnlocked ? "" : " locked"}" title="${isUnlocked ? a.desc : "Не получено"}">
+        <div class="achievement-glow"></div>
+        <div class="achievement-badge" style="color:${color};background:${color}22">${a.rare}</div>
+        <div class="achievement-icon">${a.icon}</div>
+        <div class="achievement-name">${a.name}</div>
+        <div class="achievement-desc">${a.desc}</div>
+      </div>`;
+  }).join("");
+}
 
 document.getElementById("profileContent").innerHTML = `
   <div class="profile-hero">
@@ -197,6 +277,13 @@ document.getElementById("profileContent").innerHTML = `
           <span class="profile-skill-val">${s.val}%</span>
         </div>
       `).join("")}
+    </div>
+  </div>
+
+  <div class="profile-card achievements-section" style="margin-top:14px;padding:24px">
+    <div class="achievements-title">🏆 ДОСТИЖЕНИЯ — ${p.achievements.length}/${ALL_ACHIEVEMENTS.length} получено</div>
+    <div class="achievements-grid">
+      ${renderAchievements(p.achievements)}
     </div>
   </div>
 

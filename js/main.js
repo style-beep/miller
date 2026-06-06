@@ -1,3 +1,5 @@
+import { initPageTransition } from "./page-transition.js";
+import { initEasterEgg }      from "./easter-egg.js";
 import { initCursor }         from "./cursor.js";
 import { initPlayer }         from "./player.js";
 import { initModal }          from "./modal.js";
@@ -35,7 +37,9 @@ if ("serviceWorker" in navigator) {
 
 // Инициализируем всё после загрузки DOM
 document.addEventListener("DOMContentLoaded", () => {
-  initIntro();       // первым — показываем интро
+  initPageTransition(); // transitions — первым, до всего
+  initEasterEgg();      // konami code + glitch
+  initIntro();          // интро
   initCursor();
   initLoader();
   initClock();

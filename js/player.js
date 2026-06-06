@@ -1,179 +1,209 @@
-// ── Музыкальный плеер ──────────────────────────────────────
-const songs = [
-  { title: "GTA NIGHT DRIVE",          artist: "DEL PERRO RP Theme",                     src: "music/theme1.mp3",         cover: "images/covers/cover1.png" },
-  { title: "LOS SANTOS VIBES",          artist: "Night Drive",                       src: "music/theme2.mp3",         cover: "images/covers/cover2.png" },
-  { title: "BIG ROOM BEATS",            artist: "DEL PERRO RP",                           src: "music/theme3.mp3",         cover: "images/covers/cover3.png" },
-  { title: "Некрасивый",                artist: "Автостопом по фазе сна",            src: "music/nekrasiviy.mp3",     cover: "images/covers/cover1.png" },
-  { title: "Когда я умер",              artist: "Кишлак",                            src: "music/kogda-ya-umer.mp3",  cover: "images/covers/cover2.png" },
-  { title: "Темная ночь холодный дождь",artist: "Гурпал Абдулкеримов",              src: "music/temnaya-noch.mp3",   cover: "images/covers/cover2.png" },
-  { title: "Хэмильтон",                 artist: "Whole Lotta Swag feat. GATASKI",   src: "music/WLS.mp3",            cover: "images/covers/cover1.png" },
-  { title: "NEON",                      artist: "NEWLIGHTCHILD",                     src: "music/NEON.mp3",           cover: "images/covers/cover3.png" },
-  { title: "Отмена",                    artist: "Кишлак",                            src: "music/ОТМЕНА.mp3",         cover: "images/covers/cover3.png" },
-  { title: "GOAT",                      artist: "Whole Lotta Swag",                  src: "music/GOAT.mp3",           cover: "images/covers/cover1.png" },
-  { title: "COLLECTOR",                 artist: "Big Baby Tape feat. Джон Гарик",   src: "music/COLLECTOR.mp3",      cover: "images/covers/cover2.png" },
+// ── Музыкальный плеер Miller Family ────────────────────────────
+
+const SONGS = [
+  { title: "GTA NIGHT DRIVE",             artist: "DEL PERRO RP Theme",               src: "music/theme1.mp3",        cover: "images/covers/cover1.png" },
+  { title: "LOS SANTOS VIBES",            artist: "Night Drive",                       src: "music/theme2.mp3",        cover: "images/covers/cover2.png" },
+  { title: "BIG ROOM BEATS",             artist: "DEL PERRO RP",                      src: "music/theme3.mp3",        cover: "images/covers/cover3.png" },
+  { title: "Некрасивый",                  artist: "Автостопом по фазе сна",            src: "music/nekrasiviy.mp3",    cover: "images/covers/cover1.png" },
+  { title: "Когда я умер",               artist: "Кишлак",                            src: "music/kogda-ya-umer.mp3", cover: "images/covers/cover2.png" },
+  { title: "Темная ночь холодный дождь", artist: "Гурпал Абдулкеримов",               src: "music/temnaya-noch.mp3",  cover: "images/covers/cover2.png" },
+  { title: "Хэмильтон",                  artist: "Whole Lotta Swag feat. GATASKI",    src: "music/WLS.mp3",           cover: "images/covers/cover1.png" },
+  { title: "NEON",                       artist: "NEWLIGHTCHILD",                     src: "music/NEON.mp3",          cover: "images/covers/cover3.png" },
+  { title: "Отмена",                     artist: "Кишлак",                            src: "music/ОТМЕНА.mp3",        cover: "images/covers/cover3.png" },
+  { title: "GOAT",                       artist: "Whole Lotta Swag",                  src: "music/GOAT.mp3",          cover: "images/covers/cover1.png" },
+  { title: "COLLECTOR",                  artist: "Big Baby Tape feat. Джон Гарик",    src: "music/COLLECTOR.mp3",     cover: "images/covers/cover2.png" },
 ];
 
 export function initPlayer() {
-  const audio        = document.getElementById("audioPlayer");
-  const songTitle    = document.getElementById("songTitle");
-  const songArtist   = document.getElementById("songArtist");
-  const albumArt     = document.getElementById("albumArt");
-  const playBtn      = document.getElementById("playBtn");
-  const nextBtn      = document.getElementById("nextBtn");
-  const prevBtn      = document.getElementById("prevBtn");
-  const volumeSlider = document.getElementById("volumeSlider");
-  const progressBar  = document.getElementById("progressBar");
-  const minimizeBtn  = document.getElementById("minimizeBtn");
-  const musicPlayer  = document.getElementById("musicPlayer");
-  const playlistEl   = document.getElementById("playlist");
-  const currentTimeLabel = document.getElementById("currentTime");
-  const durationLabel    = document.getElementById("duration");
+  // ── Найти все элементы ──────────────────────────────────────
+  const get = id => document.getElementById(id);
 
-  if (!audio || !playBtn) return;
+  const wrap         = get("musicPlayer");
+  const audio        = get("audioPlayer");
+  const playBtn      = get("playBtn");
+  const prevBtn      = get("prevBtn");
+  const nextBtn      = get("nextBtn");
+  const minimizeBtn  = get("minimizeBtn");
+  const progressBar  = get("progressBar");
+  const volumeSlider = get("volumeSlider");
+  const songTitle    = get("songTitle");
+  const songArtist   = get("songArtist");
+  const albumArt     = get("albumArt");
+  const currentTimeEl = get("currentTime");
+  const durationEl    = get("duration");
+  const playlistEl    = get("playlist");
 
-  let currentSong = parseInt(localStorage.getItem("currentSong")) || 0;
-  let isMinimized  = false;
+  // Если нет основных элементов — выходим
+  if (!wrap || !audio || !playBtn) return;
 
-  // Громкость из localStorage
-  const savedVolume = localStorage.getItem("playerVolume");
-  audio.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.65;
+  // ── Состояние ──────────────────────────────────────────────
+  let current    = Math.min(parseInt(localStorage.getItem("mf_song") || "0"), SONGS.length - 1);
+  let isPlaying  = false;
+  let isMinimized = false;
+  let isDragging = false;
+  let dragOffX = 0, dragOffY = 0;
+
+  // ── Восстановить громкость ──────────────────────────────────
+  const savedVol = parseFloat(localStorage.getItem("mf_vol") ?? "0.65");
+  audio.volume = Math.max(0, Math.min(1, savedVol));
   if (volumeSlider) volumeSlider.value = audio.volume;
 
-  // Позиция плеера из localStorage
-  const savedX = localStorage.getItem("playerX");
-  const savedY = localStorage.getItem("playerY");
-  if (savedX && savedY && musicPlayer) {
-    musicPlayer.style.left   = savedX + "px";
-    musicPlayer.style.top    = savedY + "px";
-    musicPlayer.style.right  = "auto";
-    musicPlayer.style.bottom = "auto";
+  // ── Восстановить позицию ────────────────────────────────────
+  const sx = localStorage.getItem("mf_px");
+  const sy = localStorage.getItem("mf_py");
+  if (sx && sy) {
+    wrap.style.right  = "auto";
+    wrap.style.bottom = "auto";
+    wrap.style.left   = clampX(parseFloat(sx)) + "px";
+    wrap.style.top    = clampY(parseFloat(sy)) + "px";
   }
 
-  function formatTime(sec) {
-    if (!sec || isNaN(sec)) return "0:00";
-    const m = Math.floor(sec / 60);
-    const s = Math.floor(sec % 60);
-    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  // ── Helpers ─────────────────────────────────────────────────
+  function fmt(s) {
+    if (!isFinite(s) || isNaN(s) || s < 0) return "0:00";
+    const m = Math.floor(s / 60), ss = Math.floor(s % 60);
+    return `${m}:${ss < 10 ? "0" : ""}${ss}`;
   }
 
+  function clampX(x) { return Math.max(0, Math.min(window.innerWidth  - wrap.offsetWidth,  x)); }
+  function clampY(y) { return Math.max(0, Math.min(window.innerHeight - wrap.offsetHeight, y)); }
+
+  // ── Загрузить трек ──────────────────────────────────────────
+  function load(idx, autoPlay = false) {
+    current = ((idx % SONGS.length) + SONGS.length) % SONGS.length;
+    const song = SONGS[current];
+
+    audio.src = song.src;
+    audio.load();
+
+    if (songTitle)  songTitle.textContent  = song.title;
+    if (songArtist) songArtist.textContent = song.artist;
+    if (albumArt)   albumArt.src           = song.cover;
+    if (progressBar) { progressBar.value = 0; progressBar.style.setProperty("--fill", "0%"); }
+    if (currentTimeEl) currentTimeEl.textContent = "0:00";
+    if (durationEl)    durationEl.textContent    = "0:00";
+
+    localStorage.setItem("mf_song", current);
+    renderPlaylist();
+
+    if (autoPlay) play();
+    else { isPlaying = false; updatePlayBtn(); }
+  }
+
+  // ── Воспроизведение ─────────────────────────────────────────
+  function play() {
+    const p = audio.play();
+    if (p) p.then(() => { isPlaying = true; updatePlayBtn(); })
+            .catch(() => { isPlaying = false; updatePlayBtn(); });
+    else { isPlaying = true; updatePlayBtn(); }
+  }
+
+  function pause() {
+    audio.pause();
+    isPlaying = false;
+    updatePlayBtn();
+  }
+
+  function toggle() { isPlaying ? pause() : play(); }
+
+  function updatePlayBtn() {
+    if (!playBtn) return;
+    playBtn.textContent = isPlaying ? "❚❚" : "▶";
+  }
+
+  // ── Рендер плейлиста ────────────────────────────────────────
   function renderPlaylist() {
     if (!playlistEl) return;
     playlistEl.innerHTML = "";
-    songs.forEach((song, i) => {
+    SONGS.forEach((song, i) => {
       const li = document.createElement("li");
-      const isActive = i === currentSong;
+      li.className = i === current ? "active" : "";
       li.innerHTML = `
-        <div class="track-number">${isActive ? "▶" : i + 1}</div>
+        <div class="track-number">${i === current ? "▶" : i + 1}</div>
         <div class="track-info">
           <div class="track-title">${song.title}</div>
           <div class="track-artist">${song.artist}</div>
         </div>
-        ${isActive ? '<div class="track-playing">♪</div>' : ""}
+        ${i === current ? '<div class="track-playing">♪</div>' : ""}
       `;
-      if (isActive) li.classList.add("active");
-      li.addEventListener("click", () => {
-        currentSong = i;
-        loadSong(currentSong);
-        playSong();
-      });
+      li.addEventListener("click", () => load(i, true));
       playlistEl.appendChild(li);
     });
   }
 
-  function loadSong(index) {
-    localStorage.setItem("currentSong", index);
-    audio.src = songs[index].src;
-    audio.load();
-    songTitle.textContent  = songs[index].title;
-    songArtist.textContent = songs[index].artist;
-    if (albumArt) albumArt.src = songs[index].cover;
-    renderPlaylist();
+  // ── Прогресс-бар ────────────────────────────────────────────
+  function updateProgress() {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    if (progressBar) {
+      progressBar.value = pct;
+      progressBar.style.setProperty("--fill", pct + "%");
+    }
+    if (currentTimeEl) currentTimeEl.textContent = fmt(audio.currentTime);
+    if (durationEl)    durationEl.textContent    = fmt(audio.duration);
   }
 
-  function playSong() {
-    audio.play().then(() => {
-      playBtn.innerHTML = "❚❚";
-    }).catch(err => {
-      console.warn("Autoplay blocked:", err);
-      playBtn.innerHTML = "▶";
-    });
-  }
+  // ── События audio ───────────────────────────────────────────
+  audio.addEventListener("timeupdate",  updateProgress);
+  audio.addEventListener("loadedmetadata", updateProgress);
+  audio.addEventListener("ended",       () => load(current + 1, true));
+  audio.addEventListener("play",        () => { isPlaying = true;  updatePlayBtn(); });
+  audio.addEventListener("pause",       () => { isPlaying = false; updatePlayBtn(); });
+  audio.addEventListener("error",       () => { isPlaying = false; updatePlayBtn(); });
 
-  loadSong(currentSong);
+  // ── Кнопки управления ───────────────────────────────────────
+  playBtn.addEventListener("click", e => { e.stopPropagation(); toggle(); });
+  prevBtn?.addEventListener("click", e => { e.stopPropagation(); load(current - 1, true); });
+  nextBtn?.addEventListener("click", e => { e.stopPropagation(); load(current + 1, true); });
 
-  playBtn.addEventListener("click", () => {
-    if (audio.paused) { playSong(); }
-    else              { audio.pause(); playBtn.innerHTML = "▶"; }
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    currentSong = (currentSong + 1) % songs.length;
-    loadSong(currentSong);
-    playSong();
-  });
-
-  prevBtn?.addEventListener("click", () => {
-    currentSong = (currentSong - 1 + songs.length) % songs.length;
-    loadSong(currentSong);
-    playSong();
-  });
-
-  audio.addEventListener("ended", () => {
-    currentSong = (currentSong + 1) % songs.length;
-    loadSong(currentSong);
-    playSong();
-  });
-
-  audio.addEventListener("timeupdate", () => {
-    if (audio.duration) progressBar.value = (audio.currentTime / audio.duration) * 100;
-    if (currentTimeLabel) currentTimeLabel.textContent = formatTime(audio.currentTime);
-    if (durationLabel)    durationLabel.textContent    = formatTime(audio.duration);
-  });
-
+  // ── Прогресс (перемотка) ────────────────────────────────────
   progressBar?.addEventListener("input", () => {
-    audio.currentTime = (progressBar.value / 100) * audio.duration;
+    if (audio.duration) audio.currentTime = (progressBar.value / 100) * audio.duration;
   });
 
+  // ── Громкость ───────────────────────────────────────────────
   volumeSlider?.addEventListener("input", () => {
-    audio.volume = volumeSlider.value;
-    localStorage.setItem("playerVolume", volumeSlider.value);
+    audio.volume = parseFloat(volumeSlider.value);
+    localStorage.setItem("mf_vol", volumeSlider.value);
   });
 
-  // Свернуть / развернуть
-  minimizeBtn?.addEventListener("click", () => {
+  // ── Свернуть/развернуть ─────────────────────────────────────
+  minimizeBtn?.addEventListener("click", e => {
+    e.stopPropagation();
     isMinimized = !isMinimized;
-    musicPlayer?.classList.toggle("minimized", isMinimized);
-    minimizeBtn.innerHTML = isMinimized ? "+" : "−";
+    wrap.classList.toggle("minimized", isMinimized);
+    minimizeBtn.textContent = isMinimized ? "+" : "−";
   });
 
-  // Перетаскивание
-  if (musicPlayer) {
-    let isDragging = false, offsetX = 0, offsetY = 0;
+  // ── Перетаскивание (desktop) ────────────────────────────────
+  wrap.addEventListener("mousedown", e => {
+    if (e.target.closest("button, input, ul, li")) return;
+    isDragging = true;
+    wrap.classList.add("dragging");
+    const rect = wrap.getBoundingClientRect();
+    dragOffX = e.clientX - rect.left;
+    dragOffY = e.clientY - rect.top;
+    e.preventDefault();
+  });
 
-    musicPlayer.addEventListener("mousedown", (e) => {
-      if (e.target.closest("button, input, .music-controls, .volume-box")) return;
-      isDragging = true;
-      musicPlayer.classList.add("dragging");
-      offsetX = e.clientX - musicPlayer.getBoundingClientRect().left;
-      offsetY = e.clientY - musicPlayer.getBoundingClientRect().top;
-    });
+  document.addEventListener("mousemove", e => {
+    if (!isDragging) return;
+    const x = clampX(e.clientX - dragOffX);
+    const y = clampY(e.clientY - dragOffY);
+    wrap.style.left   = x + "px";
+    wrap.style.top    = y + "px";
+    wrap.style.right  = "auto";
+    wrap.style.bottom = "auto";
+  });
 
-    document.addEventListener("mousemove", (e) => {
-      if (!isDragging) return;
-      musicPlayer.style.left   = `${e.clientX - offsetX}px`;
-      musicPlayer.style.top    = `${e.clientY - offsetY}px`;
-      musicPlayer.style.right  = "auto";
-      musicPlayer.style.bottom = "auto";
-    });
+  document.addEventListener("mouseup", () => {
+    if (!isDragging) return;
+    isDragging = false;
+    wrap.classList.remove("dragging");
+    localStorage.setItem("mf_px", parseInt(wrap.style.left  || 0));
+    localStorage.setItem("mf_py", parseInt(wrap.style.top   || 0));
+  });
 
-    document.addEventListener("mouseup", () => {
-      if (!isDragging) return;
-      isDragging = false;
-      musicPlayer.classList.remove("dragging");
-      if (musicPlayer.style.left) {
-        localStorage.setItem("playerX", parseInt(musicPlayer.style.left));
-        localStorage.setItem("playerY", parseInt(musicPlayer.style.top));
-      }
-    });
-  }
+  // ── Инициализация ───────────────────────────────────────────
+  load(current, false);
 }

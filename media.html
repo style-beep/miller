@@ -8,7 +8,7 @@
   <link rel="manifest" href="manifest.json"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="page.css"/>
+  <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
     .media-grid {
@@ -231,7 +231,9 @@
 
 <script type="module">
   import { initPageLoader } from "./js/page-loader.js";
-  import { MEDIA }          from "./events.config.js";
+import { initPageTransition } from "./js/page-transition.js";
+import { initEasterEgg }      from "./js/easter-egg.js";
+  import { MEDIA }          from "./js/config/events.js";
 
   const PLATFORM_ICONS = {
     youtube: { icon: 'fa-brands fa-youtube',  cls: 'platform-youtube', label: 'YouTube' },
@@ -239,7 +241,9 @@
     video:   { icon: 'fa-solid fa-film',       cls: 'platform-video',   label: 'Видео'   },
   };
 
-  initPageLoader({
+  initPageTransition();
+initEasterEgg();
+initPageLoader({
     password: "MF·MEDIA·ARCHIVE·2026",
     label:    "ЗАГРУЗКА МЕДИА АРХИВА",
     onComplete: render,

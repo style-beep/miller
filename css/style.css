@@ -105,7 +105,7 @@ html {
   inset: 0;
   z-index: -3;
   background: linear-gradient(rgba(0,0,0,0.82), rgba(0,0,0,0.94)),
-              url("images/background.png") center/cover no-repeat fixed;
+              url("../images/background.png") center/cover no-repeat fixed;
 }
 
 .cursor-glow {
@@ -147,50 +147,339 @@ html {
 }
 
 /* ====================== 4. HEADER ====================== */
+/* ═══════════════════════════════════════════════
+   HEADER  — новая версия
+═══════════════════════════════════════════════ */
+
+/* @property для анимированного угла границы */
+@property --hdr-rot {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
 header {
   position: fixed;
-  top: 20px;
+  top: 16px;
   left: 50%;
   transform: translateX(-50%);
-  width: 92%;
-  max-width: 1350px;
-  height: 86px;
-  background: rgba(10, 10, 10, 0.78);
-  backdrop-filter: blur(22px);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 28px;
-  padding: 0 35px;
+  width: 93%;
+  max-width: 1400px;
+  height: 68px;
+  background: rgba(7, 1, 1, 0.84);
+  backdrop-filter: blur(28px) saturate(1.6);
+  border: 1px solid rgba(255, 42, 42, 0.16);
+  border-radius: 18px;
+  padding: 0 20px 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   z-index: 9999;
+  box-shadow:
+    0 0 0 1px rgba(255,42,42,0.04),
+    0 8px 48px rgba(0,0,0,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.055);
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s, height 0.3s;
 }
 
-.logo {
-  font-size: 26px;
+/* Вращающаяся красная точка по периметру */
+.header-border-anim {
+  position: absolute;
+  inset: -1px;
+  border-radius: 19px;
+  background: conic-gradient(
+    from var(--hdr-rot),
+    transparent       0deg,
+    rgba(255,42,42,0) 40deg,
+    rgba(255,42,42,1) 80deg,
+    rgba(255,80,0,0.7) 100deg,
+    rgba(255,42,42,0) 140deg,
+    transparent       200deg
+  );
+  z-index: -1;
+  animation: hdr-border-spin 5s linear infinite;
+  opacity: 0.55;
+  pointer-events: none;
+}
+/* Внутренняя заливка поверх градиентной границы */
+.header-border-anim::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 18px;
+  background: rgba(7,1,1,0.92);
+  z-index: 0;
+}
+@keyframes hdr-border-spin { to { --hdr-rot: 360deg; } }
+
+/* ── Логотип ── */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.header-logo-emblem {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.header-logo-emblem-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255,42,42,0.55));
+  transition: filter 0.3s, transform 0.5s;
+  display: block;
+}
+.header-logo:hover .header-logo-emblem-img {
+  filter: drop-shadow(0 0 14px rgba(255,42,42,0.9));
+  transform: rotate(20deg) scale(1.08);
+}
+.header-logo-emblem-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,42,42,0.18) 0%, transparent 70%);
+  animation: emblem-hdr-pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes emblem-hdr-pulse {
+  0%,100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.15); }
+}
+
+.header-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+.header-logo-main {
+  font-size: 18px;
   font-weight: 900;
-  letter-spacing: 3px;
-  background: linear-gradient(90deg, #fff, var(--red));
+  letter-spacing: 5px;
+  background: linear-gradient(90deg, #ffffff 0%, #ff6666 60%, #ff2a2a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+.header-logo-divider {
+  display: none; /* используется только как разделитель в разметке */
+}
+.header-logo-sub {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: rgba(255, 42, 42, 0.55);
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+/* ── Навигация ── */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  position: relative;
+  z-index: 1;
 }
 
 nav a {
-  color: #ccc;
+  position: relative;
+  color: rgba(255,255,255,0.5);
   text-decoration: none;
-  padding: 12px 20px;
-  border-radius: 16px;
+  padding: 7px 13px;
+  border-radius: 10px;
   font-weight: 600;
-  font-size: 14px;
-  transition: 0.3s;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.25s, background 0.25s;
+  white-space: nowrap;
 }
 
-nav a:hover,
+/* Подчёркивание-слайдер */
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: #ff2a2a;
+  box-shadow: 0 0 8px rgba(255,42,42,0.9), 0 0 20px rgba(255,42,42,0.4);
+  transition: width 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+nav a:hover {
+  color: #fff;
+  background: rgba(255,42,42,0.07);
+}
 nav a.active {
-  background: rgba(255, 42, 42, 0.15);
-  color: white;
-  box-shadow: 0 0 20px rgba(255, 42, 42, 0.3);
+  color: #fff;
+  background: rgba(255,42,42,0.1);
+}
+nav a:hover::after,
+nav a.active::after {
+  width: calc(100% - 26px);
+}
+
+/* ── Правый блок ── */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Статус онлайн */
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: rgba(76,175,80,0.08);
+  border: 1px solid rgba(76,175,80,0.18);
+}
+.header-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 6px rgba(76,175,80,0.9);
+  animation: hdr-dot-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes hdr-dot-pulse {
+  0%,100% { transform:scale(1); opacity:1; }
+  50%      { transform:scale(1.4); opacity:0.65; }
+}
+.header-status-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: rgba(76,175,80,0.8);
+  text-transform: uppercase;
+}
+
+/* Кнопка CTA */
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #cc1111 0%, #8a0000 100%);
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 20px rgba(180,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+  white-space: nowrap;
+}
+.header-cta:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff2a2a 0%, #cc1111 100%);
+  box-shadow: 0 8px 32px rgba(255,42,42,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.header-cta-icon { font-size: 10px; transition: transform 0.25s; }
+.header-cta:hover .header-cta-icon { transform: translateX(4px); }
+
+/* ── Бургер-кнопка ── */
+.header-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.header-burger span {
+  display: block;
+  height: 2px;
+  background: rgba(255,255,255,0.75);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s, width 0.3s;
+}
+.header-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.header-burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.header-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Мобильное меню ── */
+.header-mobile-menu {
+  display: none;
+  position: fixed;
+  top: calc(16px + 68px + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 93%;
+  max-width: 1400px;
+  background: rgba(7,1,1,0.96);
+  backdrop-filter: blur(28px);
+  border: 1px solid rgba(255,42,42,0.14);
+  border-radius: 16px;
+  padding: 16px;
+  z-index: 9998;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.8);
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.header-mobile-menu.open {
+  display: flex;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: all;
+}
+.header-mobile-menu a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: color 0.2s, background 0.2s;
+}
+.header-mobile-menu a:hover { color: #fff; background: rgba(255,42,42,0.1); }
+.header-mobile-cta {
+  margin-top: 6px !important;
+  background: linear-gradient(135deg,#cc1111,#8a0000) !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(180,0,0,0.3);
+}
+
+/* ── Scroll-сжатие ── */
+header.scrolled {
+  height: 58px;
+  background: rgba(5,0,0,0.93) !important;
+  border-color: rgba(255,42,42,0.22) !important;
+  box-shadow: 0 0 0 1px rgba(255,42,42,0.08), 0 12px 50px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.04) !important;
 }
 
 /* ====================== 5. HERO SECTION ====================== */
@@ -996,8 +1285,32 @@ user-select: none;
 .member-stats {
   display: flex;
   gap: 10px;
-  padding: 0 24px 24px;
+  padding: 0 24px 18px;
   flex-wrap: wrap;
+}
+
+.member-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 24px 24px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: rgba(255,42,42,0.08);
+  border: 1px solid rgba(255,42,42,0.25);
+  color: rgba(255,42,42,0.8);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+.member-profile-btn:hover {
+  background: rgba(255,42,42,0.18);
+  border-color: rgba(255,42,42,0.5);
+  color: #ff4444;
 }
 
 .member-stats div {
@@ -3254,7 +3567,7 @@ html {
 }
 
 /* Enhanced Glassmorphism & Cyber Elements for Cards */
-.stat-card, .rank-card, .member-item, .about-card, .join-box, .music-player, .clock-container {
+.stat-card, .rank-card, .member-item, .about-card, .join-box, .clock-container {
   background: var(--panel-bg) !important;
   backdrop-filter: blur(14px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
@@ -3262,8 +3575,6 @@ html {
   border-radius: 12px !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
   transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
-  transform-style: preserve-3d;
-  perspective: 1000px;
 }
 
 /* Hover effects for cards */
@@ -3384,31 +3695,7 @@ section:hover .section-title::after {
 }
 
 /* Navigation Menu Polish */
-header nav a {
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-header nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--red-neon);
-  box-shadow: 0 0 8px var(--red-neon);
-  transition: width 0.3s ease;
-}
-
-header nav a:hover::after {
-  width: 100%;
-}
-
-header nav a:hover {
-  color: var(--red-neon) !important;
-  text-shadow: 0 0 10px var(--red-glow);
-}
+/* header nav a — управляется через базовые стили выше */
 
 /* Responsive Overrides & Fixes */
 @media (max-width: 768px) {
@@ -4455,10 +4742,15 @@ input:focus, textarea:focus {
 /* ── 768px: мобильный крупный ── */
 @media (max-width: 768px) {
   body { overflow-x: hidden; }
-  header { padding: 0 16px; height: 60px; }
-  .logo { font-size: 14px; letter-spacing: 2px; }
-  nav { gap: 12px; }
-  nav a { font-size: 10px; letter-spacing: 1px; }
+  header { padding: 0 14px; height: 62px; }
+  nav { display: none; }
+  .header-status { display: none; }
+  .header-cta { display: none; }
+  .header-burger { display: flex; }
+  .header-logo-main { font-size: 15px; letter-spacing: 4px; }
+  .header-logo-sub  { font-size: 7px; letter-spacing: 4px; }
+  .header-logo-emblem { width: 34px; height: 34px; }
+  .header-logo-emblem-img { width: 34px; height: 34px; }
   .live-clock { display: none; }
   .music-player {
     width: calc(100vw - 24px) !important;
