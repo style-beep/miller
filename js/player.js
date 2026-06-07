@@ -167,12 +167,21 @@ export function initPlayer() {
     localStorage.setItem("mf_vol", volumeSlider.value);
   });
 
+  // ── Восстановить состояние свёрнутости ─────────────────────
+  const savedMinimized = localStorage.getItem("mf_minimized") === "1";
+  if (savedMinimized) {
+    isMinimized = true;
+    wrap.classList.add("minimized");
+    if (minimizeBtn) minimizeBtn.textContent = "+";
+  }
+
   // ── Свернуть/развернуть ─────────────────────────────────────
   minimizeBtn?.addEventListener("click", e => {
     e.stopPropagation();
     isMinimized = !isMinimized;
     wrap.classList.toggle("minimized", isMinimized);
     minimizeBtn.textContent = isMinimized ? "+" : "−";
+    localStorage.setItem("mf_minimized", isMinimized ? "1" : "0");
   });
 
   // ── Перетаскивание (desktop) ────────────────────────────────

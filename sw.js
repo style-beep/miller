@@ -1,10 +1,12 @@
 // ── Service Worker — Miller Family PWA ──────────────────────
 // Стратегия: network-first для HTML/CSS/JS, cache-first для картинок/шрифтов
-const CACHE = "miller-v5";
+const CACHE = "miller-v6";
 
 const STATIC = [
   "/",
   "/index.html",
+  "/offline.html",
+  "/404.html",
   "/css/style.css",
   "/css/extras.css",
   "/css/page.css",
@@ -77,7 +79,13 @@ self.addEventListener("fetch", e => {
           return res;
         })
         .catch(() =>
-          caches.match(e.request).then(cached => cached || caches.match("/index.html"))
+          caches.match(e.request).then(cached => {
+            if (cached) return cached;
+            // Для HTML запросов возвращаем offline страницу
+            if (e.request.headers.get("accept")?.includes("text/html"))
+              return caches.match("/offline.html");
+            return caches.match("/index.html");
+          })
         )
     );
   }

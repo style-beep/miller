@@ -698,7 +698,7 @@
     <div class="dos-card-body">
       <div class="dos-top">
         <div class="dos-photo-wrap">
-          <img src="images/adam.jpg" alt="Adam" class="dos-photo"/>
+          <img loading="lazy" src="images/adam.jpg" alt="Adam" class="dos-photo"/>
           <div class="dos-photo-overlay"></div>
           <div class="dos-photo-id">ID: MF-001-A</div>
         </div>
@@ -773,7 +773,7 @@
     <div class="dos-card-body">
       <div class="dos-top">
         <div class="dos-photo-wrap">
-          <img src="images/roy.jpg" alt="Roy" class="dos-photo"/>
+          <img loading="lazy" src="images/roy.jpg" alt="Roy" class="dos-photo"/>
           <div class="dos-photo-overlay"></div>
           <div class="dos-photo-id">ID: MF-002-R</div>
         </div>
@@ -866,7 +866,7 @@
 
         <!-- Фото -->
         <div class="dos-boss-photo-wrap">
-          <img src="images/eddie.jpg" alt="Eddie" class="dos-boss-photo"/>
+          <img loading="lazy" src="images/eddie.jpg" alt="Eddie" class="dos-boss-photo"/>
           <div class="dos-boss-photo-overlay"></div>
           <div class="dos-boss-photo-id">ID: MF-000 · CREATOR</div>
         </div>
@@ -1066,5 +1066,680 @@ initPageLoader({
   onComplete: () => {},
 });
 </script>
+
+<!-- ══════════════════════════════════════════════
+     DOSSIER PAGE VISUAL OVERLAYS
+══════════════════════════════════════════════ -->
+<style>
+  /* ── 1. CRT Monitor Effect ── */
+  #crt-overlay {
+    position: fixed; inset: 0; z-index: 9000; pointer-events: none;
+  }
+  /* Scanlines */
+  #crt-overlay::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(0,0,0,0.07) 2px,
+      rgba(0,0,0,0.07) 4px
+    );
+    pointer-events: none;
+  }
+  /* Vignette */
+  #crt-overlay::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(0,0,0,0.55) 100%
+    );
+    pointer-events: none;
+  }
+  /* CRT flicker */
+  @keyframes crt-flicker {
+    0%,96%,100% { opacity: 1; }
+    97%          { opacity: 0.92; }
+    98%          { opacity: 1; }
+    99%          { opacity: 0.95; }
+  }
+  #crt-overlay { animation: crt-flicker 6s ease-in-out infinite; }
+
+  /* ── 2. Red Pulsing Vignette ── */
+  #red-vignette {
+    position: fixed; inset: 0; z-index: 8999; pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(120,0,0,0.18) 100%
+    );
+    animation: red-pulse 4s ease-in-out infinite;
+  }
+  @keyframes red-pulse {
+    0%,100% { opacity: 0.6; }
+    50%     { opacity: 1; }
+  }
+
+  /* ── 3. Classified Watermark ── */
+  #classified-watermark {
+    position: fixed; inset: 0; z-index: 8998; pointer-events: none;
+    overflow: hidden;
+  }
+  #classified-watermark::before {
+    content: 'CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 140%;
+    font-family: 'Special Elite', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    color: rgba(180,0,0,0.045);
+    line-height: 3.2;
+    word-spacing: 24px;
+    transform: rotate(-35deg);
+    transform-origin: center;
+    white-space: normal;
+    word-break: break-all;
+    pointer-events: none;
+  }
+
+  /* ── 4. Surveillance Camera UI ── */
+  #surveillance-cam {
+    position: fixed;
+    top: 72px;
+    right: 20px;
+    z-index: 9100;
+    pointer-events: none;
+    font-family: 'Special Elite', cursive;
+  }
+  .cam-frame {
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,42,42,0.25);
+    border-radius: 4px;
+    padding: 8px 12px;
+    min-width: 170px;
+    backdrop-filter: blur(6px);
+  }
+  .cam-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .cam-rec {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    color: #ff2a2a;
+  }
+  .cam-rec-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #ff2a2a;
+    box-shadow: 0 0 6px rgba(255,42,42,0.8);
+    animation: rec-blink 1s ease-in-out infinite;
+  }
+  @keyframes rec-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .cam-label {
+    font-size: 8px; letter-spacing: 2px;
+    color: rgba(255,255,255,0.25);
+  }
+  .cam-time {
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    color: rgba(255,255,255,0.7); margin-bottom: 3px;
+    font-family: 'Montserrat', monospace;
+  }
+  .cam-date {
+    font-size: 9px; letter-spacing: 2px;
+    color: rgba(255,255,255,0.2);
+  }
+  .cam-divider {
+    height: 1px; background: rgba(255,42,42,0.12);
+    margin: 6px 0;
+  }
+  .cam-info {
+    font-size: 8px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.15); line-height: 1.8;
+  }
+  .cam-info span { color: rgba(255,42,42,0.4); }
+  /* Уголки рамки камеры */
+  .cam-corner {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-color: rgba(255,42,42,0.5);
+    border-style: solid;
+  }
+  .cam-corner-tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+  .cam-corner-tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+  .cam-corner-bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+  .cam-corner-br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+  /* ── 5. FBI Status Bar (bottom) ── */
+  #fbi-statusbar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 9100;
+    background: rgba(0,0,0,0.88);
+    border-top: 1px solid rgba(255,42,42,0.15);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center;
+    padding: 0 20px;
+    height: 28px;
+    gap: 20px;
+    font-family: 'Special Elite', cursive;
+    font-size: 9px;
+    letter-spacing: 2px;
+    pointer-events: none;
+  }
+  .fsb-item {
+    display: flex; align-items: center; gap: 6px;
+    color: rgba(255,255,255,0.2);
+    flex-shrink: 0;
+  }
+  .fsb-item span { color: rgba(255,42,42,0.5); }
+  .fsb-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(255,42,42,0.4);
+    flex-shrink: 0;
+  }
+  .fsb-sep {
+    width: 1px; height: 14px;
+    background: rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .fsb-ticker {
+    flex: 1; overflow: hidden; position: relative;
+    height: 100%; display: flex; align-items: center;
+  }
+  .fsb-ticker-inner {
+    white-space: nowrap;
+    animation: fsb-scroll 30s linear infinite;
+    color: rgba(255,42,42,0.25);
+    font-size: 8px; letter-spacing: 3px;
+  }
+  @keyframes fsb-scroll {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(-100%); }
+  }
+  /* Отступ снизу чтобы контент не перекрывался статус-баром */
+  .page-footer { padding-bottom: 40px !important; }
+
+  /* ── Адаптив ── */
+  @media (max-width: 600px) {
+    #surveillance-cam { display: none; }
+    #fbi-statusbar .fsb-sep,
+    #fbi-statusbar .fsb-item:not(:first-child):not(:last-child) { display: none; }
+  }
+</style>
+
+<!-- 1. CRT + Vignette -->
+<div id="crt-overlay"></div>
+<div id="red-vignette"></div>
+
+<!-- 2. Watermark -->
+<div id="classified-watermark"></div>
+
+<!-- 3. Surveillance Camera -->
+<div id="surveillance-cam">
+  <div class="cam-frame" style="position:relative">
+    <div class="cam-corner cam-corner-tl"></div>
+    <div class="cam-corner cam-corner-tr"></div>
+    <div class="cam-corner cam-corner-bl"></div>
+    <div class="cam-corner cam-corner-br"></div>
+    <div class="cam-top">
+      <div class="cam-rec">
+        <div class="cam-rec-dot"></div>
+        REC
+      </div>
+      <div class="cam-label">CAM 01 · FBI</div>
+    </div>
+    <div class="cam-time" id="camTime">00:00:00</div>
+    <div class="cam-date" id="camDate">-- --- ----</div>
+    <div class="cam-divider"></div>
+    <div class="cam-info">
+      LOCATION: <span>DEL PERRO</span><br>
+      SUBJECT: <span>MILLER FAMILY</span><br>
+      STATUS: <span>ACTIVE SURVEILLANCE</span>
+    </div>
+  </div>
+</div>
+
+<!-- 4. FBI Status Bar -->
+<div id="fbi-statusbar">
+  <div class="fsb-item"><div class="fsb-dot"></div> AGENT: <span>CLASSIFIED</span></div>
+  <div class="fsb-sep"></div>
+  <div class="fsb-item">CASE: <span>MF-2026-0001</span></div>
+  <div class="fsb-sep"></div>
+  <div class="fsb-item">STATUS: <span>OPEN · ACTIVE</span></div>
+  <div class="fsb-sep"></div>
+  <div class="fsb-item">CLEARANCE: <span>LEVEL 5</span></div>
+  <div class="fsb-sep"></div>
+  <div class="fsb-ticker">
+    <div class="fsb-ticker-inner">
+      ⚠ ВНИМАНИЕ: ДАННЫЙ ФАЙЛ ЯВЛЯЕТСЯ СТРОГО СЕКРЕТНЫМ · НЕСАНКЦИОНИРОВАННЫЙ ДОСТУП КАРАЕТСЯ ПО ЗАКОНУ ·
+      MILLER FAMILY · DEL PERRO RP · СУБЪЕКТЫ ВООРУЖЕНЫ И ОПАСНЫ · НЕ ПРИБЛИЖАТЬСЯ БЕЗ ПОДДЕРЖКИ ·
+      ALL SUBJECTS ARE ARMED AND EXTREMELY DANGEROUS · DO NOT APPROACH WITHOUT BACKUP · ⚠
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── Sound Toggle Button ── */
+  #sound-toggle {
+    position: fixed;
+    bottom: 36px;
+    right: 20px;
+    z-index: 9200;
+    display: flex; align-items: center; gap: 7px;
+    padding: 7px 14px;
+    background: rgba(0,0,0,0.85);
+    border: 1px solid rgba(255,42,42,0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px; font-weight: 800;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    pointer-events: all;
+  }
+  #sound-toggle:hover { border-color: rgba(255,42,42,0.5); color: rgba(255,255,255,0.6); }
+  #sound-toggle.active {
+    border-color: rgba(255,42,42,0.6);
+    color: rgba(255,42,42,0.9);
+    box-shadow: 0 0 12px rgba(255,42,42,0.15);
+  }
+  #sound-toggle-icon { font-size: 12px; }
+  /* Анимация уровней звука */
+  .sound-bars {
+    display: flex; align-items: flex-end; gap: 2px;
+    height: 12px; opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #sound-toggle.active .sound-bars { opacity: 1; }
+  .sound-bar {
+    width: 2px; background: rgba(255,42,42,0.7); border-radius: 1px;
+    animation: bar-dance 0.8s ease-in-out infinite alternate;
+  }
+  .sound-bar:nth-child(1) { height: 4px;  animation-delay: 0s;    animation-duration: 0.6s; }
+  .sound-bar:nth-child(2) { height: 8px;  animation-delay: 0.1s;  animation-duration: 0.8s; }
+  .sound-bar:nth-child(3) { height: 12px; animation-delay: 0.2s;  animation-duration: 0.5s; }
+  .sound-bar:nth-child(4) { height: 6px;  animation-delay: 0.15s; animation-duration: 0.9s; }
+  .sound-bar:nth-child(5) { height: 10px; animation-delay: 0.05s; animation-duration: 0.7s; }
+  @keyframes bar-dance { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+</style>
+
+<!-- Sound toggle -->
+<button id="sound-toggle" title="Включить/выключить звуки">
+  <span id="sound-toggle-icon">🔇</span>
+  <span id="sound-toggle-label">ЗВУК ВЫКЛ</span>
+  <div class="sound-bars">
+    <div class="sound-bar"></div>
+    <div class="sound-bar"></div>
+    <div class="sound-bar"></div>
+    <div class="sound-bar"></div>
+    <div class="sound-bar"></div>
+  </div>
+</button>
+
+<script>
+// ══════════════════════════════════════════════
+//  DOSSIER — THREAT LEVEL MAXIMUM
+//  Ужасающие звуки. Реальная опасность.
+// ══════════════════════════════════════════════
+
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let C            = null;
+let soundEnabled = false;
+let ambientGain  = null;
+let ambientNodes = [];
+let intervals    = [];
+
+function ctx() {
+  if (!C) C = new AudioCtx();
+  if (C.state === 'suspended') C.resume();
+  return C;
+}
+
+function noiseBuffer(sec = 2) {
+  const c = ctx(), len = Math.floor(c.sampleRate * sec);
+  const buf = c.createBuffer(1, len, c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+
+// Глубокий реверб большого пространства
+function createReverb(dur = 3, decay = 2.5) {
+  const c = ctx(), len = Math.floor(c.sampleRate * dur);
+  const buf = c.createBuffer(2, len, c.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++)
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+  }
+  const conv = c.createConvolver();
+  conv.buffer = buf;
+  return conv;
+}
+
+// ═══════════════════════════════════════════════
+//  1. AMBIENT — угрожающий инфрабас + напряжение
+//  Как саундтрек к сцене допроса в триллере
+// ═══════════════════════════════════════════════
+function startAmbient() {
+  const c = ctx();
+  ambientGain = c.createGain();
+  ambientGain.gain.setValueAtTime(0, c.currentTime);
+  ambientGain.gain.linearRampToValueAtTime(1, c.currentTime + 5);
+  ambientGain.connect(c.destination);
+
+  // — Слой 1: BRAAAM — глубокий угрожающий бас-дрон —
+  // Три осциллятора чуть расстроены → биение → нарастающая тревога
+  [36, 36.4, 72.2].forEach((freq, i) => {
+    const osc = c.createOscillator();
+    osc.type = i < 2 ? 'sawtooth' : 'sine';
+    osc.frequency.value = freq;
+
+    // LFO для медленной пульсации
+    const lfo = c.createOscillator();
+    lfo.frequency.value = 0.04 + i * 0.02;
+    const lfoG = c.createGain();
+    lfoG.gain.value = 0.5;
+    lfo.connect(lfoG); lfoG.connect(osc.frequency);
+    lfo.start();
+
+    const lpf = c.createBiquadFilter();
+    lpf.type = 'lowpass'; lpf.frequency.value = 150;
+
+    const g = c.createGain();
+    g.gain.value = i < 2 ? 0.055 : 0.03;
+
+    osc.connect(lpf); lpf.connect(g); g.connect(ambientGain);
+    osc.start();
+    ambientNodes.push(osc, lfo);
+  });
+
+  // — Слой 2: Тёмный средний дрон (нарастающее напряжение) —
+  const midOsc = c.createOscillator();
+  midOsc.type = 'sawtooth';
+  midOsc.frequency.value = 110;
+  const midLpf = c.createBiquadFilter();
+  midLpf.type = 'lowpass'; midLpf.frequency.value = 300;
+  const midLfo = c.createOscillator();
+  midLfo.frequency.value = 0.08;
+  const midLfoG = c.createGain();
+  midLfoG.gain.value = 2;
+  midLfo.connect(midLfoG); midLfoG.connect(midOsc.frequency);
+  const midG = c.createGain();
+  midG.gain.value = 0.018;
+  midOsc.connect(midLpf); midLpf.connect(midG); midG.connect(ambientGain);
+  midOsc.start(); midLfo.start();
+  ambientNodes.push(midOsc, midLfo);
+
+  // — Слой 3: Шум под давлением (очень тихий, плотный) —
+  const noiseSrc = c.createBufferSource();
+  noiseSrc.buffer = noiseBuffer(4);
+  noiseSrc.loop = true;
+  const noiseLpf = c.createBiquadFilter();
+  noiseLpf.type = 'lowpass'; noiseLpf.frequency.value = 120;
+  const noiseG = c.createGain();
+  noiseG.gain.value = 0.012;
+  noiseSrc.connect(noiseLpf); noiseLpf.connect(noiseG); noiseG.connect(ambientGain);
+  noiseSrc.start();
+  ambientNodes.push(noiseSrc);
+
+  // — Слой 4: Редкие глубокие удары (пульс угрозы) —
+  function scheduleThrob() {
+    if (!soundEnabled) return;
+    const delay = 7000 + Math.random() * 10000;
+    const t = setTimeout(() => { playDeepThud(); scheduleThrob(); }, delay);
+    intervals.push(t);
+  }
+  setTimeout(scheduleThrob, 4000);
+}
+
+function stopAmbient() {
+  if (!ambientGain) return;
+  ambientGain.gain.linearRampToValueAtTime(0, ctx().currentTime + 2.5);
+  setTimeout(() => {
+    ambientNodes.forEach(n => { try { n.stop(); } catch(e){} });
+    ambientNodes = [];
+  }, 2600);
+}
+
+// ═══════════════════════════════════════════════
+//  2. СИРЕНА ВОЗДУШНОЙ ТРЕВОГИ
+//  Медленный вой снизу вверх — настоящая угроза
+// ═══════════════════════════════════════════════
+function playSiren() {
+  if (!soundEnabled) return;
+  const c = ctx();
+
+  // Большой реверб — как будто сирена на улице
+  const rev = createReverb(4, 2);
+  const revG = c.createGain();
+  revG.gain.value = 0.5;
+  rev.connect(revG); revG.connect(c.destination);
+
+  const master = c.createGain();
+  master.gain.value = 0.11;
+  master.connect(c.destination);
+  master.connect(rev);
+
+  // Lowpass — убирает высокие частоты, делает гудение тяжёлым
+  const lpf = c.createBiquadFilter();
+  lpf.type = 'lowpass'; lpf.frequency.value = 1100;
+  lpf.connect(master);
+
+  // Три осциллятора чуть расстроены → толстый тяжёлый звук
+  [0, 1.5, -1.5].forEach(detune => {
+    const osc = c.createOscillator();
+    osc.type = 'sawtooth';
+    osc.detune.value = detune;
+
+    // Вой: 180 Гц → медленно поднимается до 780 → держится → падает
+    // Один полный цикл занимает ~7 секунд
+    const T = c.currentTime;
+    osc.frequency.setValueAtTime(180, T);
+    osc.frequency.linearRampToValueAtTime(220, T + 0.5);   // старт
+    osc.frequency.linearRampToValueAtTime(780, T + 3.5);   // нарастание
+    osc.frequency.linearRampToValueAtTime(780, T + 4.5);   // пик — держится
+    osc.frequency.linearRampToValueAtTime(180, T + 6.5);   // спад
+    osc.frequency.linearRampToValueAtTime(160, T + 7.0);   // конец
+
+    const env = c.createGain();
+    env.gain.setValueAtTime(0, T);
+    env.gain.linearRampToValueAtTime(1, T + 0.3);         // плавный вход
+    env.gain.setValueAtTime(1, T + 6.5);
+    env.gain.linearRampToValueAtTime(0, T + 7.0);         // плавный выход
+
+    osc.connect(env); env.connect(lpf);
+    osc.start(T); osc.stop(T + 7.1);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  3. ГЛУБОКИЙ УДАР — пульс угрозы в ambient
+//  Как взрыв вдалеке или удар в грудь
+// ═══════════════════════════════════════════════
+function playDeepThud() {
+  if (!soundEnabled) return;
+  const c = ctx();
+
+  const rev = createReverb(2.5, 3);
+  const revG = c.createGain();
+  revG.gain.value = 0.6;
+  rev.connect(revG); revG.connect(c.destination);
+
+  // Суббас удар
+  const osc = c.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(55, c.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(20, c.currentTime + 0.5);
+
+  const gain = c.createGain();
+  gain.gain.setValueAtTime(0.45, c.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
+
+  osc.connect(gain);
+  gain.connect(c.destination);
+  gain.connect(rev);
+  osc.start(); osc.stop(c.currentTime + 0.5);
+
+  // Шумовой транзиент — удар с хрустом
+  const nBuf = c.createBufferSource();
+  nBuf.buffer = noiseBuffer(0.06);
+  const nLpf = c.createBiquadFilter();
+  nLpf.type = 'lowpass'; nLpf.frequency.value = 300;
+  const nG = c.createGain();
+  nG.gain.setValueAtTime(0.18, c.currentTime);
+  nG.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
+  nBuf.connect(nLpf); nLpf.connect(nG); nG.connect(c.destination);
+  nBuf.start();
+}
+
+// ═══════════════════════════════════════════════
+//  4. ЗВУК ОТКРЫТИЯ — нагнетание
+//  Нарастающий тёмный тон при включении
+// ═══════════════════════════════════════════════
+function playBuildUp() {
+  const c = ctx();
+
+  const rev = createReverb(3, 2);
+  const revG = c.createGain();
+  revG.gain.value = 0.4;
+  rev.connect(revG); revG.connect(c.destination);
+
+  // Нарастающий суббас
+  const osc = c.createOscillator();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(40, c.currentTime);
+  osc.frequency.linearRampToValueAtTime(160, c.currentTime + 1.8);
+  const lpf = c.createBiquadFilter();
+  lpf.type = 'lowpass'; lpf.frequency.value = 500;
+  const gain = c.createGain();
+  gain.gain.setValueAtTime(0, c.currentTime);
+  gain.gain.linearRampToValueAtTime(0.22, c.currentTime + 1.4);
+  gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 2.0);
+  osc.connect(lpf); lpf.connect(gain);
+  gain.connect(c.destination); gain.connect(rev);
+  osc.start(); osc.stop(c.currentTime + 2.0);
+
+  // Финальный глубокий удар в конце нарастания
+  setTimeout(playDeepThud, 1800);
+}
+
+// ═══════════════════════════════════════════════
+//  5. НАВЕДЕНИЕ НА КАРТОЧКУ — металлический лязг
+//  Как затвор оружия или дверь тюрьмы
+// ═══════════════════════════════════════════════
+function playMetalClank() {
+  if (!soundEnabled) return;
+  const c = ctx();
+
+  // Металлический резонанс — несколько частот вместе
+  [180, 290, 430].forEach((freq, i) => {
+    const osc = c.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const gain = c.createGain();
+    const vol = 0.04 / (i + 1);
+    gain.gain.setValueAtTime(vol, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.35 - i * 0.05);
+    osc.connect(gain); gain.connect(c.destination);
+    osc.start(); osc.stop(c.currentTime + 0.35);
+  });
+
+  // Короткий шумовой удар (лязг)
+  const nBuf = c.createBufferSource();
+  nBuf.buffer = noiseBuffer(0.04);
+  const hpf = c.createBiquadFilter();
+  hpf.type = 'highpass'; hpf.frequency.value = 1800;
+  const nG = c.createGain();
+  nG.gain.setValueAtTime(0.09, c.currentTime);
+  nG.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.04);
+  nBuf.connect(hpf); hpf.connect(nG); nG.connect(c.destination);
+  nBuf.start();
+}
+
+// ═══════════════════════════════════════════════
+//  6. ПИНГ КАМЕРЫ — угрожающий, низкий
+// ═══════════════════════════════════════════════
+function playCameraBeep() {
+  if (!soundEnabled) return;
+  const c = ctx();
+  // Два тона — как предупреждение
+  [0, 0.12].forEach((delay, i) => {
+    setTimeout(() => {
+      const osc = c.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = i === 0 ? 440 : 380;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.03, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+      osc.connect(g); g.connect(c.destination);
+      osc.start(); osc.stop(c.currentTime + 0.1);
+    }, delay * 1000);
+  });
+}
+
+// ══════════════════════════════════════════════
+//  TOGGLE + СОБЫТИЯ
+// ══════════════════════════════════════════════
+const toggleBtn   = document.getElementById('sound-toggle');
+const toggleIcon  = document.getElementById('sound-toggle-icon');
+const toggleLabel = document.getElementById('sound-toggle-label');
+
+toggleBtn.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+
+  if (soundEnabled) {
+    toggleBtn.classList.add('active');
+    toggleIcon.textContent  = '🔊';
+    toggleLabel.textContent = 'ЗВУК ВКЛ';
+    startAmbient();
+    playBuildUp();                                        // нагнетание при старте
+    setTimeout(playSiren, 2500);                          // сирена через 2.5 сек
+    intervals.push(setInterval(playCameraBeep, 5000));    // пинг каждые 5 сек
+    intervals.push(setInterval(playSiren, 45000));        // сирена каждые 45 сек
+    setTimeout(playCameraBeep, 800);
+  } else {
+    toggleBtn.classList.remove('active');
+    toggleIcon.textContent  = '🔇';
+    toggleLabel.textContent = 'ЗВУК ВЫКЛ';
+    stopAmbient();
+    intervals.forEach(id => clearInterval(id));
+    intervals = [];
+  }
+});
+
+// ── Лязг при наведении на карточки ────────────
+document.querySelectorAll('.dos-card').forEach(card => {
+  let last = 0;
+  card.addEventListener('mouseenter', () => {
+    const now = Date.now();
+    if (now - last < 250) return;
+    last = now;
+    playMetalClank();
+  });
+});
+
+// ── Часы камеры наблюдения ─────────────────────
+function updateCamTime() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  document.getElementById('camTime').textContent =
+    `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  document.getElementById('camDate').textContent =
+    `${pad(now.getDate())} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+updateCamTime();
+setInterval(updateCamTime, 1000);
+</script>
+
 </body>
 </html>

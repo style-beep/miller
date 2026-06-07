@@ -184,7 +184,8 @@
           <button class="filter-btn" data-filter="approved">ОДОБРЕНЫ</button>
           <button class="filter-btn" data-filter="rejected">ОТКЛОНЕНЫ</button>
         </div>
-        <button class="action-btn btn-reject" id="clearAppsBtn" style="margin-left:auto">🗑 Очистить все</button>
+        <button class="action-btn" id="exportCsvBtn" style="border-color:rgba(76,175,80,0.3);color:#4caf50;margin-left:auto">📥 Скачать CSV</button>
+        <button class="action-btn btn-reject" id="clearAppsBtn">🗑 Очистить все</button>
       </div>
       <table class="apps-table">
         <thead>
@@ -378,6 +379,27 @@ document.getElementById("filterBar").addEventListener("click", e => {
   document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
   btn.classList.add("active");
   renderTable();
+});
+
+document.getElementById("exportCsvBtn").addEventListener("click", () => {
+  if (!allApps.length) { alert("Нет заявок для экспорта"); return; }
+  const headers = ["ID","Никнейм","Discord","Возраст","Опыт","Причина","Статус","Комментарий","Дата"];
+  const rows = allApps.map(a => [
+    a.id, a.nickname, a.discord, a.age,
+    `"${(a.experience||"").replace(/"/g,'""')}"`,
+    `"${(a.reason||"").replace(/"/g,'""')}"`,
+    a.status,
+    `"${(a.comment||"").replace(/"/g,'""')}"`,
+    new Date(a.createdAt).toLocaleString("ru-RU"),
+  ].join(","));
+  const csv  = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement("a"), {
+    href: url, download: `miller-applications-${new Date().toISOString().slice(0,10)}.csv`
+  });
+  a.click();
+  URL.revokeObjectURL(url);
 });
 
 document.getElementById("clearAppsBtn").addEventListener("click", () => {

@@ -35,6 +35,10 @@
   <link rel="apple-touch-icon"      href="images/family-logo.jpeg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preload критичных ресурсов -->
+  <link rel="preload" href="images/miller-emblem.png" as="image"/>
+  <link rel="preload" href="images/background.png"    as="image"/>
+  <link rel="preload" href="css/style.css"            as="style"/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/extras.css" />
@@ -411,7 +415,7 @@ Control over key districts
             <span>FAMILY BOSS</span>
           </div>
         </div>
-        <img src="images/eddie.jpg" class="member-image" alt="Eddie Miller">
+        <img loading="lazy" src="images/eddie.jpg" class="member-image" alt="Eddie Miller">
         <div class="structure-info">
           <div class="structure-box"><span>CAPITAL</span><h3>$520M</h3></div>
           <div class="structure-box"><span>STATUS</span><h3>ELITE</h3></div>
@@ -431,7 +435,7 @@ Control over key districts
             <span>DIRECTOR</span>
           </div>
         </div>
-        <img src="images/adam.jpg" class="member-image" alt="Adam Miller">
+        <img loading="lazy" src="images/adam.jpg" class="member-image" alt="Adam Miller">
         <div class="structure-info">
           <div class="structure-box"><span>CONTROL</span><h3>94%</h3></div>
           <div class="structure-box"><span>BUSINESS</span><h3>12</h3></div>
@@ -451,7 +455,7 @@ Control over key districts
             <span>DEPUTY DIRECTOR</span>
           </div>
         </div>
-        <img src="images/roy.jpg" class="member-image" alt="Roy Miller">
+        <img loading="lazy" src="images/roy.jpg" class="member-image" alt="Roy Miller">
         <div class="structure-info">
           <div class="structure-box"><span>WARS</span><h3>84%</h3></div>
           <div class="structure-box"><span>COMBAT</span><h3>96%</h3></div>
@@ -507,7 +511,7 @@ Control over key districts
 
       <!-- EDDIE -->
       <div class="member-card">
-        <img src="images/miller1.jpeg" alt="Eddie Miller" class="member-photo">
+        <img loading="lazy" src="images/miller1.jpeg" alt="Eddie Miller" class="member-photo">
         <h2>EDDIE MILLER</h2>
         <p class="role">FAMILY BOSS • Основатель</p>
         <p class="description">
@@ -524,7 +528,7 @@ Control over key districts
 
       <!-- ADAM -->
       <div class="member-card">
-        <img src="images/miller2.jpeg" alt="Adam Miller" class="member-photo">
+        <img loading="lazy" src="images/miller2.jpeg" alt="Adam Miller" class="member-photo">
         <h2>ADAM MILLER</h2>
         <p class="role">DIRECTOR • Директор</p>
         <p class="description">
@@ -541,7 +545,7 @@ Control over key districts
 
       <!-- ROY -->
       <div class="member-card">
-        <img src="images/miller3.jpeg" alt="Roy Miller" class="member-photo">
+        <img loading="lazy" src="images/miller3.jpeg" alt="Roy Miller" class="member-photo">
         <h2>ROY MILLER</h2>
         <p class="role">DEPUTY DIRECTOR • Зам. Директора</p>
         <p class="description">
@@ -765,7 +769,7 @@ Control over key districts
 
       <!-- Бренд -->
       <div class="footer-brand">
-        <img src="images/background.png" alt="Miller Family" class="footer-logo-img">
+        <img loading="lazy" src="images/background.png" alt="Miller Family" class="footer-logo-img">
         <div>
           <div class="footer-brand-name">MILLER FAMILY</div>
           <div class="footer-brand-sub">GTA 5 Roleplay · Del Perro RP</div>
@@ -852,6 +856,11 @@ Control over key districts
 
     <h2>ПОДАТЬ ЗАЯВКУ В MILLER FAMILY</h2>
     <p class="modal-subtitle">Элитная семья DEL PERRO RP</p>
+
+    <div id="draftHint" style="display:none;align-items:center;gap:10px;padding:10px 14px;margin-bottom:14px;background:rgba(255,180,0,0.08);border:1px solid rgba(255,180,0,0.2);border-radius:8px;font-size:12px;color:rgba(255,180,0,0.8);">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <span>Черновик восстановлен</span>
+    </div>
 
     <form id="applyForm">
       <div class="form-group">

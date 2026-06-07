@@ -1,3 +1,4 @@
+import { initStorage }        from "./storage.js";
 import { initPageTransition } from "./page-transition.js";
 import { initEasterEgg }      from "./easter-egg.js";
 import { initCursor }         from "./cursor.js";
@@ -37,6 +38,7 @@ if ("serviceWorker" in navigator) {
 
 // Инициализируем всё после загрузки DOM
 document.addEventListener("DOMContentLoaded", () => {
+  initStorage();        // миграция localStorage — самым первым
   initPageTransition(); // transitions — первым, до всего
   initEasterEgg();      // konami code + glitch
   initIntro();          // интро

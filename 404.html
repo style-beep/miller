@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 | MILLER FAMILY</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Special+Elite&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #050505; color: #fff;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 20px;
+      overflow: hidden;
+    }
+
+    /* Фон */
+    .bg {
+      position: fixed; inset: 0; z-index: -2;
+      background: radial-gradient(ellipse at 30% 40%, rgba(80,0,0,0.15), transparent 60%),
+                  radial-gradient(ellipse at 70% 70%, rgba(60,0,0,0.1), transparent 50%),
+                  #050505;
+    }
+    /* Сканлайны */
+    .bg::after {
+      content: '';
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg, transparent 0px, transparent 3px,
+        rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
+      );
+    }
+
+    /* Предупредительная лента сверху */
+    .tape {
+      position: fixed; top: 0; left: 0; right: 0; height: 5px;
+      background: repeating-linear-gradient(
+        -45deg, rgba(220,0,0,0.8) 0px, rgba(220,0,0,0.8) 16px,
+        rgba(0,0,0,0.7) 16px, rgba(0,0,0,0.7) 32px
+      );
+    }
+
+    .emblem-wrap {
+      position: relative; margin-bottom: 24px;
+    }
+    .emblem {
+      width: 70px; height: 70px; object-fit: contain;
+      filter: grayscale(0.6) brightness(0.7);
+      animation: emblem-float 4s ease-in-out infinite;
+    }
+    @keyframes emblem-float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+
+    /* Большой 404 */
+    .number-404 {
+      font-size: clamp(80px, 18vw, 180px); font-weight: 900;
+      letter-spacing: -4px; line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,42,42,0.25);
+      position: relative; margin-bottom: 0;
+      animation: glitch-404 5s ease-in-out infinite;
+      user-select: none;
+    }
+    @keyframes glitch-404 {
+      0%,88%,100% { filter: none; transform: none; }
+      89% { filter: hue-rotate(30deg); transform: translateX(-3px); }
+      90% { filter: none; transform: translateX(3px); }
+      91% { transform: none; }
+    }
+    /* Псевдоэлементы для glitch слоёв */
+    .number-404::before,
+    .number-404::after {
+      content: "404";
+      position: absolute; top: 0; left: 0; width: 100%;
+    }
+    .number-404::before {
+      color: rgba(255,0,0,0.15);
+      animation: glitch-a 5s ease-in-out infinite;
+    }
+    .number-404::after {
+      color: rgba(0,200,255,0.08);
+      animation: glitch-b 5s ease-in-out infinite;
+    }
+    @keyframes glitch-a {
+      0%,88%,100% { clip-path: none; transform: none; }
+      89% { clip-path: inset(20% 0 40% 0); transform: translateX(4px); }
+      90% { clip-path: inset(60% 0 10% 0); transform: translateX(-4px); }
+      91% { clip-path: none; transform: none; }
+    }
+    @keyframes glitch-b {
+      0%,88%,100% { clip-path: none; transform: none; }
+      89% { clip-path: inset(50% 0 20% 0); transform: translateX(-3px); }
+      90% { clip-path: inset(10% 0 70% 0); transform: translateX(3px); }
+      91% { clip-path: none; transform: none; }
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,42,42,0.08); border: 1px solid rgba(255,42,42,0.2);
+      border-radius: 4px; padding: 5px 14px; margin-bottom: 20px;
+      font-size: 10px; font-weight: 700; letter-spacing: 4px;
+      color: rgba(255,42,42,0.6); text-transform: uppercase;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,42,42,0.6);
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    h1 {
+      font-size: clamp(18px, 4vw, 32px); font-weight: 900;
+      letter-spacing: 4px; color: #fff; margin-bottom: 10px;
+    }
+    p {
+      font-size: 13px; color: rgba(255,255,255,0.28);
+      letter-spacing: 1px; line-height: 1.8;
+      max-width: 400px; margin: 0 auto 36px;
+      font-family: 'Special Elite', cursive;
+    }
+
+    .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 28px;
+      background: rgba(255,42,42,0.1);
+      border: 1px solid rgba(255,42,42,0.3);
+      border-radius: 8px; color: rgba(255,42,42,0.8);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 3px; text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .btn:hover {
+      background: rgba(255,42,42,0.2);
+      border-color: rgba(255,42,42,0.5);
+      color: #ff4444;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.03);
+      border-color: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.3);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .footer-line {
+      position: fixed; bottom: 20px;
+      font-size: 10px; letter-spacing: 3px;
+      color: rgba(255,255,255,0.07); text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="tape"></div>
+
+  <div class="emblem-wrap">
+    <img src="images/miller-emblem.png" alt="" class="emblem"/>
+  </div>
+
+  <div class="badge"><div class="dot"></div> СТРАНИЦА НЕ НАЙДЕНА</div>
+
+  <div class="number-404">404</div>
+
+  <h1>ФАЙЛ УДАЛЁН</h1>
+  <p>
+    Страница которую ты ищешь не существует,<br>
+    была удалена или перемещена.<br>
+    Возможно, это тоже часть плана.
+  </p>
+
+  <div class="btn-row">
+    <a href="index.html" class="btn">
+      <i class="fa-solid fa-house"></i> НА ГЛАВНУЮ
+    </a>
+    <a href="javascript:history.back()" class="btn btn-secondary">
+      <i class="fa-solid fa-arrow-left"></i> НАЗАД
+    </a>
+  </div>
+
+  <div class="footer-line">MILLER FAMILY · DEL PERRO RP · 2023–2026</div>
+</body>
+</html>

@@ -211,7 +211,7 @@ initPageLoader({
     grid.innerHTML = ALLIES.map((a, i) => `
       <div class="ally-card" style="animation-delay:${i*0.1}s">
         <div class="ally-status ${a.status === 'active' ? '' : 'inactive'}"></div>
-        <img src="${a.logo}" alt="${a.name}" class="ally-logo">
+        <img loading="lazy" src="${a.logo}" alt="${a.name}" class="ally-logo">
         <div class="ally-tag">${a.tag}</div>
         <div class="ally-name">${a.name}</div>
         <div class="ally-desc">${a.desc}</div>

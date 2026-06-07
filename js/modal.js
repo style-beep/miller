@@ -1,4 +1,7 @@
-// ── Модалка заявки — localStorage версия ─────────────────────
+// ── Модалка заявки — localStorage + автосохранение ───────────
+const DRAFT_KEY = "miller_form_draft";
+const FIELDS    = ["nickname", "age", "discord", "experience", "reason"];
+
 export function initModal() {
   const modal    = document.getElementById("applyModal");
   const closeBtn = document.getElementById("modalClose");
@@ -7,13 +10,28 @@ export function initModal() {
 
   if (!modal) return;
 
-  const open  = () => { modal.classList.add("show");    document.body.style.overflow = "hidden";  };
-  const close = () => { modal.classList.remove("show"); document.body.style.overflow = "visible"; };
+  const open  = () => {
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+    restoreDraft();
+  };
+  const close = () => {
+    modal.classList.remove("show");
+    document.body.style.overflow = "visible";
+  };
 
   openBtns.forEach(btn => btn.addEventListener("click", e => { e.preventDefault(); open(); }));
   closeBtn?.addEventListener("click", close);
   modal.addEventListener("click", e => { if (e.target === modal) close(); });
 
+  // ── Автосохранение при вводе ──────────────────────────────
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", saveDraft);
+  });
+
+  // ── Отправка ──────────────────────────────────────────────
   form?.addEventListener("submit", e => {
     e.preventDefault();
 
@@ -29,7 +47,6 @@ export function initModal() {
       createdAt:  new Date().toISOString(),
     };
 
-    // Проверка дубликата по Discord
     const apps = JSON.parse(localStorage.getItem("miller_applications") || "[]");
     const duplicate = apps.find(a => a.discord.toLowerCase() === data.discord.toLowerCase());
     if (duplicate) {
@@ -39,11 +56,43 @@ export function initModal() {
 
     apps.push(data);
     localStorage.setItem("miller_applications", JSON.stringify(apps));
+    clearDraft();
 
-    showNotification("✅ Заявка успешно отправлена! Ожидай ответа в Discord.", "success");
+    showNotification("✅ Заявка отправлена! Ожидай ответа в Discord.", "success");
     close();
     form.reset();
   });
+}
+
+// ── Черновик ─────────────────────────────────────────────────
+function saveDraft() {
+  const draft = {};
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) draft[id] = el.value;
+  });
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+}
+
+function restoreDraft() {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if (!raw) return;
+  try {
+    const draft = JSON.parse(raw);
+    FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && draft[id]) el.value = draft[id];
+    });
+    // Показываем подсказку если есть черновик
+    const hint = document.getElementById("draftHint");
+    if (hint) hint.style.display = "flex";
+  } catch(e) {}
+}
+
+function clearDraft() {
+  localStorage.removeItem(DRAFT_KEY);
+  const hint = document.getElementById("draftHint");
+  if (hint) hint.style.display = "none";
 }
 
 function showNotification(msg, type) {
@@ -55,7 +104,6 @@ function showNotification(msg, type) {
     border:1px solid ${type === "success" ? "rgba(76,175,80,0.5)" : "rgba(255,160,0,0.5)"};
     color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;
     box-shadow:0 8px 32px rgba(0,0,0,0.5);
-    animation:fadeInUp 0.3s ease;
   `;
   n.textContent = msg;
   document.body.appendChild(n);

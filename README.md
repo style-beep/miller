@@ -1,71 +1,99 @@
-# MILLER FAMILY — DEL PERRO RP
+<div align="center">
 
-Сайт игровой семьи **Miller Family** с сервера [Del Perro RP](https://discord.gg/SaCXzgckS) (GTA 5 Roleplay).
+# 🔴 MILLER FAMILY
 
-Полноценный многостраничный сайт с живым списком участников Discord, музыкальным плеером, видеоплеером, мини-игрой захвата территорий, закрытыми разделами с терминальным загрузчиком и системой заявок в реальном времени.
+### Официальный сайт игровой семьи с сервера [Del Perro RP](https://discord.gg/SaCXzgckS) — GTA 5 Roleplay
+
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
+
+> **Power · Loyalty · Respect**
+
+</div>
 
 ---
 
-## Стек
+## 📋 О проекте
+
+Полноценный многостраничный сайт с живым списком участников Discord, музыкальным плеером, кастомным видеоплеером, мини-игрой захвата территорий, системой заявок на вступление, профилями участников с системой достижений и админ-панелью управления контентом.
+
+---
+
+## ⚡ Стек технологий
 
 | Слой | Технологии |
-|---|---|
+|------|-----------|
 | Фронтенд | HTML5, CSS3, Vanilla JS (ES Modules) |
-| Бэкенд | Node.js, Express, WebSocket (ws) |
+| Бэкенд | Node.js, Express |
 | Discord | discord.js v14 |
 | Окружение | dotenv |
 | Dev-режим | browser-sync, concurrently |
 
 ---
 
-## Структура проекта
+## 📁 Структура проекта
 
 ```
 miller/
 │
-├── js/                      # Фронтенд JS — модули
-│   ├── main.js              # Точка входа, подключает всё
-│   ├── animations.js        # Визуальные эффекты и анимации
-│   ├── cursor.js            # Кастомный курсор
-│   ├── discord.js           # Загрузка участников из Discord API
-│   ├── modal.js             # Модалка заявки на вступление
-│   ├── player.js            # Музыкальный плеер
-│   ├── video.js             # Видеоплеер с кастомными контролами
-│   ├── game.js              # Мини-игра «Захват территорий»
-│   ├── gallery.js           # Галерея с лайтбоксом (главная)
-│   ├── halloffame.js        # Доска почёта
-│   ├── countdown.js         # Обратный отсчёт до события
-│   ├── appstatus.js         # Проверка статуса заявки
-│   ├── notifications.js     # WebSocket уведомления (тосты)
-│   ├── timeline.js          # Таймлайн истории (подстраница)
-│   └── page-loader.js       # Терминальный загрузчик подстраниц
+├── 📄 index.html              # Главная страница
+├── 📄 admin.html              # Админ-панель (Ctrl+Shift+Z)
+├── 📄 gallery.html            # Галерея
+├── 📄 history.html            # История семьи
+├── 📄 rules.html              # Правила
+├── 📄 map.html                # Карта территорий
+├── 📄 profile.html            # Профили участников
+├── 📄 allies.html             # Союзники
+├── 📄 media.html              # Медиа (YouTube / Twitch)
+├── 📄 dossier.html            # Секретное досье
+├── 📄 game.html               # Мини-игра «Захват территорий»
 │
-├── images/                  # Аватары, эмблема, обложки плеера, галерея
-├── music/                   # Аудиофайлы плеера
-├── video/                   # Видеофайлы (трейлер и т.д.)
+├── 📁 css/
+│   ├── style.css              # Основные стили
+│   ├── page.css               # Стили подстраниц
+│   └── extras.css             # Дополнительные стили (countdown, hof и др.)
 │
-├── index.html               # Главная страница
-├── gallery.html             # Галерея (защищена паролем)
-├── history.html             # История семьи (защищена паролем)
-├── rules.html               # Правила семьи (защищена паролем)
+├── 📁 js/
+│   ├── 📁 config/
+│   │   ├── events.js          # Конфиг событий, галереи, таймлайна, доски почёта
+│   │   └── roles.js           # Порядок и фильтрация ролей Discord
+│   │
+│   ├── main.js                # Точка входа
+│   ├── animations.js          # Анимации и визуальные эффекты
+│   ├── cursor.js              # Кастомный курсор
+│   ├── discord.js             # Загрузка участников Discord
+│   ├── modal.js               # Модалка заявки на вступление
+│   ├── player.js              # Музыкальный плеер
+│   ├── video.js               # Кастомный видеоплеер
+│   ├── game.js                # Мини-игра
+│   ├── gallery.js             # Галерея с лайтбоксом
+│   ├── halloffame.js          # Доска почёта
+│   ├── countdown.js           # Обратный отсчёт до события
+│   ├── appstatus.js           # Проверка статуса заявки
+│   ├── notifications.js       # Уведомления (тосты)
+│   ├── easter-egg.js          # Пасхальное яйцо (Konami code)
+│   ├── intro.js               # Интро-экран при первом заходе
+│   ├── page-loader.js         # Терминальный загрузчик подстраниц
+│   └── page-transition.js     # Переходы между страницами
 │
-├── style.css                # Основные стили
-├── new-features.css         # Стили новых разделов
-├── page.css                 # Стили подстраниц (gallery/history/rules)
+├── 📁 images/                 # Фото участников, эмблема, фон, обложки плеера
+├── 📁 music/                  # Аудиофайлы плеера (.mp3)
+├── 📁 video/                  # Видеофайлы (трейлер)
 │
-├── server.js                # Express-сервер + Discord-бот + WebSocket
-├── events.config.js         # Конфиг событий, таймлайна, галереи, доски почёта
-├── roles.config.js          # Порядок и фильтрация ролей Discord
-│
-├── .env                     # Секреты (не в git!)
-├── .env.example             # Шаблон для .env
-├── .gitignore
-└── package.json
+├── server.js                  # Express-сервер + Discord-бот
+├── manifest.json              # PWA манифест
+├── sw.js                      # Service Worker
+├── package.json
+├── .env                       # Секреты (не в git!)
+└── .env.example               # Шаблон для .env
 ```
 
 ---
 
-## Быстрый старт
+## 🚀 Быстрый старт
 
 ### 1. Клонировать репозиторий
 
@@ -91,7 +119,7 @@ cp .env.example .env
 ```env
 DISCORD_TOKEN=токен_бота
 DISCORD_WEBHOOK=ссылка_на_вебхук
-ADMIN_SECRET=секретный_ключ_для_смены_статуса_заявок
+ADMIN_SECRET=секретный_ключ
 PORT=3001
 ```
 
@@ -101,98 +129,125 @@ PORT=3001
 # Продакшн
 npm start
 
-# Разработка (авто-перезапуск сервера + live reload браузера)
+# Разработка (авто-перезапуск + live reload)
 npm run dev
 ```
 
-В режиме разработки:
-- Сервер: `http://localhost:3001`
-- Браузер с live reload: `http://localhost:3000`
+| Режим | URL |
+|-------|-----|
+| Сервер | `http://localhost:3001` |
+| Live reload | `http://localhost:3000` |
 
 ---
 
-## Нововведения
+## ✨ Возможности
 
-### 🎬 Видеоплеер
-Кастомный видеоплеер с красивыми контролами. Видео хранится в папке `video/`.  
-Для замены: положи файл в `video/` и обнови `src` в `index.html`.
+### 🏠 Главная страница
+- Интро-экран с логотипом и прогресс-баром при первом посещении
+- Живые счётчики статистики семьи с анимацией
+- Блок требований и преимуществ с иконками
+- Секция структуры с карточками Eddie / Adam / Roy
+- Состав с кнопками перехода на профили
+- Обратный отсчёт до следующего события
+- Доска почёта топ-3 участников
+- Закрытые разделы с терминальным загрузчиком
+- Проверка статуса заявки по Discord тегу
+- Кастомный видеоплеер с трейлером
 
-### 🎮 Мини-игра «Захват территорий»
-Стратегическая игра прямо на сайте:
+### 🎮 Мини-игра «Street Wars»
 - 20 районов Los Santos на карте 5×4
 - 4 фракции: Miller Family, Los Diablos, Vagos, Ballas
 - AI атакует каждые 2.2 секунды
 - Войска регенерируются каждые 3 секунды
 - Превью атаки при наведении на врага
 
-### 🔐 Закрытые разделы с терминальным загрузчиком
-Три отдельные страницы с уникальными паролями:
+### 👤 Профили участников
+- Страница для Eddie, Adam и Roy (`profile.html?id=eddie`)
+- Статистика, навыки с прогресс-барами, биография
+- **Система достижений** — 12 ачивок с 4 уровнями редкости:
 
-| Страница | Пароль | Содержимое |
-|---|---|---|
-| `gallery.html` | `MF·VISUAL·ACCESS·2026` | Фотогалерея с лайтбоксом |
-| `history.html` | `MF·CHRONICLE·CLASSIFIED` | Таймлайн истории семьи |
-| `rules.html` | `CODEX·FAMILIA·ALPHA` | Правила + иерархия |
+| Редкость | Цвет |
+|----------|------|
+| UNCOMMON | 🟢 Зелёный |
+| RARE | 🔵 Синий |
+| EPIC | 🟣 Фиолетовый |
+| LEGENDARY | 🟠 Оранжевый |
 
-При открытии страницы — терминал автоматически вводит пароль посимвольно, заполняет прогресс-бар и показывает `ACCESS GRANTED`.
+### 🔐 Админ-панель
+Доступ: **`Ctrl + Shift + Z`** → пароль на странице входа
 
-### ⏱️ Обратный отсчёт до события
-Настраивается в `events.config.js` — одна строка с датой и названием ивента.
+| Вкладка | Возможности |
+|---------|-------------|
+| 📋 Заявки | Просмотр, одобрение, отклонение, комментарии, удаление |
+| 🏆 Доска почёта | Редактировать имя, роль, причину, фото каждого места |
+| 📅 Событие | Изменить название и дату таймера обратного отсчёта |
+| 🤝 Союзники | Добавлять, редактировать, удалять союзников |
 
-### 🏆 Доска почёта
-Топ-3 участника с золотым/серебряным/бронзовым рангом. Настраивается в `events.config.js`.
-
-### 🔔 WebSocket уведомления
-Тосты в реальном времени:
-- При подаче новой заявки
-- При одобрении/отклонении заявки администратором
-- При подключении Discord-бота
+> Все данные сохраняются в `localStorage` — работает без сервера.
 
 ### 📋 Система заявок
-- Заявки сохраняются в `applications.json` (не в git)
-- Проверка статуса по Discord тегу на главной странице
-- Администратор меняет статус через `PATCH /api/application-status/:id` с заголовком `x-admin-secret`
+- Форма вступления сохраняет данные в `localStorage`
+- Проверка дубликатов по Discord тегу
+- Статус заявки можно проверить прямо на главной странице
+- Администратор одобряет/отклоняет + оставляет комментарий
 
 ### 🎵 Музыкальный плеер
-Треки и роли управляются в конфиг-файлах. Первые 50 участников Discord видны сразу, остальные — по кнопке «ЕЩЁ».
+- Плейлист с обложками альбомов
+- Управление: play/pause, prev/next, громкость, прогресс
+- Сворачивается в мини-режим
 
-### 📱 Адаптивная вёрстка
-Полная адаптация под все устройства: 1024px (планшет), 768px (мобильный), 480px, 360px.
+### 🐣 Пасхальное яйцо
+Введи **Konami Code**: `↑ ↑ ↓ ↓ ← → ← → B A` — и увидишь секретный экран
 
----
-
-## Настройка Discord
-
-### Токен бота (`DISCORD_TOKEN`)
-
-1. Открыть [discord.com/developers/applications](https://discord.com/developers/applications)
-2. Создать новое приложение → **Bot** → **Reset Token**
-3. Скопировать токен в `.env`
-4. В разделе **Privileged Gateway Intents** включить:
-   - `SERVER MEMBERS INTENT`
-   - `PRESENCE INTENT`
-5. Пригласить бота на сервер: **OAuth2 → URL Generator** → scope `bot`
-
-### Webhook для заявок (`DISCORD_WEBHOOK`)
-
-1. Открыть нужный канал в Discord
-2. **Настройки канала → Интеграции → Вебхуки → Создать**
-3. Скопировать URL в `.env`
-
-### Роли участников (`roles.config.js`)
-
-Отредактируй массив `ROLE_ORDER` — только участники с этими ролями будут отображаться в карточке Soldiers, отсортированные по порядку из конфига.
+### 📱 PWA + адаптивность
+- Устанавливается на телефон как приложение
+- Полная адаптация: 1024px / 768px / 480px / 360px
+- Service Worker для офлайн-режима
 
 ---
 
-## API
+## ⚙️ Настройка контента
+
+### Следующее событие
+`js/config/events.js` → поле `NEXT_EVENT`:
+```js
+export const NEXT_EVENT = {
+  title: "СЕМЕЙНЫЙ СБОР",
+  description: "Общий сбор Miller Family",
+  date: "2026-06-20T20:00:00",
+};
+```
+> Или измени прямо в **Админ-панели** → вкладка 📅 Событие
+
+### Галерея
+`js/config/events.js` → массив `GALLERY`. Добавь фото в `images/` и впиши путь.
+
+### Доска почёта
+`js/config/events.js` → массив `HALL_OF_FAME`.
+> Или измени в **Админ-панели** → вкладка 🏆 Доска почёта
+
+### Союзники
+`js/config/events.js` → массив `ALLIES`.
+> Или добавь в **Админ-панели** → вкладка 🤝 Союзники
+
+### Треки плеера
+`js/player.js` → массив `songs`:
+```js
+{ title: "НАЗВАНИЕ", artist: "Исполнитель", src: "music/файл.mp3", cover: "images/covers/cover1.png" }
+```
+
+### Роли Discord
+`js/config/roles.js` → массив `ROLE_ORDER` — только участники с этими ролями отображаются в блоке Soldiers.
+
+---
+
+## 🔌 API (при запущенном сервере)
 
 ### `GET /api/members`
 Список участников Discord с ролями и статусами.
 
 ### `POST /api/apply`
-Подача заявки. Сохраняется локально + отправляется в Discord webhook.
-
+Подача заявки.
 ```json
 {
   "nickname": "Eddie_Miller",
@@ -207,51 +262,20 @@ npm run dev
 Проверка статуса заявки по Discord тегу.
 
 ### `PATCH /api/application-status/:id`
-Изменение статуса заявки (требует заголовок `x-admin-secret`).
-
+Изменение статуса (требует заголовок `x-admin-secret`).
 ```json
 { "status": "approved", "comment": "Добро пожаловать в семью!" }
 ```
-
-Возможные статусы: `pending`, `approved`, `rejected`
-
----
-
-## Настройка контента
-
-### Следующее событие (countdown)
-`events.config.js` → поле `NEXT_EVENT`:
-```js
-export const NEXT_EVENT = {
-  title: "СЕМЕЙНЫЙ СБОР",
-  description: "Общий сбор Miller Family",
-  date: "2026-06-20T20:00:00",
-};
-```
-
-### Галерея
-`events.config.js` → массив `GALLERY`. Добавь фото в `images/` и впиши путь.
-
-### Доска почёта
-`events.config.js` → массив `HALL_OF_FAME`.
-
-### Таймлайн истории
-`events.config.js` → массив `TIMELINE`.
-
-### Треки плеера
-`js/player.js` → массив `songs`:
-```js
-{ title: "НАЗВАНИЕ", artist: "Исполнитель", src: "music/файл.mp3", cover: "images/covers/cover1.png" }
-```
+Статусы: `pending` · `approved` · `rejected`
 
 ---
 
-## Деплой
+## 🌐 Деплой
 
-### Railway (рекомендуется)
+### Railway *(рекомендуется)*
 1. [railway.app](https://railway.app) → New Project → Deploy from GitHub
-2. Variables: добавить все переменные из `.env`
-3. Railway сам запустит `npm start`
+2. Добавить переменные из `.env` в Variables
+3. Railway автоматически запустит `npm start`
 
 ### Render
 1. [render.com](https://render.com) → New Web Service
@@ -260,8 +284,18 @@ export const NEXT_EVENT = {
 
 ---
 
-## Безопасность
+## 🔒 Безопасность
 
-- `.env` и `applications.json` в `.gitignore` — **никогда не коммитить**
-- Если токен попал в git — немедленно сбросить на [discord.com/developers](https://discord.com/developers)
-- `ADMIN_SECRET` — придумай сложный ключ, он защищает API смены статуса заявок
+- `.env` и `applications.json` — в `.gitignore`, **никогда не коммитить**
+- Если токен Discord попал в git — немедленно сбросить на [discord.com/developers](https://discord.com/developers)
+- Пароль от админки хранится только у тебя
+
+---
+
+<div align="center">
+
+**MILLER FAMILY · DEL PERRO RP · 2023–2026**
+
+*dev by donskoyy*
+
+</div>

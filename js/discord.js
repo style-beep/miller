@@ -34,10 +34,19 @@ function renderMembers() {
     const roleHtml = topRole
       ? `<span class="member-role" style="color:${topRole.color === '#000000' ? '#888' : topRole.color}">${topRole.name}</span>`
       : "";
+
+    // Кеш аватаров — берём из localStorage если есть
+    const cacheKey = `mf_avatar_${member.name}`;
+    if (member.avatar && !member.avatar.startsWith("images/")) {
+      localStorage.setItem(cacheKey, member.avatar);
+    }
+    const avatarSrc = member.avatar || localStorage.getItem(cacheKey) || "images/family-logo.jpeg";
+
     return `
       <div class="member-item">
         <span class="member-dot" style="background:${color}"></span>
-        <img src="${member.avatar}" style="width:28px;height:28px;border-radius:50%;margin-right:10px;object-fit:cover;">
+        <img src="${avatarSrc}" loading="lazy" style="width:28px;height:28px;border-radius:50%;margin-right:10px;object-fit:cover;"
+             onerror="this.src='images/family-logo.jpeg'">
         <span class="member-name-wrap">
           <span class="member-name">${name}</span>
           ${roleHtml}
