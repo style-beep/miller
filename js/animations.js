@@ -117,12 +117,19 @@ export function initSmoothScroll() {
 export function initScrollReveal() {
   const observer = new IntersectionObserver(
     (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("show"); }),
-    { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
+    { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
   );
 
   document.querySelectorAll(
     ".hero-left, .hero-right, .glass-card, .rank-card, .member-card, .join-box, .composition, .section-title, .stat-card"
   ).forEach((el) => { el.classList.add("hidden"); observer.observe(el); });
+
+  // dept-card отдельный observer с классом dept-visible
+  const deptObserver = new IntersectionObserver(
+    (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("dept-visible"); deptObserver.unobserve(e.target); } }),
+    { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
+  );
+  document.querySelectorAll(".dept-card").forEach((el) => deptObserver.observe(el));
 
   const heroTitle = document.querySelector(".hero-title");
   if (heroTitle) {

@@ -52,6 +52,8 @@ self.addEventListener("fetch", e => {
   const isCacheFirst = CACHE_FIRST_EXT.some(ext => url.split("?")[0].endsWith(ext))
     || url.includes("fonts.gstatic.com");
 
+  const EMPTY = new Response("", { status: 503, statusText: "Offline" });
+
   if (isCacheFirst) {
     // Cache-first: картинки, шрифты, аудио — берём из кэша, обновляем в фоне
     e.respondWith(
@@ -63,12 +65,15 @@ self.addEventListener("fetch", e => {
           }
           return res;
         }).catch(() => null);
-        return cached || fetchPromise;
+
+        // Возвращаем кэш сразу, фоном обновляем; если кэша нет — ждём сеть
+        if (cached) return cached;
+        return fetchPromise.then(r => r || EMPTY.clone());
       })
     );
   } else {
     // Network-first: HTML, CSS, JS — всегда берём свежее с сервера
-    // Кэш используется только если сеть недоступна (офлайн)
+    // При офлайне HTML → offline.html, остальное → кэш или пустой ответ
     e.respondWith(
       fetch(e.request)
         .then(res => {
@@ -78,15 +83,13 @@ self.addEventListener("fetch", e => {
           }
           return res;
         })
-        .catch(() =>
-          caches.match(e.request).then(cached => {
-            if (cached) return cached;
-            // Для HTML запросов возвращаем offline страницу
-            if (e.request.headers.get("accept")?.includes("text/html"))
-              return caches.match("/offline.html");
-            return caches.match("/index.html");
-          })
-        )
+        .catch(async () => {
+          const isHTML = e.request.headers.get("accept")?.includes("text/html");
+          if (isHTML) {
+            return (await caches.match("/offline.html")) || EMPTY.clone();
+          }
+          return (await caches.match(e.request)) || EMPTY.clone();
+        })
     );
   }
 });

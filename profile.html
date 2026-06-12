@@ -218,24 +218,69 @@
 
     /* Achievements */
     .mypf-ach-grid {
-      display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px;
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:9px;
     }
     .mypf-ach {
       display:flex;flex-direction:column;align-items:center;gap:7px;
-      padding:14px 8px;text-align:center;
+      padding:15px 8px 12px;text-align:center;
       background:rgba(255,255,255,0.02);
       border:1px solid rgba(255,255,255,0.07);border-radius:12px;
-      position:relative;overflow:hidden;transition:all 0.2s;cursor:default;
+      position:relative;overflow:hidden;transition:all 0.22s;cursor:default;
     }
-    .mypf-ach:not(.locked):hover { border-color:rgba(255,42,42,0.3);transform:translateY(-2px);background:rgba(255,42,42,0.04); }
-    .mypf-ach.locked { opacity:0.22;filter:grayscale(1); }
+    .mypf-ach:not(.locked):hover { transform:translateY(-3px); }
+    .mypf-ach.locked { opacity:0.18;filter:grayscale(1); }
+    .mypf-ach.locked:hover { transform:none; }
+
+    /* tier glow effects */
+    .mypf-ach[data-rare="MYTHIC"]:not(.locked) {
+      border-color:rgba(255,60,120,0.5);
+      box-shadow:0 0 16px rgba(255,60,120,0.2),inset 0 0 20px rgba(255,60,120,0.05);
+      animation:achMythicPulse 3s ease-in-out infinite;
+    }
+    .mypf-ach[data-rare="GOD"]:not(.locked) {
+      border-color:rgba(255,215,0,0.6);
+      box-shadow:0 0 24px rgba(255,215,0,0.25),inset 0 0 30px rgba(255,215,0,0.06);
+      animation:achGodPulse 2.5s ease-in-out infinite;
+    }
+    .mypf-ach[data-rare="LEGENDARY"]:not(.locked) {
+      border-color:rgba(255,152,0,0.45);
+      box-shadow:0 0 12px rgba(255,152,0,0.15);
+    }
+    .mypf-ach[data-rare="EPIC"]:not(.locked) {
+      border-color:rgba(156,39,176,0.4);
+      box-shadow:0 0 10px rgba(156,39,176,0.12);
+    }
+    @keyframes achMythicPulse {
+      0%,100% { box-shadow:0 0 16px rgba(255,60,120,0.2),inset 0 0 20px rgba(255,60,120,0.05); }
+      50%      { box-shadow:0 0 28px rgba(255,60,120,0.35),inset 0 0 30px rgba(255,60,120,0.1); }
+    }
+    @keyframes achGodPulse {
+      0%,100% { box-shadow:0 0 24px rgba(255,215,0,0.25),inset 0 0 30px rgba(255,215,0,0.06); }
+      50%      { box-shadow:0 0 40px rgba(255,215,0,0.45),inset 0 0 40px rgba(255,215,0,0.12); }
+    }
+
+    .mypf-ach-shine {
+      position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(ellipse at top,var(--ach-shine,transparent) 0%,transparent 65%);
+      opacity:0.12;
+    }
     .mypf-ach-badge {
       position:absolute;top:5px;right:5px;font-size:7px;font-weight:800;
-      letter-spacing:1px;padding:2px 5px;border-radius:4px;
+      letter-spacing:0.5px;padding:2px 5px;border-radius:4px;
+      text-shadow:0 1px 3px rgba(0,0,0,0.5);
     }
-    .mypf-ach-icon { font-size:24px;line-height:1; }
-    .mypf-ach-name { font-size:8px;font-weight:700;letter-spacing:1px;color:#fff;text-transform:uppercase;line-height:1.3; }
-    .mypf-ach-desc { font-size:8px;color:rgba(255,255,255,0.28);line-height:1.4; }
+    .mypf-ach-icon { font-size:26px;line-height:1;position:relative;z-index:1; }
+    .mypf-ach-name { font-size:8px;font-weight:700;letter-spacing:1px;color:#fff;text-transform:uppercase;line-height:1.3;position:relative;z-index:1; }
+    .mypf-ach-desc { font-size:8px;color:rgba(255,255,255,0.28);line-height:1.4;position:relative;z-index:1; }
+
+    /* GOD tier name shimmer */
+    .mypf-ach[data-rare="GOD"]:not(.locked) .mypf-ach-name {
+      background:linear-gradient(90deg,#ffd700,#fff8dc,#ffa500,#ffd700);
+      background-size:200% auto;
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      animation:godShimmer 2s linear infinite;
+    }
+    @keyframes godShimmer { to { background-position:200% center; } }
 
     /* Bio text */
     .mypf-bio-full { font-size:13px;color:rgba(255,255,255,0.45);line-height:1.85; }
@@ -436,19 +481,58 @@ if (!urlId) {
     { key:"arrests",    icon:"fa-handcuffs",       label:"Арестов",    color:"#888",    bg:"rgba(136,136,136,0.1)" },
   ];
 
+  const RARITIES = {
+    COMMON:    { color:"#9e9e9e", shine:"#9e9e9e" },
+    UNCOMMON:  { color:"#43b581", shine:"#43b581" },
+    RARE:      { color:"#4a9eff", shine:"#4a9eff" },
+    EPIC:      { color:"#b44fe8", shine:"#b44fe8" },
+    LEGENDARY: { color:"#ff9800", shine:"#ff9800" },
+    MYTHIC:    { color:"#ff3c78", shine:"#ff3c78" },
+    GOD:       { color:"#ffd700", shine:"#ffd700" },
+  };
+
   const ALL_ACH = [
-    { id:"founder",   icon:"👑", name:"Основатель",    desc:"Создал Miller Family",        rare:"LEGENDARY", color:"#ff9800" },
-    { id:"boss",      icon:"🔱", name:"Босс",          desc:"Получил ранг Family Boss",    rare:"EPIC",      color:"#9c27b0" },
-    { id:"war100",    icon:"⚔️", name:"Ветеран войн",  desc:"Участник 10+ войн",           rare:"RARE",      color:"#2196f3" },
-    { id:"rich",      icon:"💰", name:"Миллиардер",    desc:"Капитал 500M+",               rare:"EPIC",      color:"#9c27b0" },
-    { id:"loyal",     icon:"🤝", name:"Верность",      desc:"1 год в составе семьи",       rare:"UNCOMMON",  color:"#4caf50" },
-    { id:"terror",    icon:"🔥", name:"Гроза улиц",    desc:"Лучший боец месяца",          rare:"RARE",      color:"#2196f3" },
-    { id:"diplomat",  icon:"🕊️", name:"Дипломат",      desc:"Заключил союзный пакт",       rare:"UNCOMMON",  color:"#4caf50" },
-    { id:"legend",    icon:"⭐", name:"Легенда",        desc:"Признан легендой сервера",    rare:"LEGENDARY", color:"#ff9800" },
-    { id:"builder",   icon:"🏗️", name:"Строитель",     desc:"Открыл 10+ бизнесов",        rare:"RARE",      color:"#2196f3" },
-    { id:"ghost",     icon:"👻", name:"Призрак",        desc:"Ни одного провала операции", rare:"EPIC",      color:"#9c27b0" },
-    { id:"commander", icon:"🎖️", name:"Командир",      desc:"Руководил 5+ операциями",     rare:"UNCOMMON",  color:"#4caf50" },
-    { id:"ironwill",  icon:"🛡️", name:"Железная воля", desc:"Не нарушил кодекс ни разу",  rare:"RARE",      color:"#2196f3" },
+    // ── COMMON ──
+    { id:"recruit",    icon:"🪖", name:"Новобранец",      desc:"Впервые зарегистрировался на сайте",        rare:"COMMON"    },
+    { id:"applicant",  icon:"📋", name:"Заявитель",       desc:"Подал заявку на вступление в семью",        rare:"COMMON"    },
+    { id:"social",     icon:"💬", name:"Болтун",          desc:"Написал 100+ сообщений в Discord",          rare:"COMMON"    },
+
+    // ── UNCOMMON ──
+    { id:"loyal",      icon:"🤝", name:"Верность",        desc:"1 год в составе Miller Family",             rare:"UNCOMMON"  },
+    { id:"diplomat",   icon:"🕊️", name:"Дипломат",        desc:"Лично заключил союзный пакт",               rare:"UNCOMMON"  },
+    { id:"commander",  icon:"🎖️", name:"Командир",        desc:"Руководил 5+ боевыми операциями",           rare:"UNCOMMON"  },
+    { id:"streetwise", icon:"🌆", name:"Уличный",         desc:"100+ часов на сервере Del Perro",           rare:"UNCOMMON"  },
+    { id:"firstblood", icon:"🩸", name:"Первая кровь",    desc:"Первое задокументированное убийство",       rare:"UNCOMMON"  },
+
+    // ── RARE ──
+    { id:"war100",     icon:"⚔️", name:"Ветеран войн",    desc:"Участник 10+ войн за территорию",          rare:"RARE"      },
+    { id:"terror",     icon:"🔥", name:"Гроза улиц",      desc:"Лучший боец месяца по версии семьи",        rare:"RARE"      },
+    { id:"builder",    icon:"🏗️", name:"Строитель",       desc:"Открыл 10+ легальных бизнесов",            rare:"RARE"      },
+    { id:"ironwill",   icon:"🛡️", name:"Железная воля",   desc:"Ни разу не нарушил кодекс чести",          rare:"RARE"      },
+    { id:"hunter",     icon:"🎯", name:"Охотник",          desc:"500+ подтверждённых устранений",            rare:"RARE"      },
+    { id:"shadow",     icon:"🌑", name:"Тень",             desc:"Провёл 10 тайных операций без следов",      rare:"RARE"      },
+
+    // ── EPIC ──
+    { id:"boss",       icon:"🔱", name:"Босс",             desc:"Достиг ранга Family Boss",                  rare:"EPIC"      },
+    { id:"rich",       icon:"💰", name:"Миллиардер",       desc:"Личный капитал превысил $500,000,000",      rare:"EPIC"      },
+    { id:"ghost",      icon:"👻", name:"Призрак",           desc:"Ни одного провала за 20 операций подряд",  rare:"EPIC"      },
+    { id:"warlord",    icon:"💀", name:"Военачальник",     desc:"Участник 50+ войн — всегда на передовой",  rare:"EPIC"      },
+    { id:"territory",  icon:"🗺️", name:"Территориальный",  desc:"Лично захватил 20+ районов города",        rare:"EPIC"      },
+    { id:"enforcer",   icon:"🔫", name:"Enforcer",          desc:"1000+ убийств — живое оружие семьи",       rare:"EPIC"      },
+
+    // ── LEGENDARY ──
+    { id:"legend",     icon:"⭐", name:"Легенда",           desc:"Официально признан легендой Del Perro RP", rare:"LEGENDARY" },
+    { id:"unbeaten",   icon:"🏆", name:"Непобедимый",       desc:"Серия из 20 побед в войнах без поражений", rare:"LEGENDARY" },
+    { id:"cardinal",   icon:"🦅", name:"Кардинал",          desc:"Тайно управлял 5 фракциями одновременно",  rare:"LEGENDARY" },
+    { id:"loyalty5",   icon:"⏳", name:"Пять лет",          desc:"5 лет непрерывно в рядах Miller Family",   rare:"LEGENDARY" },
+
+    // ── MYTHIC ──
+    { id:"crimgenius", icon:"🧠", name:"Крим. гений",       desc:"Организовал операцию года на сервере",     rare:"MYTHIC"    },
+    { id:"feared",     icon:"☠️", name:"Страх улиц",        desc:"Твоё имя вызывает панику у всех фракций",  rare:"MYTHIC"    },
+    { id:"untouchable",icon:"💎", name:"Неприкасаемый",      desc:"Ни одного ареста за всё время на сервере", rare:"MYTHIC"    },
+
+    // ── GOD ──
+    { id:"founder",    icon:"👑", name:"Основатель",        desc:"Создал и возглавил Miller Family",          rare:"GOD"       },
   ];
 
   function fmtNum(n) {
@@ -458,9 +542,11 @@ if (!urlId) {
   }
 
   function achCard(a, unlocked) {
-    const on = unlocked.includes(a.id);
-    return `<div class="mypf-ach${on?"":" locked"}">
-      <div class="mypf-ach-badge" style="color:${a.color};background:${a.color}22">${a.rare}</div>
+    const on  = unlocked.includes(a.id);
+    const r   = RARITIES[a.rare];
+    return `<div class="mypf-ach${on?"":" locked"}" data-rare="${a.rare}" style="--ach-shine:${r.shine}">
+      <div class="mypf-ach-shine"></div>
+      <div class="mypf-ach-badge" style="color:${r.color};background:${r.color}20">${a.rare}</div>
       <div class="mypf-ach-icon">${a.icon}</div>
       <div class="mypf-ach-name">${a.name}</div>
       <div class="mypf-ach-desc">${a.desc}</div>
@@ -562,11 +648,11 @@ if (!urlId) {
       <!-- Content tabs -->
       <div>
         <div class="mypf-tabs">
-          <button class="mypf-tab active" data-panel="about">О себе</button>
-          <button class="mypf-tab" data-panel="achievements">Достижения</button>
+          <button class="mypf-tab${(user.achievements||[]).length===0?" active":""}" data-panel="about">О себе</button>
+          <button class="mypf-tab${(user.achievements||[]).length>0?" active":""}" data-panel="achievements">Достижения${(user.achievements||[]).length>0?` <span style="background:rgba(255,152,0,0.2);color:#ffa726;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:800;margin-left:4px">${(user.achievements||[]).length}</span>`:""}</button>
         </div>
 
-        <div class="mypf-tabpanel active" id="panel-about">
+        <div class="mypf-tabpanel${(user.achievements||[]).length===0?" active":""}" id="panel-about">
           <div class="mypf-card">
             <div class="mypf-card-title"><i class="fa-solid fa-user"></i>&nbsp; О участнике</div>
             <p class="mypf-bio-full">${user.bio || '<em style="color:rgba(255,255,255,0.2)">Описание не добавлено</em>'}</p>
@@ -574,7 +660,7 @@ if (!urlId) {
           </div>
         </div>
 
-        <div class="mypf-tabpanel" id="panel-achievements">
+        <div class="mypf-tabpanel${(user.achievements||[]).length>0?" active":""}" id="panel-achievements">
           <div class="mypf-card">
             <div class="mypf-card-title"><i class="fa-solid fa-trophy"></i>&nbsp; Достижения — <span id="achCountTab">${(user.achievements||[]).length}</span> / ${ALL_ACH.length}</div>
             <div class="mypf-ach-grid" id="achGridDisplay">
@@ -654,18 +740,31 @@ if (!urlId) {
           <div style="margin-bottom:14px;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;">
             Отметь достижения которые ты получил
           </div>
-          <div class="pf-ach-check-grid" id="achCheckGrid">
-            ${ALL_ACH.map(a => {
-              const on = (user.achievements||[]).includes(a.id);
+          ${Object.keys(RARITIES).map(tier => {
+              const tierAchs = ALL_ACH.filter(a => a.rare === tier);
+              if (!tierAchs.length) return "";
+              const r = RARITIES[tier];
               return `
-              <label class="pf-ach-check${on?" checked":""}" data-ach="${a.id}">
-                <input type="checkbox" ${on?"checked":""}>
-                <div class="pf-ach-check-box">${on?'<i class="fa-solid fa-check"></i>':""}</div>
-                <span class="pf-ach-check-icon">${a.icon}</span>
-                <span class="pf-ach-check-name">${a.name}</span>
-              </label>`;
+              <div style="margin-bottom:4px;margin-top:14px;font-size:8px;font-weight:800;letter-spacing:2px;
+                color:${r.color};text-transform:uppercase;display:flex;align-items:center;gap:8px;">
+                <span style="flex:1;height:1px;background:${r.color}30"></span>
+                ${tier}
+                <span style="flex:1;height:1px;background:${r.color}30"></span>
+              </div>
+              <div class="pf-ach-check-grid">
+                ${tierAchs.map(a => {
+                  const on = (user.achievements||[]).includes(a.id);
+                  return `
+                  <label class="pf-ach-check${on?" checked":""}" data-ach="${a.id}" style="${on?`border-color:${r.color}44;background:${r.color}08`:``}">
+                    <input type="checkbox" ${on?"checked":""}>
+                    <div class="pf-ach-check-box" style="${on?`background:${r.color};border-color:${r.color}`:``}">${on?'<i class="fa-solid fa-check"></i>':""}</div>
+                    <span class="pf-ach-check-icon">${a.icon}</span>
+                    <span class="pf-ach-check-name" style="color:${on?r.color:'rgba(255,255,255,0.5)'}">${a.name}</span>
+                  </label>`;
+                }).join("")}
+              </div>`;
             }).join("")}
-          </div>
+          <div id="achCheckGrid" style="display:none"></div>
           <button class="pf-save-btn" style="margin-top:20px" id="saveAch">
             <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить достижения
           </button>
@@ -694,13 +793,24 @@ if (!urlId) {
   });
 
   // Achievement checkboxes
-  document.getElementById("achCheckGrid").addEventListener("click", e => {
-    const lbl = e.target.closest(".pf-ach-check");
+  document.getElementById("mpanel-achievements").addEventListener("change", e => {
+    const cb  = e.target;
+    if (cb.type !== "checkbox") return;
+    const lbl = cb.closest(".pf-ach-check");
     if (!lbl) return;
-    const cb = lbl.querySelector("input");
-    cb.checked = !cb.checked;
+    const ach = ALL_ACH.find(a => a.id === lbl.dataset.ach);
+    const r   = ach ? RARITIES[ach.rare] : null;
+    // cb.checked уже обновлён браузером — не трогаем его
     lbl.classList.toggle("checked", cb.checked);
     lbl.querySelector(".pf-ach-check-box").innerHTML = cb.checked ? '<i class="fa-solid fa-check"></i>' : "";
+    if (r) {
+      lbl.querySelector(".pf-ach-check-box").style.cssText = cb.checked
+        ? `background:${r.color};border-color:${r.color}`
+        : "";
+      lbl.style.borderColor = cb.checked ? r.color + "44" : "";
+      lbl.style.background  = cb.checked ? r.color + "08" : "";
+      lbl.querySelector(".pf-ach-check-name").style.color = cb.checked ? r.color : "rgba(255,255,255,0.5)";
+    }
   });
 
   async function save(payload, btn) {
@@ -746,15 +856,14 @@ if (!urlId) {
 
   // Save achievements
   document.getElementById("saveAch").onclick = async function() {
-    const achievements = [...document.querySelectorAll(".pf-ach-check input:checked")]
+    const achievements = [...document.querySelectorAll("#mpanel-achievements .pf-ach-check input:checked")]
       .map(cb => cb.closest(".pf-ach-check").dataset.ach);
     await save({ achievements }, this);
   };
 
-  throw new Error("my-profile-rendered");
-}
+} else {
 
-// ── Достижения ──────────────────────────────────────────────────
+// ── Достижения (статические профили ?id=) ───────────────────────
 const ALL_ACHIEVEMENTS = [
   { id: "founder",    icon: "👑", name: "Основатель",    desc: "Создал Miller Family",          rare: "RARE"      },
   { id: "boss",       icon: "🔱", name: "Босс",          desc: "Получил ранг Family Boss",       rare: "EPIC"      },
@@ -913,6 +1022,7 @@ document.getElementById("profileContent").innerHTML = `
     `).join("")}
   </div>
 `;
+} // else (static profile)
 </script>
 </body>
 </html>

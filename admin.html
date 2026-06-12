@@ -133,6 +133,93 @@
     .detail-comment { width: 100%; padding: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px; resize: vertical; min-height: 60px; outline: none; margin: 10px 0; }
     .detail-actions { display: flex; gap: 8px; margin-top: 14px; }
     .detail-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.3); font-size: 20px; cursor: pointer; }
+
+    /* ── Monitor tab ── */
+    .monitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media(max-width:800px){ .monitor-grid { grid-template-columns: 1fr; } }
+
+    .mon-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; overflow: hidden; }
+    .mon-card-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .mon-card-title { font-size: 10px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+    .mon-live-dot {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 9px; letter-spacing: 2px; color: rgba(67,181,129,0.7);
+    }
+    .mon-live-dot::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #43b581; animation: livePulse 1.5s ease-in-out infinite;
+    }
+    @keyframes livePulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* Voice */
+    .voice-channels { padding: 14px; display: flex; flex-direction: column; gap: 10px; min-height: 120px; }
+    .voice-ch {
+      background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px; overflow: hidden;
+    }
+    .voice-ch-head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; background: rgba(255,255,255,0.02);
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
+    }
+    .voice-ch-head i { color: rgba(99,179,237,0.7); font-size: 12px; }
+    .voice-ch-count { margin-left: auto; font-size: 9px; color: rgba(255,255,255,0.2); }
+    .voice-members { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 14px; }
+    .voice-member {
+      display: flex; align-items: center; gap: 6px;
+      padding: 5px 10px; border-radius: 20px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+      font-size: 11px; color: rgba(255,255,255,0.6);
+    }
+    .voice-member img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
+    .voice-member .vm-icon { font-size: 9px; color: rgba(255,80,80,0.6); }
+    .voice-empty { padding: 28px; text-align: center; font-size: 12px; color: rgba(255,255,255,0.15); }
+
+    /* Chat */
+    .chat-feed {
+      height: 440px; overflow-y: auto; padding: 12px;
+      display: flex; flex-direction: column; gap: 6px;
+      scroll-behavior: smooth;
+    }
+    .chat-feed::-webkit-scrollbar { width: 4px; }
+    .chat-feed::-webkit-scrollbar-track { background: transparent; }
+    .chat-feed::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    .chat-msg {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 8px 10px; border-radius: 8px;
+      background: rgba(255,255,255,0.02);
+      transition: background 0.2s;
+    }
+    .chat-msg:hover { background: rgba(255,255,255,0.04); }
+    .chat-msg.new-msg { animation: msgIn 0.3s ease; }
+    @keyframes msgIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+    .chat-msg-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .chat-msg-body { flex: 1; min-width: 0; }
+    .chat-msg-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .chat-msg-author { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75); }
+    .chat-msg-ch { font-size: 9px; color: rgba(99,179,237,0.6); }
+    .chat-msg-time { font-size: 9px; color: rgba(255,255,255,0.2); margin-left: auto; white-space: nowrap; }
+    .chat-msg-text { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; word-break: break-word; }
+    .chat-filter {
+      display: flex; gap: 6px; padding: 10px 14px;
+      border-top: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; align-items: center;
+    }
+    .chat-filter input {
+      flex: 1; min-width: 120px; padding: 7px 12px;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px; color: #fff; font-size: 12px;
+      font-family: 'Montserrat', sans-serif; outline: none;
+    }
+    .chat-filter input::placeholder { color: rgba(255,255,255,0.2); }
+    .chat-filter input:focus { border-color: rgba(99,179,237,0.3); }
+    .mon-refresh { padding: 6px 12px; border-radius: 6px; font-size: 9px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.3); font-family: 'Montserrat', sans-serif; transition: all 0.2s; }
+    .mon-refresh:hover { border-color: rgba(99,179,237,0.4); color: rgba(99,179,237,0.8); }
+    .mon-refresh.spin i { animation: spin 0.6s linear; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -169,6 +256,7 @@
     <!-- Вкладки -->
     <div class="admin-tabs">
       <button class="admin-tab active" data-tab="applications">📋 Заявки</button>
+      <button class="admin-tab" data-tab="monitor">🔊 Мониторинг</button>
       <button class="admin-tab" data-tab="hof">🏆 Доска почёта</button>
       <button class="admin-tab" data-tab="event">📅 Событие</button>
       <button class="admin-tab" data-tab="allies">🤝 Союзники</button>
@@ -193,6 +281,43 @@
         </thead>
         <tbody id="appsBody"></tbody>
       </table>
+    </div>
+
+    <!-- Вкладка: Мониторинг -->
+    <div class="admin-tab-content" id="tab-monitor">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div class="admin-section-title" style="margin:0">МОНИТОРИНГ DISCORD</div>
+        <button class="mon-refresh" id="monRefreshBtn"><i class="fa-solid fa-rotate-right"></i> Обновить</button>
+      </div>
+      <div class="monitor-grid">
+
+        <!-- Voice channels -->
+        <div class="mon-card">
+          <div class="mon-card-head">
+            <span class="mon-card-title"><i class="fa-solid fa-microphone" style="margin-right:6px;color:rgba(99,179,237,0.6)"></i>Войс каналы</span>
+            <span class="mon-live-dot" id="voiceLiveDot">LIVE</span>
+          </div>
+          <div class="voice-channels" id="voiceList">
+            <div class="voice-empty"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>Загрузка...</div>
+          </div>
+        </div>
+
+        <!-- Chat feed -->
+        <div class="mon-card" style="display:flex;flex-direction:column">
+          <div class="mon-card-head">
+            <span class="mon-card-title"><i class="fa-solid fa-comments" style="margin-right:6px;color:rgba(99,179,237,0.6)"></i>Чат сообщения</span>
+            <span class="mon-live-dot" id="chatLiveDot">LIVE</span>
+          </div>
+          <div class="chat-feed" id="chatFeed">
+            <div class="voice-empty"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>Загрузка...</div>
+          </div>
+          <div class="chat-filter">
+            <input type="text" id="chatSearch" placeholder="Фильтр по нику или каналу...">
+            <button class="mon-refresh" id="chatScrollBtn" title="Прокрутить вниз"><i class="fa-solid fa-arrow-down"></i></button>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <!-- Вкладка: Доска почёта -->
@@ -588,6 +713,163 @@ function removeAlly(i) {
   alliesData.splice(i, 1);
   renderAlliesEditor();
 }
+
+// ══════════════════════════════════════════════════════════
+//  МОНИТОРИНГ — войсы и чаты
+// ══════════════════════════════════════════════════════════
+
+let adminSecret = "";
+let monitorInterval = null;
+let allMessages = [];
+let chatFilter = "";
+
+// Запускаем мониторинг после логина (получаем секрет из поля ввода)
+const _origInitAdmin = initAdmin;
+initAdmin = function() {
+  _origInitAdmin();
+  adminSecret = document.getElementById("secretInput").value.trim();
+  startMonitor();
+};
+
+function startMonitor() {
+  fetchVoice();
+  fetchMessages();
+  clearInterval(monitorInterval);
+  monitorInterval = setInterval(() => {
+    fetchVoice();
+    fetchMessages();
+  }, 5000);
+}
+
+async function fetchVoice() {
+  try {
+    const data = await fetch("/api/admin/voice", {
+      headers: { "x-admin-secret": adminSecret }
+    }).then(r => r.json());
+
+    if (!Array.isArray(data)) return;
+    renderVoice(data);
+  } catch {}
+}
+
+async function fetchMessages() {
+  try {
+    const data = await fetch("/api/admin/messages?limit=100", {
+      headers: { "x-admin-secret": adminSecret }
+    }).then(r => r.json());
+
+    if (!Array.isArray(data)) return;
+    const prevLen = allMessages.length;
+    allMessages = data;
+    renderChat(prevLen < data.length);
+  } catch {}
+}
+
+function renderVoice(channels) {
+  const el = document.getElementById("voiceList");
+  if (!el) return;
+
+  if (!channels.length) {
+    el.innerHTML = `<div class="voice-empty"><i class="fa-solid fa-microphone-slash" style="margin-right:6px;opacity:0.4"></i>Никого в войсе</div>`;
+    return;
+  }
+
+  el.innerHTML = channels.map(ch => `
+    <div class="voice-ch">
+      <div class="voice-ch-head">
+        <i class="fa-solid fa-volume-high"></i>
+        ${ch.channelName}
+        <span class="voice-ch-count">${ch.members.length} участн.</span>
+      </div>
+      <div class="voice-members">
+        ${ch.members.map(m => `
+          <div class="voice-member">
+            <img src="${m.avatar}" alt="" onerror="this.style.display='none'">
+            ${m.name}
+            ${m.mute ? `<i class="fa-solid fa-microphone-slash vm-icon" title="Микрофон выкл"></i>` : ""}
+            ${m.deaf ? `<i class="fa-solid fa-headphones-slash vm-icon" title="Звук выкл"></i>` : ""}
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderChat(hasNew) {
+  const el = document.getElementById("chatFeed");
+  if (!el) return;
+
+  const filtered = chatFilter
+    ? allMessages.filter(m =>
+        m.author.toLowerCase().includes(chatFilter) ||
+        m.channel.toLowerCase().includes(chatFilter) ||
+        m.content.toLowerCase().includes(chatFilter))
+    : allMessages;
+
+  if (!filtered.length) {
+    el.innerHTML = `<div class="voice-empty"><i class="fa-solid fa-comment-slash" style="margin-right:6px;opacity:0.4"></i>Нет сообщений</div>`;
+    return;
+  }
+
+  const wasAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+
+  el.innerHTML = filtered.map((m, i) => {
+    const time = new Date(m.ts).toLocaleTimeString("ru-RU", { hour:"2-digit", minute:"2-digit" });
+    const isNew = hasNew && i < 3;
+    return `
+      <div class="chat-msg${isNew ? " new-msg" : ""}">
+        <img class="chat-msg-avatar" src="${m.avatar}" alt="" onerror="this.src='images/family-logo.jpeg'">
+        <div class="chat-msg-body">
+          <div class="chat-msg-head">
+            <span class="chat-msg-author">${escHtml(m.author)}</span>
+            <span class="chat-msg-ch"><i class="fa-solid fa-hashtag" style="font-size:8px"></i> ${escHtml(m.channel)}</span>
+            <span class="chat-msg-time">${time}</span>
+          </div>
+          <div class="chat-msg-text">${escHtml(m.content)}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (wasAtBottom || hasNew) el.scrollTop = el.scrollHeight;
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+// Фильтр чата
+document.getElementById("chatSearch").addEventListener("input", e => {
+  chatFilter = e.target.value.trim().toLowerCase();
+  renderChat(false);
+});
+
+// Прокрутка вниз
+document.getElementById("chatScrollBtn").addEventListener("click", () => {
+  const el = document.getElementById("chatFeed");
+  if (el) el.scrollTop = el.scrollHeight;
+});
+
+// Ручное обновление
+document.getElementById("monRefreshBtn").addEventListener("click", function() {
+  this.classList.add("spin");
+  fetchVoice();
+  fetchMessages();
+  setTimeout(() => this.classList.remove("spin"), 600);
+});
+
+// Активируем мониторинг когда переключаемся на эту вкладку
+document.querySelectorAll(".admin-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    if (tab.dataset.tab === "monitor" && !monitorInterval) {
+      startMonitor();
+    }
+  });
+});
 </script>
 </body>
 </html>

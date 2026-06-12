@@ -511,9 +511,22 @@
   overflow: hidden;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  transition: border-color 0.25s, box-shadow 0.25s;
+  transition: border-color 0.3s, box-shadow 0.3s,
+              opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   contain: layout;
+  opacity: 0;
+  transform: translateY(18px);
 }
+.dept-card.dept-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* stagger */
+.dept-card:nth-child(1) { transition-delay: 0s; }
+.dept-card:nth-child(2) { transition-delay: 0.08s; }
+.dept-card:nth-child(3) { transition-delay: 0.16s; }
+.dept-card:nth-child(4) { transition-delay: 0.24s; }
 
 /* Угловой цветной accent слева */
 .dept-card::before {
@@ -688,6 +701,7 @@
   background: rgba(255,255,255,0.045);
   border-color: color-mix(in srgb, var(--dept-color, #ff2a2a) 25%, transparent);
   transform: translateY(-2px);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 .dept-member:hover::before { opacity: 1; }
 

@@ -132,10 +132,17 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
   ],
 });
 
 let membersCache = [];
+let voiceCache   = [];   // [{channelId, channelName, members:[{name,avatar,id}]}]
+let messagesCache = [];  // последние 100 сообщений [{id,author,avatar,content,channel,channelId,ts}]
+
+const MSG_LIMIT = 100;
 
 client.on("ready", async () => {
   console.log(`Bot online: ${client.user.tag}`);
@@ -143,9 +150,9 @@ client.on("ready", async () => {
   if (!guild) return console.warn("No guild found");
   await guild.members.fetch();
   updateCache(guild);
+  updateVoiceCache(guild);
   setInterval(() => updateCache(guild), 5000);
 
-  // Уведомление при подключении бота
   setTimeout(() => broadcast({ text: "🤖 Бот Miller Family онлайн", type: "info" }), 2000);
 });
 
@@ -161,8 +168,67 @@ function updateCache(guild) {
   }));
 }
 
+function updateVoiceCache(guild) {
+  const channels = {};
+  guild.members.cache.forEach(m => {
+    const vs = m.voice;
+    if (!vs?.channel) return;
+    const ch = vs.channel;
+    if (!channels[ch.id]) {
+      channels[ch.id] = { channelId: ch.id, channelName: ch.name, members: [] };
+    }
+    channels[ch.id].members.push({
+      id:     m.id,
+      name:   m.displayName,
+      avatar: m.user.displayAvatarURL({ extension: "png", size: 64, forceStatic: true }),
+      mute:   vs.serverMute || vs.selfMute,
+      deaf:   vs.serverDeaf || vs.selfDeaf,
+    });
+  });
+  voiceCache = Object.values(channels).sort((a, b) => b.members.length - a.members.length);
+}
+
+// Обновляем войс-кэш при изменении состояния
+client.on("voiceStateUpdate", (_old, _new) => {
+  const guild = client.guilds.cache.first();
+  if (guild) updateVoiceCache(guild);
+});
+
+// Сохраняем входящие сообщения
+client.on("messageCreate", msg => {
+  if (msg.author.bot) return;
+  if (!msg.guild) return;
+  messagesCache.push({
+    id:        msg.id,
+    author:    msg.member?.displayName || msg.author.username,
+    avatar:    msg.author.displayAvatarURL({ extension: "png", size: 32, forceStatic: true }),
+    content:   msg.content.substring(0, 400),
+    channel:   msg.channel.name,
+    channelId: msg.channelId,
+    ts:        msg.createdTimestamp,
+  });
+  if (messagesCache.length > MSG_LIMIT) messagesCache.shift();
+});
+
 // ── API: участники ──────────────────────────────────────────
 app.get("/api/members", (req, res) => res.json(membersCache));
+
+// ── API: войс-каналы (admin) ────────────────────────────────
+app.get("/api/admin/voice", (req, res) => {
+  const secret = req.headers["x-admin-secret"];
+  if (secret !== process.env.ADMIN_SECRET)
+    return res.status(403).json({ success: false });
+  res.json(voiceCache);
+});
+
+// ── API: сообщения (admin) ──────────────────────────────────
+app.get("/api/admin/messages", (req, res) => {
+  const secret = req.headers["x-admin-secret"];
+  if (secret !== process.env.ADMIN_SECRET)
+    return res.status(403).json({ success: false });
+  const limit = Math.min(parseInt(req.query.limit) || 50, MSG_LIMIT);
+  res.json([...messagesCache].reverse().slice(0, limit));
+});
 
 // ── AUTH: регистрация ───────────────────────────────────────
 app.post("/api/auth/register", async (req, res) => {
@@ -252,7 +318,7 @@ app.patch("/api/auth/profile", (req, res) => {
     allowed.forEach(k => { if (stats[k] !== undefined) u.stats[k] = Math.max(0, parseInt(stats[k]) || 0); });
   }
   if (achievements !== undefined && Array.isArray(achievements)) {
-    u.achievements = achievements.filter(a => typeof a === "string").slice(0, 20);
+    u.achievements = achievements.filter(a => typeof a === "string").slice(0, 50);
   }
   saveUsers(users);
   res.json({ success: true, user: safeUser(u) });
@@ -384,6 +450,11 @@ app.get("/api/applications", (req, res) => {
   if (secret !== process.env.ADMIN_SECRET)
     return res.status(403).json({ success: false });
   res.json(loadApps());
+});
+
+// ── 404 ─────────────────────────────────────────────────────
+app.use((req, res) => {
+  res.status(404).sendFile(path.join(__dirname, "404.html"));
 });
 
 // ── Запуск ──────────────────────────────────────────────────
