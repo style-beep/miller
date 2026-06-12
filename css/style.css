@@ -671,13 +671,16 @@ section { padding: 130px 7%; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 34px;
+  font-size: 28px;
   border: 2px solid rgba(255,255,255,0.1);
 }
+.rank-icon i {
+  filter: drop-shadow(0 0 8px currentColor);
+}
 
-.boss-icon     { background: linear-gradient(145deg, #2a0000, #4a0000); color: #ffd700; }
-.deputy-icon   { background: linear-gradient(145deg, #001a2a, #003d66); color: #5eb8ff; }
-.commander-icon{ background: linear-gradient(145deg, #2a1a00, #664000); color: #ffcc80; }
+.boss-icon     { background: linear-gradient(145deg, #2a0000, #4a0000); color: #ffd700; border-color: rgba(255,215,0,0.25); }
+.deputy-icon   { background: linear-gradient(145deg, #001a2a, #003d66); color: #5eb8ff; border-color: rgba(94,184,255,0.25); }
+.commander-icon{ background: linear-gradient(145deg, #2a1a00, #664000); color: #ffcc80; border-color: rgba(255,204,128,0.25); }
 
 .rank-card:hover .rank-icon {
   transform: scale(1.08);
@@ -2828,80 +2831,49 @@ body::before {
     box-shadow:
     0 0 25px rgba(255,0,0,.15);
 }
-.member-item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:14px 18px;
-
-    background:rgba(255,255,255,.03);
-
-    border:1px solid rgba(255,255,255,.06);
-
-    border-radius:16px;
-
-    transition:.3s ease;
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.055);
+  border-radius: 10px;
+  /* ТОЛЬКО нужные свойства — НЕ "all" */
+  transition: border-color 0.2s, background 0.2s;
+  /* Изолируем layout и paint внутри элемента */
+  contain: layout style;
+  position: relative;
+  overflow: hidden;
 }
-
-.member-item::before{
-
-    content:"";
-
-    position:absolute;
-
-    left:0;
-    top:0;
-    bottom:0;
-
-    width:3px;
-
-    background:#ff2a2a;
-
-    opacity:0;
-    transition:.3s;
+.member-item::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #ff2a2a, rgba(255,42,42,0));
+  opacity: 0;
+  transition: opacity 0.2s;
 }
-
-.member-item:hover{
-    transform:translateX(6px);
-
-    background:rgba(255,42,42,.06);
-
-    border-color:rgba(255,42,42,.25);
-
-    box-shadow:
-    0 0 20px rgba(255,42,42,.08);
+.member-item:hover {
+  background: rgba(255,42,42,0.05);
+  border-color: rgba(255,42,42,0.22);
 }
+.member-item:hover::before { opacity: 1; }
 
-.member-item:hover::before{
-    opacity:1;
+/* online-dot без пульсирующей анимации на каждом элементе */
+.online-dot {
+  background: #4cff72;
+  box-shadow: 0 0 6px rgba(76,255,114,0.6);
+  /* анимация только на одном элементе, а не на 50 */
 }
-.soldier-footer{
-
-    margin-top:20px;
-
-    text-align:center;
-
-    font-size:11px;
-
-    letter-spacing:3px;
-
-    color:rgba(255,255,255,.35);
+/* пульс только при hover — не постоянно */
+.member-item:hover .online-dot {
+  animation: onlinePulse 1.4s ease-in-out infinite;
 }
-.online-dot{
-    background:#4cff72;
-
-    box-shadow:
-    0 0 8px rgba(76,255,114,.7),
-    0 0 18px rgba(76,255,114,.4);
-
-    animation:onlinePulse 2s infinite;
-}
-
-@keyframes onlinePulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.35);}
-    100%{transform:scale(1);}
+@keyframes onlinePulse {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.4); }
 }
 /* ===================================
    SOLDIERS SECTION
@@ -3566,19 +3538,19 @@ html {
   100% { background-position: 200% 50%; }
 }
 
-/* Enhanced Glassmorphism & Cyber Elements for Cards */
-.stat-card, .rank-card, .member-item, .about-card, .join-box, .clock-container {
+/* Glassmorphism — только на КАРТАХ, НЕ на member-item (50+ элементов = лаг) */
+.stat-card, .rank-card, .about-card, .join-box, .clock-container {
   background: var(--panel-bg) !important;
   backdrop-filter: blur(14px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
   border: 1px solid var(--glass-border) !important;
   border-radius: 12px !important;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
-  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s !important;
 }
 
-/* Hover effects for cards */
-.stat-card:hover, .rank-card:hover, .member-item:hover, .about-card:hover {
+/* Hover effects — убираем member-item из этого правила */
+.stat-card:hover, .rank-card:hover, .about-card:hover {
   border-color: var(--glass-border-hover) !important;
   box-shadow: 0 15px 50px rgba(255, 30, 30, 0.12), 0 0 20px rgba(255, 30, 30, 0.05), inset 0 1px 0 rgba(255, 30, 30, 0.1) !important;
   background: rgba(12, 8, 8, 0.85) !important;

@@ -1,10 +1,13 @@
 import { initStorage }        from "./storage.js";
+import { initPerf }           from "./perf.js";
 import { initPageTransition } from "./page-transition.js";
 import { initEasterEgg }      from "./easter-egg.js";
 import { initCursor }         from "./cursor.js";
 import { initPlayer }         from "./player.js";
 import { initModal }          from "./modal.js";
 import { initDiscordMembers } from "./discord.js";
+import { initDepartments }    from "./departments.js";
+import { initUserBar }        from "./userbar.js";
 import { initVideo }          from "./video.js";
 import { initGallery }        from "./gallery.js";
 import { initHallOfFame }     from "./halloffame.js";
@@ -39,6 +42,8 @@ if ("serviceWorker" in navigator) {
 // Инициализируем всё после загрузки DOM
 document.addEventListener("DOMContentLoaded", () => {
   initStorage();        // миграция localStorage — самым первым
+  initPerf();           // режим производительности — до всего визуального
+  initUserBar();        // кнопка входа / аватар пользователя в шапке
   initPageTransition(); // transitions — первым, до всего
   initEasterEgg();      // konami code + glitch
   initIntro();          // интро
@@ -62,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initPlayer();
   initModal();
   initDiscordMembers();
+  initDepartments();
   initVideo();
   initGallery();
   initHallOfFame();

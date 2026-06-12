@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ВХОД | MILLER FAMILY</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <link rel="stylesheet" href="css/lite.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #050101;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Фон */
+    .auth-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: url('images/background.png') center/cover no-repeat;
+    }
+    .auth-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(5,0,0,0.92) 0%, rgba(10,0,0,0.85) 100%);
+    }
+
+    /* Декоративные линии */
+    .auth-line {
+      position: fixed;
+      width: 1px; height: 100vh;
+      background: linear-gradient(180deg, transparent, rgba(255,42,42,0.15), transparent);
+      pointer-events: none;
+    }
+    .auth-line:nth-child(1) { left: 15%; }
+    .auth-line:nth-child(2) { right: 15%; }
+
+    /* Логотип-ссылка */
+    .auth-logo {
+      position: fixed; top: 28px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .auth-logo img { width: 36px; height: 36px; border-radius: 8px; }
+    .auth-logo span {
+      font-size: 14px; font-weight: 900;
+      letter-spacing: 4px; color: #fff;
+    }
+    .auth-logo span em { color: #ff2a2a; font-style: normal; }
+
+    /* Карточка */
+    .auth-card {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 420px;
+      background: rgba(8,2,2,0.96);
+      border: 1px solid rgba(255,42,42,0.2);
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7),
+                  0 0 0 1px rgba(255,255,255,0.03);
+      margin: 20px;
+    }
+    .auth-card::before {
+      content: '';
+      position: absolute; top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,42,42,0.6), transparent);
+    }
+
+    /* Заголовок */
+    .auth-head { text-align: center; margin-bottom: 32px; }
+    .auth-head img {
+      width: 64px; height: 64px; border-radius: 16px;
+      border: 2px solid rgba(255,42,42,0.3);
+      margin-bottom: 16px;
+    }
+    .auth-head h1 {
+      font-size: 22px; font-weight: 900;
+      letter-spacing: 4px; color: #fff;
+      text-transform: uppercase;
+    }
+    .auth-head p {
+      font-size: 11px; letter-spacing: 2px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 6px; text-transform: uppercase;
+    }
+
+    /* Табы */
+    .auth-tabs {
+      display: flex; gap: 0;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px; padding: 3px;
+      margin-bottom: 28px;
+    }
+    .auth-tab {
+      flex: 1; padding: 9px;
+      border: none; background: none;
+      color: rgba(255,255,255,0.35);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .auth-tab.active {
+      background: rgba(255,42,42,0.15);
+      color: #ff2a2a;
+      border: 1px solid rgba(255,42,42,0.25);
+    }
+
+    /* Форма */
+    .auth-form { display: none; flex-direction: column; gap: 14px; }
+    .auth-form.active { display: flex; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+    .form-input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-input:focus {
+      border-color: rgba(255,42,42,0.4);
+      background: rgba(255,42,42,0.04);
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.2); }
+
+    /* Кнопка */
+    .auth-btn {
+      padding: 14px;
+      background: linear-gradient(135deg, #cc0000, #880000);
+      border: none; border-radius: 10px;
+      color: #fff; font-family: 'Montserrat', sans-serif;
+      font-size: 12px; font-weight: 900;
+      letter-spacing: 3px; text-transform: uppercase;
+      cursor: pointer; margin-top: 4px;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .auth-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .auth-btn:active { transform: translateY(0); }
+    .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Разделитель */
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 4px 0;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+    .auth-divider span {
+      font-size: 10px; letter-spacing: 2px;
+      color: rgba(255,255,255,0.2); text-transform: uppercase;
+    }
+
+    /* Discord кнопка */
+    .discord-btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px;
+      padding: 13px;
+      background: rgba(88,101,242,0.12);
+      border: 1px solid rgba(88,101,242,0.35);
+      border-radius: 10px;
+      color: #7289da; font-family: 'Montserrat', sans-serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .discord-btn:hover {
+      background: rgba(88,101,242,0.2);
+      border-color: rgba(88,101,242,0.6);
+      color: #99aaff;
+    }
+    .discord-btn i { font-size: 16px; }
+
+    /* Ошибка */
+    .auth-error {
+      display: none;
+      background: rgba(255,42,42,0.1);
+      border: 1px solid rgba(255,42,42,0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 11px; letter-spacing: 1px;
+      color: #ff6666; text-align: center;
+    }
+    .auth-error.show { display: block; }
+
+    /* Успех */
+    .auth-success {
+      display: none;
+      background: rgba(67,181,129,0.1);
+      border: 1px solid rgba(67,181,129,0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 11px; letter-spacing: 1px;
+      color: #43b581; text-align: center;
+    }
+    .auth-success.show { display: block; }
+
+    /* Назад */
+    .auth-back {
+      position: fixed; top: 28px; left: 28px; z-index: 10;
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none;
+      color: rgba(255,255,255,0.3);
+      font-size: 11px; letter-spacing: 2px;
+      font-weight: 700; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .auth-back:hover { color: #ff2a2a; }
+  </style>
+</head>
+<body>
+  <div class="auth-bg"></div>
+  <div class="auth-line"></div>
+  <div class="auth-line"></div>
+
+  <a href="index.html" class="auth-back">
+    <i class="fa-solid fa-arrow-left"></i> Главная
+  </a>
+
+  <a href="index.html" class="auth-logo">
+    <img src="images/family-logo.jpeg" alt="Miller Family"/>
+    <span><em>MILLER</em> FAMILY</span>
+  </a>
+
+  <div class="auth-card">
+    <div class="auth-head">
+      <img src="images/family-logo.jpeg" alt=""/>
+      <h1>Miller Family</h1>
+      <p>Del Perro RP — Личный кабинет</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Вход</button>
+      <button class="auth-tab" data-tab="register">Регистрация</button>
+    </div>
+
+    <!-- ВХОД -->
+    <form class="auth-form active" id="loginForm">
+      <div class="auth-error" id="loginError"></div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" name="email" placeholder="your@email.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Пароль</label>
+        <input class="form-input" type="password" name="password" placeholder="••••••••" required/>
+      </div>
+      <button class="auth-btn" type="submit">
+        <i class="fa-solid fa-right-to-bracket"></i> &nbsp;Войти
+      </button>
+      <div class="auth-divider"><span>или</span></div>
+      <a class="discord-btn" href="/api/auth/discord">
+        <i class="fa-brands fa-discord"></i> Войти через Discord
+      </a>
+    </form>
+
+    <!-- РЕГИСТРАЦИЯ -->
+    <form class="auth-form" id="registerForm">
+      <div class="auth-error" id="registerError"></div>
+      <div class="auth-success" id="registerSuccess"></div>
+      <div class="form-group">
+        <label class="form-label">Никнейм</label>
+        <input class="form-input" type="text" name="username" placeholder="YourName" maxlength="32" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" name="email" placeholder="your@email.com" required/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Пароль</label>
+        <input class="form-input" type="password" name="password" placeholder="Минимум 6 символов" required/>
+      </div>
+      <button class="auth-btn" type="submit">
+        <i class="fa-solid fa-user-plus"></i> &nbsp;Создать аккаунт
+      </button>
+      <div class="auth-divider"><span>или</span></div>
+      <a class="discord-btn" href="/api/auth/discord">
+        <i class="fa-brands fa-discord"></i> Войти через Discord
+      </a>
+    </form>
+  </div>
+
+  <script>
+    // Проверяем ошибку из URL
+    const params = new URLSearchParams(location.search);
+    if (params.get('error') === 'discord') {
+      document.getElementById('loginError').textContent = 'Ошибка авторизации Discord. Попробуйте снова.';
+      document.getElementById('loginError').classList.add('show');
+    }
+
+    // Табы
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Form').classList.add('active');
+      });
+    });
+
+    // Вход
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      const err = document.getElementById('loginError');
+      err.classList.remove('show');
+      btn.disabled = true;
+
+      const data = Object.fromEntries(new FormData(e.target));
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (json.success) {
+          location.href = '/profile.html';
+        } else {
+          err.textContent = json.message;
+          err.classList.add('show');
+        }
+      } catch {
+        err.textContent = 'Ошибка сервера. Попробуйте позже.';
+        err.classList.add('show');
+      }
+      btn.disabled = false;
+    });
+
+    // Регистрация
+    document.getElementById('registerForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      const err = document.getElementById('registerError');
+      const ok  = document.getElementById('registerSuccess');
+      err.classList.remove('show');
+      ok.classList.remove('show');
+      btn.disabled = true;
+
+      const data = Object.fromEntries(new FormData(e.target));
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (json.success) {
+          location.href = '/profile.html';
+        } else {
+          err.textContent = json.message;
+          err.classList.add('show');
+        }
+      } catch {
+        err.textContent = 'Ошибка сервера. Попробуйте позже.';
+        err.classList.add('show');
+      }
+      btn.disabled = false;
+    });
+
+    // Если уже авторизован — сразу редирект
+    fetch('/api/auth/me').then(r => r.json()).then(d => {
+      if (d.user) location.href = '/profile.html';
+    });
+  </script>
+</body>
+</html>

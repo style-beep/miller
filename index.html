@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>MILLER FAMILY | DEL PERRO RP</title>
@@ -43,6 +44,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/extras.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
   <!-- INTRO OVERLAY -->
@@ -409,7 +411,7 @@ Control over key districts
       <!-- Eddie -->
       <div class="rank-card">
         <div class="rank-header">
-          <div class="rank-icon boss-icon">👑</div>
+          <div class="rank-icon boss-icon"><i class="fa-solid fa-crown"></i></div>
           <div class="rank-text">
             <h2>EDDIE MILLER</h2>
             <span>FAMILY BOSS</span>
@@ -429,7 +431,7 @@ Control over key districts
       <!-- Adam -->
       <div class="rank-card">
         <div class="rank-header">
-          <div class="rank-icon deputy-icon">🛡</div>
+          <div class="rank-icon deputy-icon"><i class="fa-solid fa-chess-king"></i></div>
           <div class="rank-text">
             <h2>ADAM MILLER</h2>
             <span>DIRECTOR</span>
@@ -449,7 +451,7 @@ Control over key districts
       <!-- Roy -->
       <div class="rank-card">
         <div class="rank-header">
-          <div class="rank-icon commander-icon">⚔</div>
+          <div class="rank-icon commander-icon"><i class="fa-solid fa-bolt"></i></div>
           <div class="rank-text">
             <h2>ROY MILLER</h2>
             <span>DEPUTY DIRECTOR</span>
@@ -474,7 +476,7 @@ Control over key districts
     <div class="soldiers-left">
 
         <div class="soldiers-badge">
-            ⚔
+            <i class="fa-solid fa-users"></i>
         </div>
 
         <div class="soldiers-info">
@@ -507,57 +509,84 @@ Control over key districts
   <section class="composition" id="members">
     <div class="background-title">MILLER</div>
     <div class="section-title">СОСТАВ</div>
-    <div class="composition-grid">
+    <p class="section-sub">Структура семьи Miller Family</p>
 
-      <!-- EDDIE -->
-      <div class="member-card">
-        <img loading="lazy" src="images/miller1.jpeg" alt="Eddie Miller" class="member-photo">
-        <h2>EDDIE MILLER</h2>
-        <p class="role">FAMILY BOSS • Основатель</p>
-        <p class="description">
-          Основатель Miller Family. Отвечает за развитие, бизнес, финансы и стратегию организации. 
-          Имеет высший авторитет и полный контроль.
-        </p>
-        <div class="member-stats">
-          <div>💰 <strong>520M+</strong></div>
-          <div>👥 <strong>70+</strong></div>
-          <div>⚡ <strong>98%</strong></div>
+    <div class="departments-grid">
+
+      <!-- РУКОВОДСТВО -->
+      <div class="dept-card dept-leadership">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#ff2a2a">
+            <i class="dept-icon fa-solid fa-crown"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">РУКОВОДСТВО</h3>
+            <p class="dept-subtitle">Высшее командование семьи</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
         </div>
-        <a href="profile.html?id=eddie" class="member-profile-btn">ОТКРЫТЬ ПРОФИЛЬ <i class="fa-solid fa-arrow-right"></i></a>
+        <div class="dept-line" style="--dept-color:#ff2a2a"></div>
+        <div class="dept-members" id="dept-leadership"></div>
       </div>
 
-      <!-- ADAM -->
-      <div class="member-card">
-        <img loading="lazy" src="images/miller2.jpeg" alt="Adam Miller" class="member-photo">
-        <h2>ADAM MILLER</h2>
-        <p class="role">DIRECTOR • Директор</p>
-        <p class="description">
-          Контролирует внутреннюю структуру, персонал и организационные процессы.
-          Обеспечивает стабильность и дисциплину семьи.
-        </p>
-        <div class="member-stats">
-          <div>📊 <strong>94%</strong></div>
-          <div>💼 <strong>12</strong></div>
-          <div>🛡️ <strong>MAX</strong></div>
+      <!-- СТАРШАЯ АДМИНИСТРАЦИЯ -->
+      <div class="dept-card dept-senior-admin">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#c9a227">
+            <i class="dept-icon fa-solid fa-star"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">СТАРШАЯ АДМИНИСТРАЦИЯ</h3>
+            <p class="dept-subtitle">Координация и надзор</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
         </div>
-        <a href="profile.html?id=adam" class="member-profile-btn">ОТКРЫТЬ ПРОФИЛЬ <i class="fa-solid fa-arrow-right"></i></a>
+        <div class="dept-line" style="--dept-color:#c9a227"></div>
+        <div class="dept-members" id="dept-senior-admin"></div>
       </div>
 
-      <!-- ROY -->
-      <div class="member-card">
-        <img loading="lazy" src="images/miller3.jpeg" alt="Roy Miller" class="member-photo">
-        <h2>ROY MILLER</h2>
-        <p class="role">DEPUTY DIRECTOR • Зам. Директора</p>
-        <p class="description">
-          Руководит боевыми операциями, войнами и контролем территорий.
-          Отвечает за безопасность и силовые действия семьи.
-        </p>
-        <div class="member-stats">
-          <div>⚔️ <strong>84%</strong></div>
-          <div>🔫 <strong>96%</strong></div>
-          <div>🚗 <strong>18</strong></div>
+      <!-- ТЕХНИЧЕСКАЯ АДМИНИСТРАЦИЯ -->
+      <div class="dept-card dept-tech-admin">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#4a9eff">
+            <i class="dept-icon fa-solid fa-microchip"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">ТЕХНИЧЕСКАЯ АДМИНИСТРАЦИЯ</h3>
+            <p class="dept-subtitle">Техническая поддержка и дизайн</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
         </div>
-        <a href="profile.html?id=roy" class="member-profile-btn">ОТКРЫТЬ ПРОФИЛЬ <i class="fa-solid fa-arrow-right"></i></a>
+        <div class="dept-line" style="--dept-color:#4a9eff"></div>
+        <div class="dept-members" id="dept-tech-admin"></div>
+      </div>
+
+      <!-- МОДЕРАЦИЯ -->
+      <div class="dept-card dept-moderation">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#43b581">
+            <i class="dept-icon fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">МОДЕРАЦИЯ</h3>
+            <p class="dept-subtitle">Поддержание порядка в семье</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
+        </div>
+        <div class="dept-line" style="--dept-color:#43b581"></div>
+        <div class="dept-members" id="dept-moderation"></div>
       </div>
 
     </div>
@@ -615,7 +644,7 @@ Control over key districts
       <a href="gallery.html" class="classified-card">
         <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
         <div class="cc-glow"></div>
-        <div class="cc-icon">📸</div>
+        <div class="cc-icon"><i class="fa-solid fa-images"></i></div>
         <div class="cc-title">ГАЛЕРЕЯ</div>
         <div class="cc-desc">Визуальный архив Miller Family. Фото с операций, портреты бойцов и памятные моменты.</div>
         <div class="cc-meta">
@@ -627,7 +656,7 @@ Control over key districts
       <a href="history.html" class="classified-card">
         <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
         <div class="cc-glow"></div>
-        <div class="cc-icon">📜</div>
+        <div class="cc-icon"><i class="fa-solid fa-scroll"></i></div>
         <div class="cc-title">ИСТОРИЯ</div>
         <div class="cc-desc">Хроника Miller Family с момента основания. Войны, победы и ключевые события организации.</div>
         <div class="cc-meta">
@@ -639,7 +668,7 @@ Control over key districts
       <a href="rules.html" class="classified-card">
         <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
         <div class="cc-glow"></div>
-        <div class="cc-icon">⚖️</div>
+        <div class="cc-icon"><i class="fa-solid fa-scale-balanced"></i></div>
         <div class="cc-title">ПРАВИЛА</div>
         <div class="cc-desc">Кодекс Miller Family. Обязателен к исполнению каждым членом организации без исключений.</div>
         <div class="cc-meta">
@@ -651,7 +680,7 @@ Control over key districts
       <a href="game.html" class="classified-card">
         <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
         <div class="cc-glow"></div>
-        <div class="cc-icon">🎮</div>
+        <div class="cc-icon"><i class="fa-solid fa-crosshairs"></i></div>
         <div class="cc-title">ИГРА</div>
         <div class="cc-desc">Захвати все 20 районов Los Santos. 4 фракции, AI противники, реальное время.</div>
         <div class="cc-meta">
@@ -663,7 +692,7 @@ Control over key districts
       <a href="allies.html" class="classified-card">
         <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
         <div class="cc-glow"></div>
-        <div class="cc-icon">🤝</div>
+        <div class="cc-icon"><i class="fa-solid fa-handshake"></i></div>
         <div class="cc-title">СОЮЗНИКИ</div>
         <div class="cc-desc">Организации с пактом о ненападении. Союзные кланы и дружественные структуры Del Perro RP.</div>
         <div class="cc-meta">
@@ -675,7 +704,7 @@ Control over key districts
       <a href="media.html" class="classified-card">
         <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
         <div class="cc-glow"></div>
-        <div class="cc-icon">🎬</div>
+        <div class="cc-icon"><i class="fa-solid fa-clapperboard"></i></div>
         <div class="cc-title">МЕДИА</div>
         <div class="cc-desc">Видео, стримы и клипы Miller Family. YouTube, Twitch и эксклюзивные записи операций.</div>
         <div class="cc-meta">

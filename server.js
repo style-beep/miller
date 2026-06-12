@@ -6,14 +6,98 @@ const path      = require("path");
 const fs        = require("fs");
 const http      = require("http");
 const WebSocket = require("ws");
+const session   = require("express-session");
+const bcrypt    = require("bcryptjs");
+const passport  = require("passport");
+const { Strategy: LocalStrategy }   = require("passport-local");
+const { Strategy: DiscordStrategy } = require("passport-discord");
 
 const app    = express();
 const server = http.createServer(app);
 const wss    = new WebSocket.Server({ server });
 const PORT   = process.env.PORT || 3001;
 
+// ── User storage ────────────────────────────────────────────
+const USERS_FILE = path.join(__dirname, "users.json");
+
+function loadUsers() {
+  try { if (fs.existsSync(USERS_FILE)) return JSON.parse(fs.readFileSync(USERS_FILE, "utf8")); } catch {}
+  return [];
+}
+function saveUsers(users) {
+  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf8");
+}
+function safeUser(u) {
+  if (!u) return null;
+  const { passwordHash, ...safe } = u;
+  return safe;
+}
+
+// ── Passport setup ──────────────────────────────────────────
+passport.serializeUser((user, done) => done(null, user.id));
+passport.deserializeUser((id, done) => {
+  const user = loadUsers().find(u => u.id === id);
+  done(null, user || false);
+});
+
+passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
+  const user = loadUsers().find(u => u.email?.toLowerCase() === email.toLowerCase());
+  if (!user)              return done(null, false, { message: "Пользователь не найден" });
+  if (!user.passwordHash) return done(null, false, { message: "Используйте вход через Discord" });
+  if (!bcrypt.compareSync(password, user.passwordHash))
+                          return done(null, false, { message: "Неверный пароль" });
+  return done(null, user);
+}));
+
+if (process.env.DISCORD_CLIENT_ID && process.env.DISCORD_CLIENT_SECRET) {
+  passport.use(new DiscordStrategy({
+    clientID:     process.env.DISCORD_CLIENT_ID,
+    clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    callbackURL:  process.env.DISCORD_CALLBACK_URL || `http://localhost:${PORT}/api/auth/discord/callback`,
+    scope: ["identify"],
+  }, (accessToken, refreshToken, profile, done) => {
+    const users  = loadUsers();
+    let user     = users.find(u => u.discordId === profile.id);
+    const avatar = profile.avatar
+      ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png?size=256`
+      : null;
+
+    if (!user) {
+      user = {
+        id:            Date.now().toString(),
+        username:      profile.global_name || profile.username,
+        discordId:     profile.id,
+        discordTag:    profile.username,
+        discordAvatar: avatar,
+        bio:           "",
+        statusText:    "",
+        stats:         { kills: 0, deaths: 0, wins: 0, events: 0, money: 0, reputation: 0, hours: 0, arrests: 0 },
+        achievements:  [],
+        createdAt:     new Date().toISOString(),
+        lastSeen:      new Date().toISOString(),
+      };
+      users.push(user);
+    } else {
+      user.username      = profile.global_name || profile.username;
+      user.discordTag    = profile.username;
+      user.discordAvatar = avatar || user.discordAvatar;
+      user.lastSeen      = new Date().toISOString();
+    }
+    saveUsers(users);
+    return done(null, user);
+  }));
+}
+
 // ── Middleware ──────────────────────────────────────────────
 app.use(express.json());
+app.use(session({
+  secret:            process.env.SESSION_SECRET || "miller-family-2026-secret",
+  resave:            false,
+  saveUninitialized: false,
+  cookie:            { maxAge: 7 * 24 * 60 * 60 * 1000 },
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname)));
 
 // ── WebSocket broadcast ─────────────────────────────────────
@@ -67,7 +151,7 @@ client.on("ready", async () => {
 
 function updateCache(guild) {
   membersCache = guild.members.cache.map(m => ({
-    name:   m.user.username,
+    name:   m.displayName,
     avatar: m.user.displayAvatarURL({ extension: "png", size: 64, forceStatic: true }),
     status: m.presence?.status || "offline",
     roles:  m.roles.cache
@@ -79,6 +163,109 @@ function updateCache(guild) {
 
 // ── API: участники ──────────────────────────────────────────
 app.get("/api/members", (req, res) => res.json(membersCache));
+
+// ── AUTH: регистрация ───────────────────────────────────────
+app.post("/api/auth/register", async (req, res) => {
+  const { username, email, password } = req.body;
+  if (!username || !email || !password)
+    return res.status(400).json({ success: false, message: "Заполните все поля" });
+  if (password.length < 6)
+    return res.status(400).json({ success: false, message: "Пароль минимум 6 символов" });
+
+  const users = loadUsers();
+  if (users.find(u => u.email?.toLowerCase() === email.toLowerCase()))
+    return res.status(409).json({ success: false, message: "Email уже используется" });
+
+  const user = {
+    id:           Date.now().toString(),
+    username,
+    email:        email.toLowerCase(),
+    passwordHash: await bcrypt.hash(password, 10),
+    bio:          "",
+    statusText:   "",
+    stats:        { kills: 0, deaths: 0, wins: 0, events: 0, money: 0, reputation: 0, hours: 0, arrests: 0 },
+    achievements: [],
+    createdAt:    new Date().toISOString(),
+    lastSeen:     new Date().toISOString(),
+  };
+  users.push(user);
+  saveUsers(users);
+
+  req.login(user, err => {
+    if (err) return res.status(500).json({ success: false });
+    res.json({ success: true, user: safeUser(user) });
+  });
+});
+
+// ── AUTH: вход ─────────────────────────────────────────────
+app.post("/api/auth/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err)   return next(err);
+    if (!user) return res.status(401).json({ success: false, message: info?.message || "Ошибка входа" });
+    req.login(user, err => {
+      if (err) return next(err);
+      // обновляем lastSeen
+      const users = loadUsers();
+      const u = users.find(x => x.id === user.id);
+      if (u) { u.lastSeen = new Date().toISOString(); saveUsers(users); }
+      res.json({ success: true, user: safeUser(user) });
+    });
+  })(req, res, next);
+});
+
+// ── AUTH: выход ────────────────────────────────────────────
+app.post("/api/auth/logout", (req, res) => {
+  req.logout(() => res.json({ success: true }));
+});
+
+// ── AUTH: текущий пользователь ─────────────────────────────
+app.get("/api/auth/me", (req, res) => {
+  if (!req.user) return res.json({ user: null });
+  const user = { ...safeUser(req.user) };
+  // Подтягиваем роли с Discord сервера по discordId
+  if (user.discordId) {
+    const member = membersCache.find(m =>
+      m.avatar?.includes(`/avatars/${user.discordId}/`)
+    );
+    if (member) {
+      user.discordRoles  = member.roles;
+      user.discordStatus = member.status;
+      user.discordName   = member.name;
+    }
+  }
+  res.json({ user });
+});
+
+// ── AUTH: обновить профиль ─────────────────────────────────
+app.patch("/api/auth/profile", (req, res) => {
+  if (!req.user) return res.status(401).json({ success: false });
+  const { bio, username, statusText, stats, achievements } = req.body;
+  const users = loadUsers();
+  const u = users.find(x => x.id === req.user.id);
+  if (!u) return res.status(404).json({ success: false });
+  if (bio        !== undefined) u.bio        = String(bio).substring(0, 300);
+  if (username   !== undefined) u.username   = String(username).substring(0, 32);
+  if (statusText !== undefined) u.statusText = String(statusText).substring(0, 60);
+  if (stats      !== undefined && typeof stats === "object") {
+    u.stats = u.stats || {};
+    const allowed = ["kills","deaths","wins","events","money","reputation","hours","arrests"];
+    allowed.forEach(k => { if (stats[k] !== undefined) u.stats[k] = Math.max(0, parseInt(stats[k]) || 0); });
+  }
+  if (achievements !== undefined && Array.isArray(achievements)) {
+    u.achievements = achievements.filter(a => typeof a === "string").slice(0, 20);
+  }
+  saveUsers(users);
+  res.json({ success: true, user: safeUser(u) });
+});
+
+// ── AUTH: Discord OAuth ────────────────────────────────────
+app.get("/api/auth/discord",
+  passport.authenticate("discord")
+);
+app.get("/api/auth/discord/callback",
+  passport.authenticate("discord", { failureRedirect: "/auth.html?error=discord" }),
+  (req, res) => res.redirect("/profile.html")
+);
 
 // ── API: подача заявки ──────────────────────────────────────
 app.post("/api/apply", async (req, res) => {

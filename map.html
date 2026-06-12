@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>КАРТА | MILLER FAMILY</title>
@@ -111,6 +112,7 @@
       .map-layout { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
 <div class="bg-overlay"></div>
@@ -341,5 +343,6 @@ function renderStats() {
   `).join("");
 }
 </script>
+<script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>
 </body>
 </html>

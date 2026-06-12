@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>ПРАВИЛА | MILLER FAMILY</title>
@@ -91,6 +92,7 @@
       .hier-arrow { right: 50%; bottom: -12px; top: auto; transform: translateX(50%) rotate(90deg); }
     }
   </style>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
 
@@ -218,11 +220,11 @@ import { initEasterEgg }      from "./js/easter-egg.js";
   ];
 
   const HIERARCHY = [
-    { icon: "👑", title: "Создатель",        desc: "Высший авторитет. Слово — закон" },
-    { icon: "🛡️",  title: "Director",         desc: "Управление внутренними процессами" },
-    { icon: "⚔️", title: "Deputy Director",   desc: "Силовые операции и территории" },
-    { icon: "🔫", title: "Коллер",            desc: "Координация рядовых бойцов" },
-    { icon: "⭐", title: "Miller",             desc: "Основной состав семьи" },
+    { icon: '<i class="fa-solid fa-crown"></i>',          title: "Создатель",        desc: "Высший авторитет. Слово — закон" },
+    { icon: '<i class="fa-solid fa-chess-king"></i>',     title: "Director",         desc: "Управление внутренними процессами" },
+    { icon: '<i class="fa-solid fa-bolt"></i>',           title: "Deputy Director",  desc: "Силовые операции и территории" },
+    { icon: '<i class="fa-solid fa-radio"></i>',          title: "Коллер",           desc: "Координация рядовых бойцов" },
+    { icon: '<i class="fa-solid fa-star"></i>',           title: "Miller",           desc: "Основной состав семьи" },
   ];
 
   initPageTransition();
@@ -271,5 +273,6 @@ initPageLoader({
     `).join("");
   }
 </script>
+<script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>
 </body>
 </html>

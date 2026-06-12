@@ -237,7 +237,23 @@
   position:absolute; top:18px; right:18px;
   font-size:14px; color:rgba(255,255,255,0.15); transition:color 0.3s;
 }
-.cc-icon { font-size:40px; margin-bottom:16px; }
+.cc-icon {
+  font-size: 0;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cc-icon i {
+  font-size: 36px;
+  color: rgba(255,42,42,0.7);
+  filter: drop-shadow(0 0 12px rgba(255,42,42,0.4));
+  transition: color 0.3s, filter 0.3s;
+}
+.classified-card:hover .cc-icon i {
+  color: #ff2a2a;
+  filter: drop-shadow(0 0 20px rgba(255,42,42,0.7));
+}
 .cc-title {
   font-size:18px; font-weight:900; letter-spacing:4px;
   color:#fff; text-transform:uppercase; margin-bottom:12px;
@@ -255,3 +271,496 @@
 
 @media (max-width:900px)  { .classified-grid { grid-template-columns:1fr; max-width:460px; } }
 @media (max-width:480px)  { .classified-card { padding:24px 20px; } .cc-code { display:none; } }
+
+/* ═══════════════════════════════════════════════════════
+   SOLDIERS CARD — красивая, быстрая версия
+   Ключевое: NO backdrop-filter на member-item
+═══════════════════════════════════════════════════════ */
+
+/* Карточка-контейнер */
+.soldiers-card {
+  position: relative;
+  background: linear-gradient(145deg,
+    rgba(12,4,4,0.97) 0%,
+    rgba(20,6,6,0.95) 50%,
+    rgba(10,2,2,0.98) 100%
+  ) !important;
+  border: 1px solid rgba(255,42,42,0.18) !important;
+  border-radius: 20px !important;
+  overflow: hidden;
+  contain: layout;
+  /* Убираем blur — иначе при ховере фон просвечивает */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.soldiers-card:hover {
+  background: linear-gradient(145deg,
+    rgba(15,5,5,0.98) 0%,
+    rgba(22,7,7,0.97) 50%,
+    rgba(12,3,3,0.99) 100%
+  ) !important;
+  border-color: rgba(255,42,42,0.3) !important;
+  transform: none !important;
+  box-shadow: 0 8px 32px rgba(255,42,42,0.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Декоративная линия сверху */
+.soldiers-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,42,42,0.6) 20%,
+    rgba(255,80,0,0.8) 50%,
+    rgba(255,42,42,0.6) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Фоновый SOLDIER текст */
+.soldiers-card::after {
+  content: 'SOLDIERS';
+  position: absolute;
+  bottom: -10px; right: -10px;
+  font-size: 90px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  color: rgba(255,255,255,0.018);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Шапка карточки */
+.soldiers-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 0 !important;
+}
+
+.soldiers-badge {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 12px !important;
+  font-size: 22px !important;
+  background: linear-gradient(135deg, rgba(180,0,0,0.3), rgba(80,0,0,0.15)) !important;
+  border: 1px solid rgba(255,42,42,0.3) !important;
+  box-shadow: 0 0 16px rgba(255,42,42,0.1);
+}
+
+.soldiers-info h2 {
+  font-size: 20px !important;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #fff;
+}
+.soldiers-info p {
+  font-size: 10px !important;
+  letter-spacing: 2.5px;
+  color: rgba(255,42,42,0.55) !important;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.soldiers-count {
+  min-width: 80px !important;
+  padding: 10px 16px !important;
+  border-radius: 12px !important;
+  background: rgba(255,42,42,0.08) !important;
+  border: 1px solid rgba(255,42,42,0.2) !important;
+  text-align: center;
+}
+.soldiers-count span {
+  font-size: 28px !important;
+  color: #ff2a2a !important;
+  display: block;
+  line-height: 1;
+}
+
+.soldiers-divider { display: none !important; }
+
+/* Список участников */
+.members-list {
+  padding: 14px 20px !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 6px !important;
+  max-height: 360px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,42,42,0.3) transparent;
+  contain: layout;
+}
+.members-list::-webkit-scrollbar { width: 3px; }
+.members-list::-webkit-scrollbar-thumb { background: rgba(255,42,42,0.3); border-radius: 2px; }
+
+/* Элемент участника — без backdrop-filter, без тяжёлых теней */
+.member-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 8px 12px !important;
+  background: rgba(255,255,255,0.025) !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  border-radius: 10px !important;
+  /* ТОЛЬКО нужные свойства */
+  transition: border-color 0.18s, background 0.18s !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  contain: layout style;
+  overflow: hidden;
+  position: relative;
+}
+.member-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: #ff2a2a;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+.member-item:hover {
+  background: rgba(255,42,42,0.06) !important;
+  border-color: rgba(255,42,42,0.25) !important;
+  transform: none !important; /* убираем translateX — вызывает repaint соседей */
+  box-shadow: none !important;
+}
+.member-item:hover::before { opacity: 1; }
+
+/* Точка статуса */
+.member-dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.online-dot {
+  background: #4cff72 !important;
+  box-shadow: 0 0 5px rgba(76,255,114,0.5) !important;
+  /* Пульс убран — анимация на 50 элементах = лаг */
+  animation: none !important;
+}
+.offline-dot {
+  background: #444 !important;
+  box-shadow: none !important;
+}
+.member-name { font-size: 12px !important; font-weight: 700; color: rgba(255,255,255,0.85); }
+.member-role { font-size: 9px !important; letter-spacing: 0.5px; opacity: 0.7; }
+
+/* Кнопка "ещё" */
+.load-more-btn {
+  grid-column: 1 / -1;
+  margin-top: 4px !important;
+}
+
+/* Футер карточки */
+.soldiers-footer {
+  padding: 12px 20px !important;
+  border-top: 1px solid rgba(255,255,255,0.04) !important;
+  font-size: 9px !important;
+  letter-spacing: 3px !important;
+  color: rgba(255,42,42,0.35) !important;
+  text-align: center;
+  margin-top: 0 !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ОТДЕЛЫ — секция СОСТАВ
+═══════════════════════════════════════════════════════ */
+
+.section-sub {
+  text-align: center;
+  color: rgba(255,255,255,0.3);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: -12px;
+  margin-bottom: 48px;
+}
+
+.departments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+@media (max-width: 900px) {
+  .departments-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Карточка отдела ── */
+.dept-card {
+  position: relative;
+  background: rgba(8,2,2,0.97);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  contain: layout;
+}
+
+/* Угловой цветной accent слева */
+.dept-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg,
+    var(--dept-color, #ff2a2a) 0%,
+    transparent 100%
+  );
+  opacity: 0.7;
+}
+
+/* Фоновый glow от цвета отдела */
+.dept-card::after {
+  content: '';
+  position: absolute;
+  top: -60px; left: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--dept-color, #ff2a2a) 8%, transparent) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.dept-card:hover {
+  border-color: color-mix(in srgb, var(--dept-color, #ff2a2a) 35%, transparent);
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5),
+              0 0 0 1px color-mix(in srgb, var(--dept-color, #ff2a2a) 12%, transparent);
+}
+
+/* ── Шапка отдела ── */
+.dept-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.dept-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--dept-color, #ff2a2a) 12%, rgba(0,0,0,0.5));
+  border: 1px solid color-mix(in srgb, var(--dept-color, #ff2a2a) 30%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--dept-color, #ff2a2a) 15%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 20px;
+}
+
+.dept-icon-wrap .dept-icon {
+  color: var(--dept-color, #ff2a2a);
+  font-size: 20px;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--dept-color, #ff2a2a) 60%, transparent));
+}
+
+.dept-title-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.dept-title {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 2.5px;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.dept-subtitle {
+  font-size: 10px;
+  color: color-mix(in srgb, var(--dept-color, #ff2a2a) 60%, rgba(255,255,255,0.3));
+  letter-spacing: 2px;
+  margin: 5px 0 0;
+  text-transform: uppercase;
+}
+
+/* Счётчик участников */
+.dept-count-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--dept-color, #ff2a2a) 10%, rgba(0,0,0,0.6));
+  border: 1px solid color-mix(in srgb, var(--dept-color, #ff2a2a) 25%, transparent);
+}
+
+.dept-count {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--dept-color, #ff2a2a);
+  line-height: 1;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.dept-count-label {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Разделитель под шапкой */
+.dept-line {
+  height: 1px;
+  margin: 16px 24px 0;
+  background: linear-gradient(90deg,
+    var(--dept-color, #ff2a2a),
+    rgba(255,255,255,0.04) 70%,
+    transparent
+  );
+  opacity: 0.4;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Список участников — сетка ── */
+.dept-members {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 14px 16px 18px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Карточка участника — вертикальная ── */
+.dept-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  cursor: default;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.dept-member::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--dept-color, #ff2a2a);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.dept-member:hover {
+  background: rgba(255,255,255,0.045);
+  border-color: color-mix(in srgb, var(--dept-color, #ff2a2a) 25%, transparent);
+  transform: translateY(-2px);
+}
+.dept-member:hover::before { opacity: 1; }
+
+/* ── Аватар ── */
+.dept-avatar-wrap {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.dept-avatar-wrap img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 2px solid color-mix(in srgb, var(--dept-color, #ff2a2a) 30%, rgba(255,255,255,0.1));
+}
+
+.dept-status {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid rgba(8,2,2,0.97);
+}
+
+/* ── Имя и роль ── */
+.dept-member-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.dept-member-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  letter-spacing: 0.2px;
+}
+
+.dept-member-role {
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  margin-top: 3px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.dept-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: rgba(255,255,255,0.18);
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 20px 0;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .dept-members { grid-template-columns: repeat(2, 1fr); }
+}

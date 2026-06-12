@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>ПРОФИЛЬ | MILLER FAMILY</title>
@@ -11,65 +12,333 @@
   <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
+    /* ── Static profile (public ?id=) ── */
     .profile-wrap { max-width: 900px; margin: 0 auto; }
-
     .profile-hero {
       display: flex; align-items: center; gap: 40px;
       padding: 40px; background: rgba(0,0,0,0.55);
       border: 1px solid rgba(255,255,255,0.07); border-radius: 20px;
       margin-bottom: 20px; position: relative; overflow: hidden;
     }
-    .profile-hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at left, rgba(255,42,42,0.08), transparent 60%);
-      pointer-events: none;
-    }
-    .profile-photo {
-      width: 160px; height: 160px; border-radius: 16px;
-      object-fit: cover; border: 2px solid rgba(255,42,42,0.4);
-      box-shadow: 0 0 30px rgba(255,42,42,0.2); flex-shrink: 0;
-    }
-    .profile-info { flex: 1; }
-    .profile-rank { font-size: 10px; font-weight: 700; letter-spacing: 4px; color: rgba(255,42,42,0.7); text-transform: uppercase; margin-bottom: 8px; }
-    .profile-name { font-size: 36px; font-weight: 900; letter-spacing: 3px; color: #fff; margin-bottom: 6px; }
-    .profile-role { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-bottom: 20px; }
-    .profile-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px; border-radius: 6px;
-      background: rgba(255,42,42,0.1); border: 1px solid rgba(255,42,42,0.25);
-      font-size: 11px; font-weight: 700; letter-spacing: 2px; color: rgba(255,42,42,0.8);
+    .profile-hero::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse at left,rgba(255,42,42,0.08),transparent 60%);pointer-events:none; }
+    .profile-photo { width:160px;height:160px;border-radius:16px;object-fit:cover;border:2px solid rgba(255,42,42,0.4);box-shadow:0 0 30px rgba(255,42,42,0.2);flex-shrink:0; }
+    .profile-info { flex:1; }
+    .profile-rank { font-size:10px;font-weight:700;letter-spacing:4px;color:rgba(255,42,42,0.7);text-transform:uppercase;margin-bottom:8px; }
+    .profile-name { font-size:36px;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:6px; }
+    .profile-role { font-size:14px;color:rgba(255,255,255,0.4);letter-spacing:2px;margin-bottom:20px; }
+    .profile-badge { display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:6px;background:rgba(255,42,42,0.1);border:1px solid rgba(255,42,42,0.25);font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,42,42,0.8); }
+    .profile-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px; }
+    .profile-stat { padding:20px;text-align:center;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.06);border-radius:12px;transition:border-color 0.3s; }
+    .profile-stat:hover { border-color:rgba(255,42,42,0.2); }
+    .profile-stat-val { font-size:28px;font-weight:900;color:#fff;display:block;margin-bottom:4px; }
+    .profile-stat-key { font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase; }
+    .profile-bottom { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+    .profile-card { padding:24px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.06);border-radius:12px; }
+    .profile-card-title { font-size:10px;font-weight:800;letter-spacing:3px;color:rgba(255,42,42,0.7);text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.05); }
+    .profile-card p { font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7; }
+    .profile-skill { display:flex;align-items:center;justify-content:space-between;margin-bottom:10px; }
+    .profile-skill-name { font-size:12px;color:rgba(255,255,255,0.5); }
+    .profile-skill-bar { flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;margin:0 12px;overflow:hidden; }
+    .profile-skill-fill { height:100%;background:linear-gradient(90deg,#8a0000,#ff2a2a);border-radius:2px; }
+    .profile-skill-val { font-size:11px;font-weight:700;color:rgba(255,42,42,0.8);min-width:36px;text-align:right; }
+    @media(max-width:768px){
+      .profile-hero{flex-direction:column;text-align:center;}
+      .profile-grid{grid-template-columns:repeat(2,1fr);}
+      .profile-bottom{grid-template-columns:1fr;}
+      .profile-name{font-size:24px;}
     }
 
-    .profile-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 20px; }
-    .profile-stat {
-      padding: 20px; text-align: center;
-      background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px; transition: border-color 0.3s;
-    }
-    .profile-stat:hover { border-color: rgba(255,42,42,0.2); }
-    .profile-stat-val { font-size: 28px; font-weight: 900; color: #fff; display: block; margin-bottom: 4px; }
-    .profile-stat-key { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; text-transform: uppercase; }
+    /* ── Personal profile ── */
+    .mypf { max-width:980px;margin:90px auto 60px;padding:0 20px;font-family:'Montserrat',sans-serif; }
 
-    .profile-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .profile-card {
-      padding: 24px; background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.06); border-radius: 12px;
+    /* ── Hero ── */
+    .mypf-hero {
+      position:relative;border-radius:20px;overflow:hidden;margin-bottom:14px;
+      background:linear-gradient(135deg,rgba(30,5,5,0.98) 0%,rgba(18,3,3,0.98) 100%);
+      border:1px solid rgba(255,42,42,0.25);
+      box-shadow:0 4px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.04);
     }
-    .profile-card-title { font-size: 10px; font-weight: 800; letter-spacing: 3px; color: rgba(255,42,42,0.7); text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .profile-card p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7; }
-    .profile-skill { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .profile-skill-name { font-size: 12px; color: rgba(255,255,255,0.5); }
-    .profile-skill-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; margin: 0 12px; overflow: hidden; }
-    .profile-skill-fill { height: 100%; background: linear-gradient(90deg, #8a0000, #ff2a2a); border-radius: 2px; }
-    .profile-skill-val { font-size: 11px; font-weight: 700; color: rgba(255,42,42,0.8); min-width: 36px; text-align: right; }
+    .mypf-banner {
+      height:140px;
+      background:linear-gradient(135deg,#2a0505 0%,#1a0202 35%,#0d0101 70%,#050000 100%);
+      position:relative;overflow:hidden;
+    }
+    .mypf-banner::before {
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 25% 60%,rgba(255,42,42,0.22) 0%,transparent 55%),
+                 radial-gradient(ellipse at 75% 30%,rgba(180,20,20,0.1) 0%,transparent 40%);
+    }
+    .mypf-banner::after {
+      content:'';position:absolute;inset:0;opacity:0.06;
+      background-image:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);
+      background-size:20px 20px;
+    }
+    .mypf-hero-body {
+      display:flex;align-items:flex-end;gap:20px;padding:0 28px 24px;
+      position:relative;margin-top:-52px;
+    }
+    .mypf-avatar-wrap { position:relative;flex-shrink:0; }
+    .mypf-avatar {
+      width:104px;height:104px;border-radius:50%;object-fit:cover;
+      border:4px solid rgba(18,3,3,0.98);
+      box-shadow:0 0 0 2px rgba(255,42,42,0.4),0 8px 24px rgba(0,0,0,0.7);
+      display:block;
+    }
+    .mypf-avatar-placeholder {
+      width:104px;height:104px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(255,42,42,0.2),rgba(180,0,0,0.1));
+      border:4px solid rgba(18,3,3,0.98);
+      box-shadow:0 0 0 2px rgba(255,42,42,0.3),0 8px 24px rgba(0,0,0,0.7);
+      display:flex;align-items:center;justify-content:center;
+      font-size:38px;font-weight:900;color:#ff2a2a;
+    }
+    .mypf-status-dot {
+      position:absolute;bottom:5px;right:5px;width:18px;height:18px;
+      border-radius:50%;border:3px solid rgba(18,3,3,0.98);
+    }
+    .mypf-status-dot.online  { background:#3ddc84; box-shadow:0 0 8px rgba(61,220,132,0.6); }
+    .mypf-status-dot.idle    { background:#faa61a; box-shadow:0 0 8px rgba(250,166,26,0.5); }
+    .mypf-status-dot.dnd     { background:#f04747; box-shadow:0 0 8px rgba(240,71,71,0.5); }
+    .mypf-status-dot.offline { background:#4a4a4a; }
 
-    @media (max-width: 768px) {
-      .profile-hero   { flex-direction: column; text-align: center; }
-      .profile-grid   { grid-template-columns: repeat(2,1fr); }
-      .profile-bottom { grid-template-columns: 1fr; }
-      .profile-name   { font-size: 24px; }
+    .mypf-info { flex:1;min-width:0;padding-bottom:2px; }
+    .mypf-role-label { font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px; }
+    .mypf-name { font-size:24px;font-weight:900;letter-spacing:1.5px;color:#fff;margin:0 0 2px;
+      text-shadow:0 2px 12px rgba(255,42,42,0.2); }
+    .mypf-tag  { font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:1px;margin-bottom:7px; }
+    .mypf-bio  { font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;max-width:460px; }
+    .mypf-status-text {
+      display:inline-flex;align-items:center;gap:6px;margin-top:7px;
+      font-size:11px;color:rgba(255,255,255,0.28);font-style:italic;
+    }
+    .mypf-actions {
+      display:flex;flex-direction:column;gap:8px;align-items:flex-end;
+      padding-bottom:2px;flex-shrink:0;
+    }
+    .mypf-edit-btn {
+      display:flex;align-items:center;gap:8px;padding:10px 18px;
+      border:1px solid rgba(255,42,42,0.4);border-radius:10px;
+      background:rgba(255,42,42,0.1);color:#ff4444;
+      font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+      transition:all 0.2s;white-space:nowrap;
+    }
+    .mypf-edit-btn:hover { background:rgba(255,42,42,0.2);border-color:#ff2a2a;color:#fff; }
+    .mypf-logout-btn {
+      display:flex;align-items:center;gap:7px;padding:8px 14px;
+      border:1px solid rgba(255,255,255,0.1);border-radius:10px;
+      background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.25);
+      font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;
+    }
+    .mypf-logout-btn:hover { border-color:rgba(255,42,42,0.35);color:#ff2a2a; }
+
+    /* ── Stats strip ── */
+    .mypf-stats {
+      display:grid;gap:10px;margin-bottom:14px;
+      grid-template-columns:repeat(4,1fr);
+    }
+    .mypf-stat-card {
+      padding:16px;
+      background:linear-gradient(135deg,rgba(28,6,6,0.95),rgba(18,3,3,0.95));
+      border:1px solid rgba(255,255,255,0.08);border-radius:14px;
+      display:flex;align-items:center;gap:12px;
+      transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;
+      position:relative;overflow:hidden;
+    }
+    .mypf-stat-card::before {
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:var(--sc);opacity:0.5;border-radius:14px 14px 0 0;
+    }
+    .mypf-stat-card:hover {
+      border-color:rgba(255,42,42,0.2);transform:translateY(-2px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    }
+    .mypf-stat-icon {
+      width:38px;height:38px;border-radius:9px;display:flex;
+      align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+    }
+    .mypf-stat-body { min-width:0; }
+    .mypf-stat-val { font-size:20px;font-weight:900;color:#fff;line-height:1; }
+    .mypf-stat-label {
+      font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.3);
+      text-transform:uppercase;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+
+    /* ── Main grid ── */
+    .mypf-grid { display:grid;grid-template-columns:260px 1fr;gap:12px; }
+    .mypf-card {
+      background:linear-gradient(135deg,rgba(28,6,6,0.95),rgba(18,3,3,0.95));
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;padding:20px;
+      box-shadow:0 2px 20px rgba(0,0,0,0.3);
+    }
+    .mypf-card + .mypf-card { margin-top:12px; }
+    .mypf-card-title {
+      font-size:9px;font-weight:800;letter-spacing:3px;
+      color:rgba(255,42,42,0.65);text-transform:uppercase;margin-bottom:14px;
+      padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.06);
+      display:flex;align-items:center;gap:8px;
+    }
+    .mypf-card-title i { font-size:11px; }
+
+    /* Roles */
+    .mypf-roles { display:flex;flex-wrap:wrap;gap:6px; }
+    .mypf-role-chip {
+      padding:4px 11px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;
+    }
+
+    /* Info rows */
+    .mypf-info-row {
+      display:flex;justify-content:space-between;align-items:center;
+      padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12px;
+    }
+    .mypf-info-row:last-child { border-bottom:none; }
+    .mypf-info-key { color:rgba(255,255,255,0.28);font-size:11px; }
+    .mypf-info-val { color:rgba(255,255,255,0.75);font-weight:600;font-size:11px; }
+
+    /* Tabs */
+    .mypf-tabs {
+      display:flex;gap:4px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:12px;padding:4px;margin-bottom:12px;
+    }
+    .mypf-tab {
+      flex:1;padding:9px;border:none;background:none;
+      color:rgba(255,255,255,0.3);font-family:'Montserrat',sans-serif;
+      font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+      border-radius:9px;cursor:pointer;transition:all 0.2s;
+    }
+    .mypf-tab.active {
+      background:rgba(255,42,42,0.14);color:#ff4444;
+      box-shadow:0 0 0 1px rgba(255,42,42,0.25);
+    }
+    .mypf-tabpanel { display:none; }
+    .mypf-tabpanel.active { display:block; }
+
+    /* Achievements */
+    .mypf-ach-grid {
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:9px;
+    }
+    .mypf-ach {
+      display:flex;flex-direction:column;align-items:center;gap:7px;
+      padding:14px 8px;text-align:center;
+      background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.07);border-radius:12px;
+      position:relative;overflow:hidden;transition:all 0.2s;cursor:default;
+    }
+    .mypf-ach:not(.locked):hover { border-color:rgba(255,42,42,0.3);transform:translateY(-2px);background:rgba(255,42,42,0.04); }
+    .mypf-ach.locked { opacity:0.22;filter:grayscale(1); }
+    .mypf-ach-badge {
+      position:absolute;top:5px;right:5px;font-size:7px;font-weight:800;
+      letter-spacing:1px;padding:2px 5px;border-radius:4px;
+    }
+    .mypf-ach-icon { font-size:24px;line-height:1; }
+    .mypf-ach-name { font-size:8px;font-weight:700;letter-spacing:1px;color:#fff;text-transform:uppercase;line-height:1.3; }
+    .mypf-ach-desc { font-size:8px;color:rgba(255,255,255,0.28);line-height:1.4; }
+
+    /* Bio text */
+    .mypf-bio-full { font-size:13px;color:rgba(255,255,255,0.45);line-height:1.85; }
+
+    /* ── MODAL ── */
+    .pf-modal-overlay {
+      position:fixed;inset:0;z-index:2000;
+      background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);
+      display:none;align-items:center;justify-content:center;padding:20px;
+    }
+    .pf-modal-overlay.open { display:flex; }
+    .pf-modal {
+      width:100%;max-width:540px;max-height:88vh;overflow-y:auto;
+      background:linear-gradient(160deg,rgba(22,4,4,0.99),rgba(12,2,2,0.99));
+      border:1px solid rgba(255,42,42,0.25);
+      border-radius:20px;padding:0;position:relative;
+      box-shadow:0 32px 80px rgba(0,0,0,0.8),0 0 0 1px rgba(255,255,255,0.02);
+    }
+    .pf-modal-head {
+      padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:18px;
+    }
+    .pf-modal-title { font-size:13px;font-weight:900;letter-spacing:3px;color:#fff;text-transform:uppercase; }
+    .pf-modal-close {
+      background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+      border-radius:8px;color:rgba(255,255,255,0.4);
+      font-size:14px;cursor:pointer;padding:6px 9px;transition:all 0.2s;line-height:1;
+    }
+    .pf-modal-close:hover { background:rgba(255,42,42,0.15);border-color:rgba(255,42,42,0.3);color:#ff4444; }
+    .pf-modal-tabs { display:flex;gap:0;padding:0 28px;border-bottom:1px solid rgba(255,255,255,0.05); }
+    .pf-modal-tab {
+      padding:14px 16px;border:none;background:none;
+      color:rgba(255,255,255,0.3);font-family:'Montserrat',sans-serif;
+      font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+      border-bottom:2px solid transparent;cursor:pointer;transition:all 0.2s;
+    }
+    .pf-modal-tab.active { color:#ff4444;border-bottom-color:#ff2a2a; }
+    .pf-modal-body { padding:22px 28px 28px; }
+    .pf-modal-panel { display:none; }
+    .pf-modal-panel.active { display:block; }
+
+    .pf-field { margin-bottom:16px; }
+    .pf-label {
+      display:block;font-size:9px;font-weight:700;letter-spacing:2px;
+      color:rgba(255,255,255,0.3);text-transform:uppercase;margin-bottom:6px;
+    }
+    .pf-input, .pf-textarea {
+      width:100%;background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.09);border-radius:9px;
+      padding:11px 14px;color:#fff;font-family:'Montserrat',sans-serif;
+      font-size:13px;font-weight:500;outline:none;
+      transition:border-color 0.2s,background 0.2s;box-sizing:border-box;
+    }
+    .pf-input:focus, .pf-textarea:focus { border-color:rgba(255,42,42,0.45);background:rgba(255,42,42,0.03); }
+    .pf-input::placeholder, .pf-textarea::placeholder { color:rgba(255,255,255,0.18); }
+    .pf-textarea { resize:vertical;min-height:88px; }
+
+    .pf-stats-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+
+    .pf-ach-check-grid { display:grid;grid-template-columns:1fr 1fr;gap:7px; }
+    .pf-ach-check {
+      display:flex;align-items:center;gap:9px;padding:9px 11px;
+      border:1px solid rgba(255,255,255,0.07);border-radius:9px;cursor:pointer;
+      transition:border-color 0.2s,background 0.2s;
+    }
+    .pf-ach-check:hover { border-color:rgba(255,42,42,0.2);background:rgba(255,42,42,0.03); }
+    .pf-ach-check.checked { background:rgba(255,42,42,0.07);border-color:rgba(255,42,42,0.3); }
+    .pf-ach-check input { display:none; }
+    .pf-ach-check-box {
+      width:17px;height:17px;border:2px solid rgba(255,255,255,0.15);
+      border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      font-size:9px;transition:all 0.15s;
+    }
+    .pf-ach-check.checked .pf-ach-check-box { background:#cc0000;border-color:#cc0000;color:#fff; }
+    .pf-ach-check-icon { font-size:15px; }
+    .pf-ach-check-name { font-size:9px;font-weight:700;color:rgba(255,255,255,0.55);letter-spacing:1px;text-transform:uppercase; }
+
+    .pf-save-btn {
+      width:100%;padding:13px;
+      background:linear-gradient(135deg,#cc0000,#7a0000);
+      border:none;border-radius:9px;color:#fff;font-family:'Montserrat',sans-serif;
+      font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;
+      cursor:pointer;margin-top:8px;transition:opacity 0.2s,transform 0.15s;
+      box-shadow:0 4px 16px rgba(200,0,0,0.3);
+    }
+    .pf-save-btn:hover { opacity:0.88;transform:translateY(-1px); }
+    .pf-save-btn:disabled { opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none; }
+
+    @media(max-width:900px){
+      .mypf-grid { grid-template-columns:1fr; }
+      .mypf-stats { grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:600px){
+      .mypf-hero-body { flex-wrap:wrap; }
+      .mypf-actions { align-items:flex-start;flex-direction:row;flex-wrap:wrap; }
+      .pf-stats-grid,.pf-ach-check-grid { grid-template-columns:1fr; }
+      .pf-modal-body { padding:18px; }
+      .pf-modal-head { padding:18px 18px 16px; }
+      .pf-modal-tabs { padding:0 18px; }
+      .mypf-stats { grid-template-columns:repeat(2,1fr); }
     }
   </style>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
 <div class="bg-overlay"></div>
@@ -134,7 +403,356 @@
 </style>
 
 <script type="module">
+import { initPerf }    from "./js/perf.js";
+import { initUserBar } from "./js/userbar.js";
+initPerf();
+initUserBar();
+
 import { HALL_OF_FAME } from "./js/config/events.js";
+
+// ── Личный кабинет (без ?id=) ───────────────────────────────
+const urlId = new URLSearchParams(location.search).get("id");
+if (!urlId) {
+  const { user } = await fetch("/api/auth/me").then(r => r.json()).catch(() => ({ user: null }));
+  if (!user) { location.href = "/auth.html"; throw new Error("redirect"); }
+
+  // Defaults
+  const st = user.stats || {};
+  const topRole   = user.discordRoles?.[0];
+  const roleName  = topRole?.name  || "Участник";
+  const roleColor = (!topRole || topRole.color === "#000000") ? "#ff2a2a" : topRole.color;
+  const joinDate  = new Date(user.createdAt).toLocaleDateString("ru-RU", { day:"numeric", month:"long", year:"numeric" });
+  const statusCls = user.discordStatus || "offline";
+  const displayName = user.discordName || user.username;
+
+  const STAT_DEFS = [
+    { key:"kills",      icon:"fa-skull",          label:"Убийства",   color:"#ff2a2a", bg:"rgba(255,42,42,0.12)"  },
+    { key:"deaths",     icon:"fa-cross",           label:"Смерти",     color:"#ff6b6b", bg:"rgba(255,107,107,0.1)" },
+    { key:"wins",       icon:"fa-trophy",          label:"Победы",     color:"#c9a227", bg:"rgba(201,162,39,0.1)"  },
+    { key:"events",     icon:"fa-calendar-check",  label:"Ивенты",     color:"#4a9eff", bg:"rgba(74,158,255,0.1)"  },
+    { key:"money",      icon:"fa-dollar-sign",     label:"Деньги ($)", color:"#43b581", bg:"rgba(67,181,129,0.1)"  },
+    { key:"reputation", icon:"fa-star",            label:"Репутация",  color:"#9b59b6", bg:"rgba(155,89,182,0.1)"  },
+    { key:"hours",      icon:"fa-clock",           label:"Часов",      color:"#e67e22", bg:"rgba(230,126,34,0.1)"  },
+    { key:"arrests",    icon:"fa-handcuffs",       label:"Арестов",    color:"#888",    bg:"rgba(136,136,136,0.1)" },
+  ];
+
+  const ALL_ACH = [
+    { id:"founder",   icon:"👑", name:"Основатель",    desc:"Создал Miller Family",        rare:"LEGENDARY", color:"#ff9800" },
+    { id:"boss",      icon:"🔱", name:"Босс",          desc:"Получил ранг Family Boss",    rare:"EPIC",      color:"#9c27b0" },
+    { id:"war100",    icon:"⚔️", name:"Ветеран войн",  desc:"Участник 10+ войн",           rare:"RARE",      color:"#2196f3" },
+    { id:"rich",      icon:"💰", name:"Миллиардер",    desc:"Капитал 500M+",               rare:"EPIC",      color:"#9c27b0" },
+    { id:"loyal",     icon:"🤝", name:"Верность",      desc:"1 год в составе семьи",       rare:"UNCOMMON",  color:"#4caf50" },
+    { id:"terror",    icon:"🔥", name:"Гроза улиц",    desc:"Лучший боец месяца",          rare:"RARE",      color:"#2196f3" },
+    { id:"diplomat",  icon:"🕊️", name:"Дипломат",      desc:"Заключил союзный пакт",       rare:"UNCOMMON",  color:"#4caf50" },
+    { id:"legend",    icon:"⭐", name:"Легенда",        desc:"Признан легендой сервера",    rare:"LEGENDARY", color:"#ff9800" },
+    { id:"builder",   icon:"🏗️", name:"Строитель",     desc:"Открыл 10+ бизнесов",        rare:"RARE",      color:"#2196f3" },
+    { id:"ghost",     icon:"👻", name:"Призрак",        desc:"Ни одного провала операции", rare:"EPIC",      color:"#9c27b0" },
+    { id:"commander", icon:"🎖️", name:"Командир",      desc:"Руководил 5+ операциями",     rare:"UNCOMMON",  color:"#4caf50" },
+    { id:"ironwill",  icon:"🛡️", name:"Железная воля", desc:"Не нарушил кодекс ни разу",  rare:"RARE",      color:"#2196f3" },
+  ];
+
+  function fmtNum(n) {
+    if (n >= 1000000) return (n/1000000).toFixed(1)+"M";
+    if (n >= 1000)    return (n/1000).toFixed(1)+"K";
+    return String(n || 0);
+  }
+
+  function achCard(a, unlocked) {
+    const on = unlocked.includes(a.id);
+    return `<div class="mypf-ach${on?"":" locked"}">
+      <div class="mypf-ach-badge" style="color:${a.color};background:${a.color}22">${a.rare}</div>
+      <div class="mypf-ach-icon">${a.icon}</div>
+      <div class="mypf-ach-name">${a.name}</div>
+      <div class="mypf-ach-desc">${a.desc}</div>
+    </div>`;
+  }
+
+  document.querySelector("main")?.remove();
+  document.title = `${displayName} | MILLER FAMILY`;
+
+  const wrap = document.createElement("div");
+  wrap.className = "mypf";
+  wrap.innerHTML = `
+    <!-- ── Hero ── -->
+    <div class="mypf-hero">
+      <div class="mypf-banner">
+        <div class="mypf-banner-pattern"></div>
+      </div>
+      <div class="mypf-hero-body">
+        <div class="mypf-avatar-wrap">
+          ${user.discordAvatar
+            ? `<img src="${user.discordAvatar}" class="mypf-avatar" onerror="this.outerHTML='<div class=mypf-avatar-placeholder>${displayName[0].toUpperCase()}</div>'">`
+            : `<div class="mypf-avatar-placeholder">${displayName[0].toUpperCase()}</div>`}
+          <span class="mypf-status-dot ${statusCls}"></span>
+        </div>
+        <div class="mypf-info">
+          <div class="mypf-role-label" style="color:${roleColor}">${roleName}</div>
+          <h1 class="mypf-name">${displayName}</h1>
+          ${user.discordTag ? `<div class="mypf-tag">@${user.discordTag}</div>` : ""}
+          <div class="mypf-bio" id="mypfBioDisplay">${user.bio || '<em style="color:rgba(255,255,255,0.2)">Нет описания — нажми «Редактировать»</em>'}</div>
+          ${user.statusText ? `<div class="mypf-status-text"><i class="fa-solid fa-circle-dot" style="color:${roleColor}"></i> ${user.statusText}</div>` : ""}
+        </div>
+        <div class="mypf-actions">
+          <button class="mypf-edit-btn" id="openEditModal">
+            <i class="fa-solid fa-pen-to-square"></i> Редактировать
+          </button>
+          <button class="mypf-logout-btn" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/')">
+            <i class="fa-solid fa-right-from-bracket"></i> Выйти
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Stats strip ── -->
+    <div class="mypf-stats">
+      ${STAT_DEFS.map(s => `
+        <div class="mypf-stat-card" style="--sc:${s.color}">
+          <div class="mypf-stat-icon" style="background:${s.bg}">
+            <i class="fa-solid ${s.icon}" style="color:${s.color};filter:drop-shadow(0 0 6px ${s.color}66)"></i>
+          </div>
+          <div class="mypf-stat-body">
+            <div class="mypf-stat-val" id="stat_${s.key}">${fmtNum(st[s.key])}</div>
+            <div class="mypf-stat-label">${s.label}</div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <!-- ── Main grid ── -->
+    <div class="mypf-grid">
+      <!-- Sidebar -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        ${user.discordRoles?.length ? `
+        <div class="mypf-card">
+          <div class="mypf-card-title"><i class="fa-solid fa-shield-halved"></i>&nbsp; Роли</div>
+          <div class="mypf-roles">
+            ${user.discordRoles.slice(0,10).map(r => {
+              const c = r.color === "#000000" ? "rgba(255,255,255,0.4)" : r.color;
+              const bg = r.color === "#000000" ? "rgba(255,255,255,0.05)" : r.color+"18";
+              const bd = r.color === "#000000" ? "rgba(255,255,255,0.08)" : r.color+"44";
+              return `<span class="mypf-role-chip" style="color:${c};background:${bg};border:1px solid ${bd}">${r.name}</span>`;
+            }).join("")}
+          </div>
+        </div>` : ""}
+
+        <div class="mypf-card">
+          <div class="mypf-card-title"><i class="fa-solid fa-circle-info"></i>&nbsp; Инфо</div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">На сайте с</span>
+            <span class="mypf-info-val">${joinDate}</span>
+          </div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">Статус</span>
+            <span class="mypf-info-val" style="display:flex;align-items:center;gap:6px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:${statusCls==='online'?'#4cff72':statusCls==='idle'?'#faa61a':statusCls==='dnd'?'#f04747':'#555'}"></span>
+              ${statusCls==='online'?'В сети':statusCls==='idle'?'Неактивен':statusCls==='dnd'?'Не беспокоить':'Не в сети'}
+            </span>
+          </div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">Достижений</span>
+            <span class="mypf-info-val" id="achCount">${(user.achievements||[]).length} / ${ALL_ACH.length}</span>
+          </div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">K/D</span>
+            <span class="mypf-info-val">${st.deaths ? ((st.kills||0)/st.deaths).toFixed(2) : (st.kills||0)}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content tabs -->
+      <div>
+        <div class="mypf-tabs">
+          <button class="mypf-tab active" data-panel="about">О себе</button>
+          <button class="mypf-tab" data-panel="achievements">Достижения</button>
+        </div>
+
+        <div class="mypf-tabpanel active" id="panel-about">
+          <div class="mypf-card">
+            <div class="mypf-card-title"><i class="fa-solid fa-user"></i>&nbsp; О участнике</div>
+            <p class="mypf-bio-full">${user.bio || '<em style="color:rgba(255,255,255,0.2)">Описание не добавлено</em>'}</p>
+            ${user.statusText ? `<div style="margin-top:12px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:12px;color:rgba(255,255,255,0.4);font-style:italic;"><i class="fa-solid fa-quote-left" style="margin-right:8px;color:rgba(255,42,42,0.4)"></i>${user.statusText}</div>` : ""}
+          </div>
+        </div>
+
+        <div class="mypf-tabpanel" id="panel-achievements">
+          <div class="mypf-card">
+            <div class="mypf-card-title"><i class="fa-solid fa-trophy"></i>&nbsp; Достижения — <span id="achCountTab">${(user.achievements||[]).length}</span> / ${ALL_ACH.length}</div>
+            <div class="mypf-ach-grid" id="achGridDisplay">
+              ${ALL_ACH.map(a => achCard(a, user.achievements||[])).join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(wrap);
+
+  // Tab switching
+  wrap.querySelectorAll(".mypf-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      wrap.querySelectorAll(".mypf-tab,.mypf-tabpanel").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("panel-" + btn.dataset.panel)?.classList.add("active");
+    });
+  });
+
+  // ── Edit Modal ────────────────────────────────────────────
+  const modalHtml = `
+  <div class="pf-modal-overlay" id="editModalOverlay">
+    <div class="pf-modal">
+      <div class="pf-modal-head">
+        <span class="pf-modal-title"><i class="fa-solid fa-pen-to-square" style="margin-right:10px;color:#ff2a2a"></i>Редактировать профиль</span>
+        <button class="pf-modal-close" id="closeEditModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="pf-modal-tabs">
+        <button class="pf-modal-tab active" data-mpanel="profile">Профиль</button>
+        <button class="pf-modal-tab" data-mpanel="stats">Статистика</button>
+        <button class="pf-modal-tab" data-mpanel="achievements">Достижения</button>
+      </div>
+      <div class="pf-modal-body">
+
+        <!-- Panel: Профиль -->
+        <div class="pf-modal-panel active" id="mpanel-profile">
+          <div class="pf-field">
+            <label class="pf-label">Отображаемое имя</label>
+            <input class="pf-input" id="edit_username" value="${user.username}" placeholder="Никнейм">
+          </div>
+          <div class="pf-field">
+            <label class="pf-label">О себе <span style="color:rgba(255,255,255,0.2);font-size:9px">(макс 300 символов)</span></label>
+            <textarea class="pf-textarea" id="edit_bio" placeholder="Расскажи о себе...">${user.bio||""}</textarea>
+          </div>
+          <div class="pf-field">
+            <label class="pf-label">Статус / Цитата <span style="color:rgba(255,255,255,0.2);font-size:9px">(макс 60 символов)</span></label>
+            <input class="pf-input" id="edit_status" value="${user.statusText||""}" placeholder="Что у тебя на уме...">
+          </div>
+          <button class="pf-save-btn" id="saveProfile">
+            <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить профиль
+          </button>
+        </div>
+
+        <!-- Panel: Статистика -->
+        <div class="pf-modal-panel" id="mpanel-stats">
+          <div class="pf-stats-grid">
+            ${STAT_DEFS.map(s => `
+              <div class="pf-field">
+                <label class="pf-label" style="display:flex;align-items:center;gap:6px;">
+                  <i class="fa-solid ${s.icon}" style="color:${s.color}"></i> ${s.label}
+                </label>
+                <div class="pf-stat-input-wrap">
+                  <input class="pf-input" type="number" min="0" id="edit_stat_${s.key}" value="${st[s.key]||0}">
+                </div>
+              </div>
+            `).join("")}
+          </div>
+          <button class="pf-save-btn" id="saveStats">
+            <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить статистику
+          </button>
+        </div>
+
+        <!-- Panel: Достижения -->
+        <div class="pf-modal-panel" id="mpanel-achievements">
+          <div style="margin-bottom:14px;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;">
+            Отметь достижения которые ты получил
+          </div>
+          <div class="pf-ach-check-grid" id="achCheckGrid">
+            ${ALL_ACH.map(a => {
+              const on = (user.achievements||[]).includes(a.id);
+              return `
+              <label class="pf-ach-check${on?" checked":""}" data-ach="${a.id}">
+                <input type="checkbox" ${on?"checked":""}>
+                <div class="pf-ach-check-box">${on?'<i class="fa-solid fa-check"></i>':""}</div>
+                <span class="pf-ach-check-icon">${a.icon}</span>
+                <span class="pf-ach-check-name">${a.name}</span>
+              </label>`;
+            }).join("")}
+          </div>
+          <button class="pf-save-btn" style="margin-top:20px" id="saveAch">
+            <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить достижения
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+  // Modal open/close
+  document.getElementById("openEditModal").onclick = () => document.getElementById("editModalOverlay").classList.add("open");
+  document.getElementById("closeEditModal").onclick = () => document.getElementById("editModalOverlay").classList.remove("open");
+  document.getElementById("editModalOverlay").addEventListener("click", e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove("open");
+  });
+
+  // Modal tabs
+  document.querySelectorAll(".pf-modal-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".pf-modal-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".pf-modal-panel").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("mpanel-" + btn.dataset.mpanel)?.classList.add("active");
+    });
+  });
+
+  // Achievement checkboxes
+  document.getElementById("achCheckGrid").addEventListener("click", e => {
+    const lbl = e.target.closest(".pf-ach-check");
+    if (!lbl) return;
+    const cb = lbl.querySelector("input");
+    cb.checked = !cb.checked;
+    lbl.classList.toggle("checked", cb.checked);
+    lbl.querySelector(".pf-ach-check-box").innerHTML = cb.checked ? '<i class="fa-solid fa-check"></i>' : "";
+  });
+
+  async function save(payload, btn) {
+    btn.disabled = true;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Сохранение...';
+    try {
+      const res = await fetch("/api/auth/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.success) {
+        btn.innerHTML = '<i class="fa-solid fa-check"></i>&nbsp; Сохранено!';
+        btn.style.background = "linear-gradient(135deg,#1a7a4a,#0f4a2e)";
+        setTimeout(() => location.reload(), 900);
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-xmark"></i>&nbsp; Ошибка';
+        btn.style.background = "rgba(255,42,42,0.3)";
+        setTimeout(() => { btn.innerHTML = orig; btn.style.background = ""; btn.disabled = false; }, 2000);
+      }
+    } catch {
+      btn.innerHTML = orig; btn.style.background = ""; btn.disabled = false;
+    }
+  }
+
+  // Save profile
+  document.getElementById("saveProfile").onclick = async function() {
+    await save({
+      username:   document.getElementById("edit_username").value.trim().substring(0,32),
+      bio:        document.getElementById("edit_bio").value.trim().substring(0,300),
+      statusText: document.getElementById("edit_status").value.trim().substring(0,60),
+    }, this);
+  };
+
+  // Save stats
+  document.getElementById("saveStats").onclick = async function() {
+    const stats = {};
+    STAT_DEFS.forEach(s => { stats[s.key] = parseInt(document.getElementById("edit_stat_"+s.key).value)||0; });
+    await save({ stats }, this);
+  };
+
+  // Save achievements
+  document.getElementById("saveAch").onclick = async function() {
+    const achievements = [...document.querySelectorAll(".pf-ach-check input:checked")]
+      .map(cb => cb.closest(".pf-ach-check").dataset.ach);
+    await save({ achievements }, this);
+  };
+
+  throw new Error("my-profile-rendered");
+}
 
 // ── Достижения ──────────────────────────────────────────────────
 const ALL_ACHIEVEMENTS = [

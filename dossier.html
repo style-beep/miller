@@ -176,8 +176,9 @@
     }
     .dos-danger-label { font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.2); font-weight: 700; flex-shrink: 0; }
     .dos-skulls { display: flex; gap: 4px; }
-    .dos-skull { font-size: 14px; filter: grayscale(1); opacity: 0.2; transition: all 0.2s; }
-    .dos-skull.active { filter: none; opacity: 1; animation: skull-pulse 2s ease-in-out infinite; }
+    .dos-skull { font-size: 14px; color: rgba(255,255,255,0.15); transition: all 0.2s; }
+    .dos-skull.active { color: #ff2a2a; filter: drop-shadow(0 0 4px rgba(255,42,42,0.7)); opacity: 1; animation: skull-pulse 2s ease-in-out infinite; }
+    .dos-boss-skull { font-size: 16px; color: #ff2a2a; filter: drop-shadow(0 0 6px rgba(255,42,42,0.8)); }
     @keyframes skull-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
     .dos-danger-text { margin-left: auto; font-size: 9px; letter-spacing: 2px; font-weight: 800; }
 
@@ -713,11 +714,11 @@
       <div class="dos-danger-row">
         <div class="dos-danger-label">DANGER LEVEL</div>
         <div class="dos-skulls">
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
         </div>
         <div class="dos-danger-text" style="color:#ff2a2a">МАКСИМАЛЬНЫЙ</div>
       </div>
@@ -781,18 +782,18 @@
           <div class="dos-name">ROY</div>
           <div class="dos-alias dos-font">"The Enforcer" · "R.M."</div>
           <div class="dos-status wanted">⚠ WANTED</div>
-          <div class="dos-rank">⚔️ Enforcer · Miller Family</div>
+          <div class="dos-rank"><i class="fa-solid fa-gun"></i> Enforcer · Miller Family</div>
         </div>
       </div>
 
       <div class="dos-danger-row">
         <div class="dos-danger-label">DANGER LEVEL</div>
         <div class="dos-skulls">
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull active">💀</span>
-          <span class="dos-skull" style="opacity:0.1">💀</span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull"><i class="fa-solid fa-skull"></i></span>
         </div>
         <div class="dos-danger-text" style="color:#ff9800">ВЫСОКИЙ</div>
       </div>
@@ -875,11 +876,11 @@
         <div class="dos-boss-danger">
           <div class="dos-boss-danger-title">THREAT ASSESSMENT</div>
           <div class="dos-boss-skulls">
-            <span class="dos-boss-skull">💀</span>
-            <span class="dos-boss-skull">💀</span>
-            <span class="dos-boss-skull">💀</span>
-            <span class="dos-boss-skull">💀</span>
-            <span class="dos-boss-skull">💀</span>
+            <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+            <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+            <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+            <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+            <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
           </div>
           <div class="dos-boss-danger-label">КРИТИЧЕСКИЙ</div>
         </div>
@@ -1014,11 +1015,11 @@
       <div class="dos-danger-row">
         <div class="dos-danger-label">DANGER LEVEL</div>
         <div class="dos-skulls">
-          <span class="dos-skull" style="opacity:0.08">💀</span>
-          <span class="dos-skull" style="opacity:0.08">💀</span>
-          <span class="dos-skull" style="opacity:0.08">💀</span>
-          <span class="dos-skull" style="opacity:0.08">💀</span>
-          <span class="dos-skull" style="opacity:0.08">💀</span>
+          <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+          <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
         </div>
         <div class="dos-danger-text" style="color:rgba(255,255,255,0.2)">██████</div>
       </div>

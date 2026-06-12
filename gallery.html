@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>ГАЛЕРЕЯ | MILLER FAMILY</title>
@@ -11,7 +12,34 @@
   <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
-    /* Галерея */
+
+    /* ── Фильтры ── */
+    .gallery-filters {
+      display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .gf-btn {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 20px; border-radius: 8px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      color: rgba(255,255,255,0.4);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px; font-weight: 800; letter-spacing: 2px;
+      text-transform: uppercase; transition: all 0.2s;
+    }
+    .gf-btn:hover { border-color: rgba(255,42,42,0.3); color: rgba(255,255,255,0.7); }
+    .gf-btn.active {
+      background: rgba(255,42,42,0.12);
+      border-color: rgba(255,42,42,0.45);
+      color: #ff2a2a;
+    }
+    .gf-count {
+      background: rgba(255,255,255,0.08); border-radius: 4px;
+      padding: 1px 7px; font-size: 9px; font-weight: 700;
+    }
+    .gf-btn.active .gf-count { background: rgba(255,42,42,0.2); }
+
+    /* ── Сетка ── */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -21,64 +49,162 @@
       position: relative; border-radius: 10px; overflow: hidden;
       aspect-ratio: 4/3; cursor: pointer; background: #111;
       border: 1px solid rgba(255,255,255,0.05);
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
     }
     .gallery-item:hover { transform: scale(1.02); box-shadow: 0 8px 32px rgba(255,42,42,0.2); }
-    .gallery-item img { width:100%; height:100%; object-fit:cover; transition: transform 0.5s; display:block; }
+    .gallery-item.hidden { display: none; }
+
+    /* первый элемент — большой */
+    .gallery-item.first-visible {
+      grid-column: span 2; grid-row: span 2; aspect-ratio: auto;
+    }
+
+    /* фото */
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s; display: block;
+    }
     .gallery-item:hover img { transform: scale(1.08); }
-    .gallery-item:first-child { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+
+    /* видео-превью */
+    .gallery-item video {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* YouTube превью */
+    .yt-thumb {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; transition: transform 0.5s;
+    }
+    .gallery-item:hover .yt-thumb { transform: scale(1.06); }
+
+    /* иконка типа */
+    .gallery-type-badge {
+      position: absolute; top: 10px; left: 10px; z-index: 2;
+      width: 28px; height: 28px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; backdrop-filter: blur(6px);
+    }
+    .badge-photo   { background: rgba(0,0,0,0.55); color: rgba(255,255,255,0.6); }
+    .badge-video   { background: rgba(255,42,42,0.7); color: #fff; }
+    .badge-youtube { background: rgba(255,0,0,0.85); color: #fff; }
+
+    /* кнопка play поверх видео/yt */
+    .gallery-play {
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: center; z-index: 2;
+    }
+    .gallery-play-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(255,42,42,0.85); border: 2px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: #fff;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 20px rgba(255,0,0,0.4);
+    }
+    .gallery-item:hover .gallery-play-icon {
+      transform: scale(1.12);
+      background: rgba(255,42,42,1);
+    }
+
+    /* оверлей */
     .gallery-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
       display: flex; align-items: flex-end; justify-content: space-between;
-      padding: 14px; opacity: 0; transition: opacity 0.3s;
+      padding: 14px; opacity: 0; transition: opacity 0.3s; z-index: 3;
     }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
     .gallery-caption { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 600; letter-spacing: 0.5px; }
     .gallery-zoom { color: var(--red); font-size: 16px; }
 
-    /* Lightbox */
+    /* ── Lightbox ── */
     .gallery-lightbox {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.96);
+      position: fixed; inset: 0; background: rgba(0,0,0,0.97);
       z-index: 99999; display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(12px);
+      opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(14px);
     }
     .gallery-lightbox.active { opacity: 1; pointer-events: all; }
-    .lb-content { text-align: center; max-width: 90vw; max-height: 90vh; }
-    .lb-content img { max-width:100%; max-height:80vh; border-radius:10px; object-fit:contain; transition: opacity 0.2s; border: 1px solid rgba(255,255,255,0.07); }
-    .lb-footer { display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding: 0 4px; }
-    #lbCaption { font-size:13px; color:rgba(255,255,255,0.6); letter-spacing:1px; }
-    .lb-count  { font-size:12px; color:rgba(255,255,255,0.25); letter-spacing:1px; }
+
+    .lb-content {
+      text-align: center; max-width: 90vw; max-height: 90vh;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    /* фото в lightbox */
+    #lbImg {
+      max-width: 100%; max-height: 78vh; border-radius: 10px;
+      object-fit: contain; border: 1px solid rgba(255,255,255,0.07);
+      transition: opacity 0.2s;
+    }
+
+    /* видео в lightbox */
+    #lbVideo {
+      max-width: 100%; max-height: 78vh; width: 900px;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.07);
+      background: #000; display: none;
+    }
+
+    /* YouTube iframe в lightbox */
+    #lbYoutube {
+      width: min(900px, 90vw);
+      aspect-ratio: 16/9;
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.07);
+      background: #000; display: none;
+    }
+
+    .lb-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 14px; padding: 0 4px; width: 100%;
+    }
+    #lbCaption { font-size: 13px; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+    .lb-count  { font-size: 12px; color: rgba(255,255,255,0.25); letter-spacing: 1px; }
+
     .lb-close, .lb-nav {
-      position: fixed; background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.1);
-      color: #fff; cursor: pointer; border-radius: 50%; width: 48px; height: 48px;
-      display: flex; align-items: center; justify-content: center; font-size: 18px;
-      transition: background 0.2s, border-color 0.2s; backdrop-filter: blur(6px);
+      position: fixed; background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; cursor: pointer; border-radius: 50%;
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; transition: background 0.2s, border-color 0.2s;
+      backdrop-filter: blur(6px);
     }
     .lb-close:hover, .lb-nav:hover { background: rgba(255,42,42,0.3); border-color: rgba(255,42,42,0.6); }
-    .lb-close { top:20px; right:20px; }
-    .lb-prev  { left:20px; top:50%; transform:translateY(-50%); }
-    .lb-next  { right:20px; top:50%; transform:translateY(-50%); }
+    .lb-close { top: 20px; right: 20px; }
+    .lb-prev  { left: 20px; top: 50%; transform: translateY(-50%); }
+    .lb-next  { right: 20px; top: 50%; transform: translateY(-50%); }
 
+    /* пустое состояние */
+    .gallery-empty {
+      grid-column: 1 / -1; text-align: center;
+      padding: 60px 20px; color: rgba(255,255,255,0.2);
+      font-size: 13px; letter-spacing: 2px;
+    }
+    .gallery-empty i { font-size: 32px; display: block; margin-bottom: 12px; opacity: 0.3; }
+
+    /* ── Адаптив ── */
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 768px) {
-      .gallery-grid { grid-template-columns: repeat(2,1fr); }
-      .gallery-item:first-child { grid-column: span 2; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item.first-visible { grid-column: span 2; grid-row: span 1; aspect-ratio: 4/3; }
     }
     @media (max-width: 480px) {
       .gallery-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
     }
   </style>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
 
-<!-- Background -->
 <div class="bg-overlay"></div>
 <div class="particles">
   <span></span><span></span><span></span><span></span>
   <span></span><span></span><span></span><span></span>
 </div>
 
-<!-- ── Loader ── -->
+<!-- Loader -->
 <div id="pageLoaderOverlay">
   <div class="loader-terminal">
     <div class="loader-titlebar">
@@ -112,7 +238,7 @@
   </div>
 </div>
 
-<!-- ── Header ── -->
+<!-- Header -->
 <header class="page-header">
   <a href="index.html" class="page-logo">MILLER <span>FAMILY</span></a>
   <nav class="page-nav">
@@ -122,12 +248,29 @@
   </nav>
 </header>
 
-<!-- ── Content ── -->
+<!-- Content -->
 <main id="pageContent">
   <section class="page-section">
     <div class="page-bg-title">GALLERY</div>
     <h1 class="page-section-title">Галерея</h1>
     <p class="page-section-sub">Визуальный архив Miller Family</p>
+
+    <!-- Фильтры -->
+    <div class="gallery-filters" id="galleryFilters">
+      <button class="gf-btn active" data-filter="all">
+        <i class="fa-solid fa-border-all"></i> ВСЕ <span class="gf-count" id="cntAll">0</span>
+      </button>
+      <button class="gf-btn" data-filter="photo">
+        <i class="fa-solid fa-image"></i> ФОТО <span class="gf-count" id="cntPhoto">0</span>
+      </button>
+      <button class="gf-btn" data-filter="video">
+        <i class="fa-solid fa-film"></i> ВИДЕО <span class="gf-count" id="cntVideo">0</span>
+      </button>
+      <button class="gf-btn" data-filter="youtube">
+        <i class="fa-brands fa-youtube"></i> YOUTUBE <span class="gf-count" id="cntYoutube">0</span>
+      </button>
+    </div>
+
     <div class="gallery-grid" id="galleryGrid"></div>
   </section>
 
@@ -142,7 +285,12 @@
   <button class="lb-nav lb-prev" id="lbPrev"><i class="fa-solid fa-chevron-left"></i></button>
   <button class="lb-nav lb-next" id="lbNext"><i class="fa-solid fa-chevron-right"></i></button>
   <div class="lb-content">
-    <img loading="lazy" id="lbImg" src="" alt="">
+    <!-- фото -->
+    <img id="lbImg" src="" alt="" loading="lazy"/>
+    <!-- локальное видео -->
+    <video id="lbVideo" controls playsinline></video>
+    <!-- youtube -->
+    <iframe id="lbYoutube" src="" allowfullscreen allow="autoplay; encrypted-media" frameborder="0"></iframe>
     <div class="lb-footer">
       <span id="lbCaption"></span>
       <span id="lbCount" class="lb-count"></span>
@@ -151,64 +299,219 @@
 </div>
 
 <script type="module">
-  import { initPageLoader } from "./js/page-loader.js";
-import { initPageTransition } from "./js/page-transition.js";
-import { initEasterEgg }      from "./js/easter-egg.js";
-  import { GALLERY }        from "./js/config/events.js";
+  import { initPageLoader }      from "./js/page-loader.js";
+  import { initPageTransition }  from "./js/page-transition.js";
+  import { initEasterEgg }       from "./js/easter-egg.js";
+  import { GALLERY }             from "./js/config/events.js";
 
   initPageTransition();
-initEasterEgg();
-initPageLoader({
-    password: "MF·VISUAL·ACCESS·2026",
-    label:    "ВВОД КОДА ДОСТУПА К АРХИВУ",
+  initEasterEgg();
+  initPageLoader({
+    password:   "MF·VISUAL·ACCESS·2026",
+    label:      "ВВОД КОДА ДОСТУПА К АРХИВУ",
     onComplete: renderGallery,
   });
 
+  // ── Извлечь YouTube ID из разных форматов ссылок ──────────────
+  function getYouTubeId(url) {
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  // ── Построить HTML одного элемента галереи ────────────────────
+  function buildItem(item, index) {
+    const type = item.type || "photo";
+
+    if (type === "photo") {
+      return `
+        <div class="gallery-item" data-index="${index}" data-type="photo">
+          <span class="gallery-type-badge badge-photo"><i class="fa-solid fa-image"></i></span>
+          <img loading="lazy" src="${item.src}" alt="${item.caption}">
+          <div class="gallery-overlay">
+            <span class="gallery-caption">${item.caption}</span>
+            <span class="gallery-zoom"><i class="fa-solid fa-expand"></i></span>
+          </div>
+        </div>`;
+    }
+
+    if (type === "video") {
+      return `
+        <div class="gallery-item" data-index="${index}" data-type="video">
+          <span class="gallery-type-badge badge-video"><i class="fa-solid fa-play"></i></span>
+          <video muted preload="metadata" src="${item.src}#t=0.5"></video>
+          <div class="gallery-play">
+            <div class="gallery-play-icon"><i class="fa-solid fa-play"></i></div>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">${item.caption}</span>
+            <span class="gallery-zoom"><i class="fa-solid fa-expand"></i></span>
+          </div>
+        </div>`;
+    }
+
+    if (type === "youtube") {
+      const ytId   = getYouTubeId(item.src);
+      const thumb  = ytId
+        ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`
+        : "images/background.png";
+      return `
+        <div class="gallery-item" data-index="${index}" data-type="youtube" data-ytid="${ytId || ''}">
+          <span class="gallery-type-badge badge-youtube"><i class="fa-brands fa-youtube"></i></span>
+          <img loading="lazy" class="yt-thumb" src="${thumb}" alt="${item.caption}">
+          <div class="gallery-play">
+            <div class="gallery-play-icon"><i class="fa-brands fa-youtube"></i></div>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-caption">${item.caption}</span>
+            <span class="gallery-zoom"><i class="fa-solid fa-expand"></i></span>
+          </div>
+        </div>`;
+    }
+
+    return "";
+  }
+
+  // ── Обновить классы "первый видимый" (большой элемент) ────────
+  function updateFirstVisible() {
+    document.querySelectorAll(".gallery-item.first-visible")
+      .forEach(el => el.classList.remove("first-visible"));
+    const first = document.querySelector(".gallery-item:not(.hidden)");
+    if (first) first.classList.add("first-visible");
+  }
+
+  // ── Обновить счётчики кнопок фильтра ─────────────────────────
+  function updateCounts(items) {
+    document.getElementById("cntAll").textContent     = items.length;
+    document.getElementById("cntPhoto").textContent   = items.filter(i => (i.type||"photo") === "photo").length;
+    document.getElementById("cntVideo").textContent   = items.filter(i => i.type === "video").length;
+    document.getElementById("cntYoutube").textContent = items.filter(i => i.type === "youtube").length;
+  }
+
+  // ── Главная функция ──────────────────────────────────────────
   function renderGallery() {
     const grid = document.getElementById("galleryGrid");
-    grid.innerHTML = GALLERY.map((item, i) => `
-      <div class="gallery-item" data-index="${i}">
-        <img loading="lazy" src="${item.src}" alt="${item.caption}" >
-        <div class="gallery-overlay">
-          <span class="gallery-caption">${item.caption}</span>
-          <span class="gallery-zoom"><i class="fa-solid fa-expand"></i></span>
-        </div>
-      </div>
-    `).join("");
+    grid.innerHTML = GALLERY.map((item, i) => buildItem(item, i)).join("");
 
-    const lb    = document.getElementById("galleryLightbox");
-    const lbImg = document.getElementById("lbImg");
-    const lbCap = document.getElementById("lbCaption");
-    const lbCnt = document.getElementById("lbCount");
-    let current = 0;
+    updateCounts(GALLERY);
+    updateFirstVisible();
 
-    function open(i) {
-      current = i;
-      lbImg.src = GALLERY[i].src;
-      lbCap.textContent = GALLERY[i].caption;
-      lbCnt.textContent = `${i+1} / ${GALLERY.length}`;
+    // ── Lightbox ──────────────────────────────────────────────
+    const lb        = document.getElementById("galleryLightbox");
+    const lbImg     = document.getElementById("lbImg");
+    const lbVideo   = document.getElementById("lbVideo");
+    const lbYoutube = document.getElementById("lbYoutube");
+    const lbCap     = document.getElementById("lbCaption");
+    const lbCnt     = document.getElementById("lbCount");
+    let current     = 0;
+    let visibleItems = [...GALLERY.keys()]; // индексы видимых элементов
+
+    function hideAllMedia() {
+      lbImg.style.display     = "none";
+      lbVideo.style.display   = "none";
+      lbYoutube.style.display = "none";
+      lbVideo.pause();
+      lbYoutube.src = ""; // остановить воспроизведение YouTube
+    }
+
+    function openItem(galleryIndex) {
+      current = visibleItems.indexOf(galleryIndex);
+      if (current === -1) current = 0;
+      showCurrent();
       lb.classList.add("active");
       document.body.style.overflow = "hidden";
     }
-    function close() { lb.classList.remove("active"); document.body.style.overflow = ""; }
-    function nav(d) {
-      current = (current + d + GALLERY.length) % GALLERY.length;
-      lbImg.style.opacity = "0";
-      setTimeout(() => { lbImg.src = GALLERY[current].src; lbCap.textContent = GALLERY[current].caption; lbCnt.textContent = `${current+1} / ${GALLERY.length}`; lbImg.style.opacity = "1"; }, 180);
+
+    function showCurrent() {
+      const idx  = visibleItems[current];
+      const item = GALLERY[idx];
+      const type = item.type || "photo";
+
+      hideAllMedia();
+      lbCap.textContent = item.caption;
+      lbCnt.textContent = `${current + 1} / ${visibleItems.length}`;
+
+      if (type === "photo") {
+        lbImg.style.display = "block";
+        lbImg.style.opacity = "0";
+        lbImg.src = item.src;
+        lbImg.onload = () => { lbImg.style.opacity = "1"; };
+
+      } else if (type === "video") {
+        lbVideo.style.display = "block";
+        lbVideo.src = item.src;
+        lbVideo.load();
+
+      } else if (type === "youtube") {
+        const ytId = getYouTubeId(item.src);
+        lbYoutube.style.display = "block";
+        lbYoutube.src = ytId
+          ? `https://www.youtube.com/embed/${ytId}?autoplay=1`
+          : "";
+      }
     }
 
-    grid.querySelectorAll(".gallery-item").forEach((el, i) => el.addEventListener("click", () => open(i)));
+    function close() {
+      lb.classList.remove("active");
+      document.body.style.overflow = "";
+      hideAllMedia();
+    }
+
+    function nav(dir) {
+      current = (current + dir + visibleItems.length) % visibleItems.length;
+      showCurrent();
+    }
+
+    // клики по элементам
+    grid.addEventListener("click", e => {
+      const item = e.target.closest(".gallery-item");
+      if (!item) return;
+      openItem(parseInt(item.dataset.index));
+    });
+
     document.getElementById("lbClose").addEventListener("click", close);
     document.getElementById("lbPrev").addEventListener("click", () => nav(-1));
     document.getElementById("lbNext").addEventListener("click", () => nav(1));
     lb.addEventListener("click", e => { if (e.target === lb) close(); });
     document.addEventListener("keydown", e => {
       if (!lb.classList.contains("active")) return;
-      if (e.key === "Escape") close();
-      if (e.key === "ArrowLeft") nav(-1);
-      if (e.key === "ArrowRight") nav(1);
+      if (e.key === "Escape")      close();
+      if (e.key === "ArrowLeft")   nav(-1);
+      if (e.key === "ArrowRight")  nav(1);
+    });
+
+    // ── Фильтры ──────────────────────────────────────────────
+    document.getElementById("galleryFilters").addEventListener("click", e => {
+      const btn = e.target.closest(".gf-btn");
+      if (!btn) return;
+
+      document.querySelectorAll(".gf-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const filter = btn.dataset.filter;
+      visibleItems = [];
+
+      grid.querySelectorAll(".gallery-item").forEach(el => {
+        const type = el.dataset.type || "photo";
+        const show = filter === "all" || type === filter;
+        el.classList.toggle("hidden", !show);
+        if (show) visibleItems.push(parseInt(el.dataset.index));
+      });
+
+      // пустое состояние
+      const emptyEl = grid.querySelector(".gallery-empty");
+      if (emptyEl) emptyEl.remove();
+      if (visibleItems.length === 0) {
+        grid.insertAdjacentHTML("beforeend", `
+          <div class="gallery-empty">
+            <i class="fa-solid fa-photo-film"></i>
+            В этой категории пока ничего нет
+          </div>`);
+      }
+
+      updateFirstVisible();
     });
   }
 </script>
+<script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>
 </body>
 </html>

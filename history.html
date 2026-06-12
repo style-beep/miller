@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>ИСТОРИЯ | MILLER FAMILY</title>
@@ -62,6 +63,7 @@
       .tl-card  { max-width: 100%; }
     }
   </style>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
 
@@ -162,5 +164,6 @@ initPageLoader({
     list.querySelectorAll(".tl-item").forEach(el => obs.observe(el));
   }
 </script>
+<script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>
 </body>
 </html>

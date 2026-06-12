@@ -1,0 +1,33 @@
+[
+  {
+    "id": "1781250004445",
+    "username": "Itsuki Miller",
+    "email": "st3614580@gmail.com",
+    "passwordHash": "$2b$10$WQ6wnzEXn1.zP1vIwz7WQOKpZnsAKnVznctieT7cR8cJynD/vePau",
+    "bio": "",
+    "stats": {
+      "kills": 0,
+      "wins": 0,
+      "events": 0
+    },
+    "achievements": [],
+    "createdAt": "2026-06-12T07:40:04.539Z",
+    "lastSeen": "2026-06-12T08:17:51.475Z"
+  },
+  {
+    "id": "1781250382469",
+    "username": "donskoyyy",
+    "discordId": "1482385668218028084",
+    "discordTag": "donskoyyy.",
+    "discordAvatar": "https://cdn.discordapp.com/avatars/1482385668218028084/f50acd77861b083c29f196a9b7ef874c.png?size=256",
+    "bio": "",
+    "stats": {
+      "kills": 0,
+      "wins": 0,
+      "events": 0
+    },
+    "achievements": [],
+    "createdAt": "2026-06-12T07:46:22.469Z",
+    "lastSeen": "2026-06-12T08:19:41.399Z"
+  }
+]

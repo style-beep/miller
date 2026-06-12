@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>МЕДИА | MILLER FAMILY</title>
@@ -163,6 +164,7 @@
       .media-card:first-child { grid-column: span 1; }
     }
   </style>
+  <link rel="stylesheet" href="css/lite.css"/>
 </head>
 <body>
 
@@ -289,5 +291,6 @@ initPageLoader({
     cards.forEach(c => obs.observe(c));
   }
 </script>
+<script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>
 </body>
 </html>
