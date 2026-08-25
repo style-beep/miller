@@ -16,21 +16,24 @@ const DEFAULT_ALLIES = [
   { name:"ПРИМЕРНЫЙ СОЮЗНИК", tag:"ALLY", desc:"Дружественная организация. Пакт о ненападении подписан в 2024 году.", discord:"https://discord.gg/", since:"Март 2024", status:"active" },
 ];
 
-document.getElementById("loginBtn").addEventListener("click", tryLogin);
-document.getElementById("secretInput").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
-
-function tryLogin() {
-  const s = document.getElementById("secretInput").value.trim();
-  if (!s) return;
-  if (s === "donskoyy") {
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
-    initAdmin();
-  } else {
-    document.getElementById("loginError").textContent = "Неверный ключ доступа";
-    setTimeout(() => document.getElementById("loginError").textContent = "", 2500);
+// Доступ определяется server-side сессией (роль "admin"), а не полем ввода.
+(async function checkAdminAccess() {
+  try {
+    const res  = await fetch("/api/auth/me");
+    const data = await res.json();
+    if (data.user && data.user.role === "admin") {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminPanel").style.display = "block";
+      initAdmin();
+    } else {
+      document.getElementById("secretInput").style.display = "none";
+      document.getElementById("loginBtn").style.display = "none";
+      document.getElementById("loginError").textContent = "Доступ запрещён — войдите под аккаунтом администратора";
+    }
+  } catch {
+    document.getElementById("loginError").textContent = "Ошибка проверки доступа";
   }
-}
+})();
 
 document.getElementById("logoutBtn").addEventListener("click", () => {
   document.getElementById("adminPanel").style.display = "none";
