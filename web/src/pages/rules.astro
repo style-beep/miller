@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLoader from '../components/PageLoader.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PageFooter from '../components/PageFooter.astro';
+---
+
+<BaseLayout title="ПРАВИЛА | MILLER FAMILY">
+  <PageLoader
+    barTitle="MILLER FAMILY · SECURE ACCESS"
+    logoSub="Family Codex System"
+    section="КОДЕКС СЕМЬИ"
+    initialLabel="Запрос доступа..."
+    barMetaLabel="ЗАГРУЗКА КОДЕКСА"
+  />
+
+  <PageHeader
+    links={[
+      { href: '/gallery.html', label: 'Галерея' },
+      { href: '/history.html', label: 'История' },
+    ]}
+  />
+
+  <main id="pageContent">
+    <section class="page-section">
+      <div class="page-bg-title">CODEX</div>
+      <h1 class="page-section-title">Правила семьи</h1>
+      <p class="page-section-sub">Кодекс Miller Family · Обязателен к исполнению</p>
+
+      <div class="rules-grid" id="rulesGrid"></div>
+
+      <div class="rules-warning">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Нарушение правил влечёт предупреждение, понижение в ранге или исключение из семьи. Незнание правил не освобождает от ответственности.
+      </div>
+
+      <div class="hierarchy-section">
+        <h2 class="page-section-title" style="font-size:36px;margin-bottom:6px">Иерархия</h2>
+        <p class="page-section-sub" style="margin-bottom:0">Цепочка командования Miller Family</p>
+        <div class="hierarchy-steps" id="hierarchySteps"></div>
+      </div>
+    </section>
+
+    <PageFooter />
+  </main>
+</BaseLayout>
+
+<style>
+  .rules-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 20px; max-width: 1000px; margin: 0 auto;
+  }
+  .rules-card {
+    padding: 30px; background: rgba(5,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 14px;
+    backdrop-filter: blur(12px);
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.55s ease, transform 0.55s ease, border-color 0.3s;
+  }
+  .rules-card.rc-visible { opacity: 1; transform: translateY(0); }
+  .rules-card:hover { border-color: rgba(255,42,42,0.2); box-shadow: 0 4px 28px rgba(255,42,42,0.07); }
+  .rules-card-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(255,42,42,0.1); border: 1px solid rgba(255,42,42,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; margin-bottom: 16px; color: rgba(255,42,42,0.8);
+  }
+  .rules-card-title {
+    font-size: 13px; font-weight: 800; letter-spacing: 2px;
+    color: #fff; text-transform: uppercase; margin-bottom: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .rules-list { list-style: none; padding: 0; margin: 0; }
+  .rules-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    margin-bottom: 12px; line-height: 1.6; padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .rules-list li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .rules-list li .rule-num {
+    font-size: 10px; font-weight: 800; color: rgba(255,42,42,0.5);
+    background: rgba(255,42,42,0.08); border-radius: 4px;
+    padding: 2px 7px; flex-shrink: 0; margin-top: 2px; letter-spacing: 1px;
+  }
+
+  .rules-warning {
+    max-width: 1000px; margin: 28px auto 0;
+    padding: 18px 24px; border-radius: 12px;
+    background: rgba(255,42,42,0.06); border: 1px solid rgba(255,42,42,0.18);
+    display: flex; align-items: center; gap: 16px;
+    font-size: 13px; color: rgba(255,255,255,0.45);
+  }
+  .rules-warning i { font-size: 20px; color: rgba(255,42,42,0.6); flex-shrink: 0; }
+
+  .hierarchy-section { margin-top: 60px; }
+  .hierarchy-steps {
+    display: flex; align-items: stretch; gap: 0;
+    max-width: 900px; margin: 32px auto 0; flex-wrap: wrap;
+  }
+  .hier-step {
+    flex: 1; min-width: 140px; padding: 20px 16px; text-align: center;
+    background: rgba(5,0,0,0.5); border: 1px solid rgba(255,255,255,0.05);
+    position: relative; transition: background 0.3s;
+  }
+  .hier-step:first-child { border-radius: 12px 0 0 12px; }
+  .hier-step:last-child  { border-radius: 0 12px 12px 0; }
+  .hier-step:hover { background: rgba(255,42,42,0.05); }
+  .hier-icon  { font-size: 24px; margin-bottom: 8px; }
+  .hier-title { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: rgba(255,42,42,0.8); text-transform: uppercase; margin-bottom: 6px; }
+  .hier-desc  { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+  .hier-arrow {
+    position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+    width: 24px; height: 24px; background: rgba(5,0,0,0.9);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: rgba(255,42,42,0.5); z-index: 1;
+  }
+  .hier-step:last-child .hier-arrow { display: none; }
+
+  @media (max-width: 768px) {
+    .rules-grid { grid-template-columns: 1fr; }
+    .hierarchy-steps { flex-direction: column; }
+    .hier-step:first-child { border-radius: 12px 12px 0 0; }
+    .hier-step:last-child  { border-radius: 0 0 12px 12px; }
+    .hier-arrow { right: 50%; bottom: -12px; top: auto; transform: translateX(50%) rotate(90deg); }
+  }
+</style>
+
+<script type="module" is:inline>
+  import { requireAuth }    from "/js/auth-guard.js";
+  import { initPageLoader } from "/js/page-loader.js";
+  import { initPageTransition } from "/js/page-transition.js";
+  import { initEasterEgg }      from "/js/easter-egg.js";
+
+  const RULES = [
+    {
+      icon: "fa-shield-halved", title: "Общие правила",
+      items: [
+        "Уважение к каждому члену семьи обязательно",
+        "Запрещено работать против интересов семьи",
+        "Все решения главы семьи обязательны к исполнению",
+        "Разглашение внутренней информации — исключение",
+        "Обязательное присутствие на семейных собраниях",
+      ]
+    },
+    {
+      icon: "fa-crosshairs", title: "Боевые правила",
+      items: [
+        "Без приказа старшего не начинать войну",
+        "Помогать членам семьи в конфликтах обязательно",
+        "Запрещено сдаваться без разрешения командира",
+        "Трофеи делятся согласно иерархии",
+        "Провокации без согласования запрещены",
+      ]
+    },
+    {
+      icon: "fa-microphone", title: "RP правила",
+      items: [
+        "Соблюдать атмосферу RP в любых ситуациях",
+        "Не выходить из роли во время активных сцен",
+        "Называть себя по игровому имени в голосовых",
+        "Метагейминг строго запрещён",
+        "PowerPlay допускается только по договорённости",
+      ]
+    },
+    {
+      icon: "fa-bolt", title: "Активность",
+      items: [
+        "Минимальная активность — 3 раза в неделю",
+        "Отсутствие более 7 дней — предупредить заранее",
+        "Участие в ивентах семьи приветствуется",
+        "Игнорирование вызовов командира — нарушение",
+        "Регулярные отчёты об активности обязательны",
+      ]
+    },
+  ];
+
+  const HIERARCHY = [
+    { icon: '<i class="fa-solid fa-crown"></i>',          title: "Создатель",        desc: "Высший авторитет. Слово — закон" },
+    { icon: '<i class="fa-solid fa-chess-king"></i>',     title: "Director",         desc: "Управление внутренними процессами" },
+    { icon: '<i class="fa-solid fa-bolt"></i>',           title: "Deputy Director",  desc: "Силовые операции и территории" },
+    { icon: '<i class="fa-solid fa-radio"></i>',          title: "Коллер",           desc: "Координация рядовых бойцов" },
+    { icon: '<i class="fa-solid fa-star"></i>',           title: "Miller",           desc: "Основной состав семьи" },
+  ];
+
+  requireAuth().then(user => {
+    if (!user) return;
+    initPageTransition();
+    initEasterEgg();
+    initPageLoader({
+      password: "CODEX·FAMILIA·ALPHA",
+      label:    "ВВОД КОДА ДОСТУПА К КОДЕКСУ",
+      onComplete: render,
+    });
+  });
+
+  function render() {
+    const grid = document.getElementById("rulesGrid");
+    grid.innerHTML = RULES.map(r => `
+      <div class="rules-card">
+        <div class="rules-card-icon"><i class="fa-solid ${r.icon}"></i></div>
+        <div class="rules-card-title">${r.title}</div>
+        <ul class="rules-list">
+          ${r.items.map((item, i) => `
+            <li><span class="rule-num">${String(i+1).padStart(2,"0")}</span>${item}</li>
+          `).join("")}
+        </ul>
+      </div>
+    `).join("");
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add("rc-visible"), i * 100);
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    grid.querySelectorAll(".rules-card").forEach(c => obs.observe(c));
+
+    const hier = document.getElementById("hierarchySteps");
+    hier.innerHTML = HIERARCHY.map((h, i) => `
+      <div class="hier-step">
+        <div class="hier-icon">${h.icon}</div>
+        <div class="hier-title">${h.title}</div>
+        <div class="hier-desc">${h.desc}</div>
+        <div class="hier-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+      </div>
+    `).join("");
+  }
+</script>

@@ -128,9 +128,9 @@
         <span class="header-status-dot"></span>
         <span class="header-status-label">ОНЛАЙН</span>
       </div>
-      <a href="#apply" class="header-cta">
-        Вступить
-        <i class="fa-solid fa-arrow-right-long header-cta-icon"></i>
+      <a href="alert.html" class="header-cta">
+        Тревога
+        <i class="fa-solid fa-triangle-exclamation header-cta-icon"></i>
       </a>
       <!-- Бургер (мобильный) -->
       <button class="header-burger" id="headerBurger" aria-label="Меню" aria-expanded="false">
@@ -148,7 +148,7 @@
     <a href="map.html">Карта</a>
     <a href="gallery.html">Галерея</a>
     <a href="dossier.html">Досье</a>
-    <a href="#apply" class="header-mobile-cta">Вступить →</a>
+    <a href="alert.html" class="header-mobile-cta">Тревога →</a>
   </div>
 
   <!-- CLOCK -->
@@ -214,8 +214,8 @@
   </p>
 
   <div class="hero-buttons">
-    <a href="#" class="join-btn">ВСТУПИТЬ В СЕМЬЮ</a>
-    <a href="https://discord.gg/SaCXzgckS" target="_blank" class="discord-btn">DISCORD</a>
+    <a href="power.html" class="hero-nav-btn"><i class="fa-solid fa-sitemap" style="margin-right:8px;font-size:12px"></i>СТРУКТУРА ВЛАСТИ</a>
+    <a href="trophies.html" class="discord-btn"><i class="fa-solid fa-trophy" style="margin-right:8px;font-size:12px"></i>ТРОФЕИ</a>
   </div>
 </div>
 
@@ -409,15 +409,18 @@ Control over key districts
     <div class="section-title">СТРУКТУРА</div>
     <div class="structure-grid">
       <!-- Eddie -->
-      <div class="rank-card">
+      <div class="rank-card" data-leader-slot="boss">
         <div class="rank-header">
           <div class="rank-icon boss-icon"><i class="fa-solid fa-crown"></i></div>
           <div class="rank-text">
-            <h2>EDDIE MILLER</h2>
+            <h2 data-leader-name>EDDIE MILLER</h2>
             <span>FAMILY BOSS</span>
           </div>
         </div>
-        <img loading="lazy" src="images/eddie.jpg" class="member-image" alt="Eddie Miller">
+        <div class="leader-photo">
+          <div class="leader-photo-bg"></div>
+          <img loading="lazy" src="images/eddie.jpg" class="leader-photo-avatar" data-leader-avatar alt="Eddie Miller">
+        </div>
         <div class="structure-info">
           <div class="structure-box"><span>CAPITAL</span><h3>$520M</h3></div>
           <div class="structure-box"><span>STATUS</span><h3>ELITE</h3></div>
@@ -426,18 +429,22 @@ Control over key districts
         </div>
         <div class="rank-description">Основатель и глава семьи. Стратегия, финансы и долгосрочное развитие.</div>
         <div class="card-status">CREATOR ACCESS</div>
+        <a href="profile.html?id=eddie" data-leader-profile class="rank-profile-btn"><i class="fa-solid fa-user"></i> Войти в профиль</a>
       </div>
 
       <!-- Adam -->
-      <div class="rank-card">
+      <div class="rank-card" data-leader-slot="director">
         <div class="rank-header">
           <div class="rank-icon deputy-icon"><i class="fa-solid fa-chess-king"></i></div>
           <div class="rank-text">
-            <h2>ADAM MILLER</h2>
+            <h2 data-leader-name>ADAM MILLER</h2>
             <span>DIRECTOR</span>
           </div>
         </div>
-        <img loading="lazy" src="images/adam.jpg" class="member-image" alt="Adam Miller">
+        <div class="leader-photo">
+          <div class="leader-photo-bg"></div>
+          <img loading="lazy" src="images/adam.jpg" class="leader-photo-avatar" data-leader-avatar alt="Adam Miller">
+        </div>
         <div class="structure-info">
           <div class="structure-box"><span>CONTROL</span><h3>94%</h3></div>
           <div class="structure-box"><span>BUSINESS</span><h3>12</h3></div>
@@ -446,18 +453,22 @@ Control over key districts
         </div>
         <div class="rank-description">Управление внутренними процессами и персоналом.</div>
         <div class="card-status">DIRECTOR ACCESS</div>
+        <a href="profile.html?id=adam" data-leader-profile class="rank-profile-btn"><i class="fa-solid fa-user"></i> Войти в профиль</a>
       </div>
 
       <!-- Roy -->
-      <div class="rank-card">
+      <div class="rank-card" data-leader-slot="deputy">
         <div class="rank-header">
           <div class="rank-icon commander-icon"><i class="fa-solid fa-bolt"></i></div>
           <div class="rank-text">
-            <h2>ROY MILLER</h2>
+            <h2 data-leader-name>ROY MILLER</h2>
             <span>DEPUTY DIRECTOR</span>
           </div>
         </div>
-        <img loading="lazy" src="images/roy.jpg" class="member-image" alt="Roy Miller">
+        <div class="leader-photo">
+          <div class="leader-photo-bg"></div>
+          <img loading="lazy" src="images/roy.jpg" class="leader-photo-avatar" data-leader-avatar alt="Roy Miller">
+        </div>
         <div class="structure-info">
           <div class="structure-box"><span>WARS</span><h3>84%</h3></div>
           <div class="structure-box"><span>COMBAT</span><h3>96%</h3></div>
@@ -466,6 +477,7 @@ Control over key districts
         </div>
         <div class="rank-description">Руководитель силовых операций и территориального контроля.</div>
         <div class="card-status">TACTICAL ACCESS</div>
+        <a href="profile.html?id=roy" data-leader-profile class="rank-profile-btn"><i class="fa-solid fa-user"></i> Войти в профиль</a>
       </div>
     </div>
 
@@ -790,7 +802,8 @@ Control over key districts
   </section>
 
 </div>
-  <!-- FOOTER -->
+
+  <!-- FOOTER (внутри gated — скрыт от гостей) -->
   <footer class="footer">
 
     <!-- TOP: логотип + колонки -->
@@ -822,8 +835,8 @@ Control over key districts
       <!-- Организация -->
       <div class="footer-col">
         <div class="footer-col-title">Организация</div>
-        <a href="#join">Вступить в семью</a>
-        <a href="https://discord.gg/SaCXzgckS" target="_blank">Discord сервер</a>
+        <a href="map.html">Карта территорий</a>
+        <a href="dossier.html">Досье</a>
         <a href="https://www.twitch.tv/eddiemi11er" target="_blank">Трансляции</a>
         <a href="https://youtube.com/@eddiealta" target="_blank">YouTube канал</a>
       </div>
@@ -866,6 +879,23 @@ Control over key districts
     </div>
 
   </footer>
+
+<!-- AUTH WALL — показывается после О НАС для гостей -->
+<div id="auth-wall" style="display:none">
+  <div class="aw-card">
+    <span class="aw-icon">🔒</span>
+    <div class="aw-title">Закрытая зона</div>
+    <div class="aw-sub">
+      Этот раздел доступен только членам Miller Family.<br>
+      Войдите в аккаунт, чтобы видеть структуру, участников,<br>
+      события, карту и всё остальное.
+    </div>
+    <div class="aw-btns">
+      <a href="/auth.html" class="aw-btn-login"><i class="fa-solid fa-key"></i>ВОЙТИ</a>
+      <a href="#join" class="aw-btn-join"><i class="fa-solid fa-file-pen"></i>ПОДАТЬ ЗАЯВКУ</a>
+    </div>
+  </div>
+</div>
 
   <!-- SVG defs for territory ring gradient -->
   <svg width="0" height="0" style="position:absolute">

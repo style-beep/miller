@@ -1,0 +1,702 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLoader from '../components/PageLoader.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PageFooter from '../components/PageFooter.astro';
+---
+
+<BaseLayout title="СТРУКТУРА ВЛАСТИ | MILLER FAMILY">
+  <PageLoader
+    barTitle="MILLER FAMILY · POWER STRUCTURE"
+    logoSub="Chain of Command"
+    section="СТРУКТУРА ВЛАСТИ"
+    initialLabel="Загрузка данных..."
+    barMetaLabel="ИНИЦИАЛИЗАЦИЯ"
+  />
+
+  <PageHeader
+    links={[
+      { href: '/alert.html', label: 'Тревога' },
+      { href: '/trophies.html', label: 'Трофеи' },
+      { href: '/map.html', label: 'Карта' },
+    ]}
+  />
+
+  <main id="pageContent">
+    <section class="page-section">
+      <div class="page-bg-title">POWER</div>
+      <h1 class="page-section-title">Структура власти</h1>
+      <p class="page-section-sub">Кликни на уровень пирамиды · Miller Family</p>
+
+      <div class="power-layout">
+        <div class="pyramid-svg-wrap">
+          <svg id="pyramidSvg" viewBox="0 0 560 310" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="detail-panel" id="detailPanel">
+          <div class="dp-accent" id="dpAccent"></div>
+          <div class="dp-body" id="dpBody">
+            <div class="dp-placeholder">
+              <i class="fa-solid fa-sitemap"></i>
+              Кликни на уровень<br>пирамиды слева
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label"><i class="fa-solid fa-layer-group"></i>Все уровни</div>
+      <div class="rank-cards-wrap" id="rankCards"></div>
+
+      <div class="section-label"><i class="fa-solid fa-arrow-trend-up"></i>Путь повышения</div>
+      <div class="timeline-wrap">
+        <div class="timeline-steps">
+          <div class="tl-step"><div class="tl-circle" style="--rc:rgba(60,60,60,0.5)"><i class="fa-solid fa-user-plus" style="color:#555;font-size:15px"></i></div><div class="tl-name">Новобранец</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:rgba(80,80,80,0.5)"><i class="fa-solid fa-user" style="color:#777;font-size:15px"></i></div><div class="tl-name">Солдат</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:rgba(110,110,110,0.5)"><i class="fa-solid fa-medal" style="color:#aaa;font-size:15px"></i></div><div class="tl-name">Ветеран</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:#43b581"><i class="fa-solid fa-shield-halved" style="color:#43b581;font-size:15px"></i></div><div class="tl-name">Модератор</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:#6a9fd8"><i class="fa-solid fa-microchip" style="color:#6a9fd8;font-size:15px"></i></div><div class="tl-name">Тех. Админ</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:#b06fe8"><i class="fa-solid fa-star" style="color:#b06fe8;font-size:15px"></i></div><div class="tl-name">Ст. Админ</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:#4a9eff"><i class="fa-solid fa-bolt" style="color:#4a9eff;font-size:15px"></i></div><div class="tl-name">Зам. Директора</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:#c9a227"><i class="fa-solid fa-chess-king" style="color:#c9a227;font-size:15px"></i></div><div class="tl-name">Директор</div></div>
+          <div class="tl-arr"></div>
+          <div class="tl-step"><div class="tl-circle" style="--rc:#ff2a2a"><i class="fa-solid fa-crown" style="color:#ff2a2a;font-size:15px"></i></div><div class="tl-name">Family Boss</div></div>
+        </div>
+      </div>
+    </section>
+
+    <PageFooter />
+  </main>
+</BaseLayout>
+
+<style>
+  .power-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 900px) { .power-layout { grid-template-columns: 1fr; } }
+
+  .pyramid-svg-wrap {
+    position: relative;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    overflow: hidden;
+    padding: 6px;
+  }
+  .pyramid-svg-wrap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,42,42,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,42,42,0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  #pyramidSvg { width: 100%; height: auto; display: block; position: relative; z-index: 1; cursor: pointer; }
+
+  .py-tier-group { cursor: pointer; }
+  .py-fill   { transition: opacity 0.3s; }
+  .py-outer  { transition: opacity 0.3s; }
+  .py-stroke { transition: stroke-width 0.3s, opacity 0.3s; }
+  .py-top-edge { transition: opacity 0.3s; }
+
+  .py-tier-group:not(.active) .py-fill   { opacity: 0.3; }
+  .py-tier-group:not(.active) .py-outer  { opacity: 0.06; }
+  .py-tier-group:not(.active) .py-stroke { opacity: 0.35; }
+  .py-tier-group:not(.active) .py-top-edge { opacity: 0.3; }
+  .py-tier-group:not(.active) .py-corner  { opacity: 0.25; }
+  .py-tier-group:not(.active) .py-label   { opacity: 0.4; }
+  .py-tier-group:not(.active) .py-count   { opacity: 0.3; }
+
+  .py-tier-group.active .py-fill   { opacity: 1; }
+  .py-tier-group.active .py-outer  { opacity: 0.22; }
+  .py-tier-group.active .py-stroke { stroke-width: 2 !important; opacity: 1; }
+  .py-tier-group.active .py-top-edge { opacity: 1; }
+  .py-tier-group.active .py-corner  { opacity: 1; }
+  .py-tier-group.active .py-label   { opacity: 1; }
+  .py-tier-group.active .py-count   { opacity: 0.85; }
+
+  .py-tier-group:hover:not(.active) .py-fill   { opacity: 0.6; }
+  .py-tier-group:hover:not(.active) .py-outer  { opacity: 0.14; }
+  .py-tier-group:hover:not(.active) .py-stroke { opacity: 0.7; }
+  .py-tier-group:hover:not(.active) .py-top-edge { opacity: 0.7; }
+
+  @keyframes py-pulse {
+    0%,100% { opacity: 0.22; } 50% { opacity: 0.38; }
+  }
+  .py-tier-group.active .py-outer { animation: py-pulse 2s ease-in-out infinite; }
+
+  .detail-panel {
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 18px;
+    overflow: hidden;
+    position: sticky;
+    top: 90px;
+  }
+  .dp-accent { height: 3px; background: var(--dc, rgba(255,255,255,0.1)); transition: background 0.4s; }
+  .dp-body   { padding: 28px 26px; }
+
+  .dp-placeholder {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 0; color: rgba(255,255,255,0.2);
+    font-size: 12px; text-align: center;
+    gap: 14px;
+  }
+  .dp-placeholder i { font-size: 32px; opacity: 0.25; }
+
+  .dp-icon-wrap {
+    width: 64px; height: 64px; border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: var(--dc);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 0 24px -6px var(--dc);
+    margin-bottom: 16px;
+    transition: all 0.4s;
+  }
+  .dp-num   { font-size: 9px; font-weight: 800; letter-spacing: 4px; color: rgba(255,255,255,0.2); text-transform: uppercase; margin-bottom: 8px; }
+  .dp-name  { font-size: 20px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
+  .dp-sub   { font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--dc); margin-bottom: 20px; }
+
+  .dp-divider { height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 18px; }
+
+  .dp-count-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;
+  }
+  .dp-stat {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px; padding: 12px; text-align: center;
+  }
+  .dp-stat-v { font-size: 24px; font-weight: 900; color: var(--dc); display: block; line-height: 1; margin-bottom: 4px; }
+  .dp-stat-k { font-size: 8px; color: rgba(255,255,255,0.25); letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .dp-members { margin-bottom: 18px; }
+  .dp-m-title { font-size: 8px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 10px; }
+  .dp-m-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px; margin: 3px 4px 3px 0;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+    font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.5);
+  }
+  .dp-m-tag i { font-size: 9px; color: var(--dc); }
+
+  .dp-duties { margin-bottom: 18px; }
+  .dp-d-title { font-size: 8px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 10px; }
+  .dp-d-row {
+    display: flex; align-items: flex-start; gap: 9px;
+    font-size: 11.5px; color: rgba(255,255,255,0.4);
+    line-height: 1.55; margin-bottom: 8px;
+  }
+  .dp-d-row i { color: var(--dc); font-size: 9px; margin-top: 4px; flex-shrink: 0; }
+
+  .dp-access {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; border-radius: 10px;
+    border: 1px solid var(--dc);
+    background: rgba(0,0,0,0.4);
+    font-size: 9px; font-weight: 800; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--dc);
+    opacity: 0.8;
+  }
+
+  .rank-cards-wrap {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-bottom: 48px;
+  }
+  .rc-card {
+    position: relative;
+    display: flex; align-items: center; gap: 24px;
+    padding: 24px 28px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-left: 3px solid var(--rc);
+    background: rgba(0,0,0,0.5);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+  }
+  .rc-card::before {
+    content: var(--rnum);
+    position: absolute; right: 24px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 100px; font-weight: 900; letter-spacing: -4px;
+    color: rgba(255,255,255,0.025); line-height: 1;
+    pointer-events: none;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .rc-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, var(--rc-wash) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .rc-card:hover { box-shadow: 0 4px 32px -8px var(--rc); background: rgba(0,0,0,0.6); }
+  .rc-card:hover::after { opacity: 1; }
+
+  .rc-icon-col {
+    width: 56px; height: 56px; border-radius: 16px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: var(--rc);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 0 20px -6px var(--rc);
+    position: relative; z-index: 1;
+  }
+  .rc-text { flex: 1; position: relative; z-index: 1; }
+  .rc-title { font-size: 15px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; margin-bottom: 4px; }
+  .rc-sub   { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--rc); opacity: 0.7; }
+  .rc-right {
+    text-align: right; flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .rc-count { font-size: 32px; font-weight: 900; color: var(--rc); line-height: 1; display: block; }
+  .rc-lbl   { font-size: 8px; color: rgba(255,255,255,0.2); letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .section-label {
+    font-size: 9px; font-weight: 800; letter-spacing: 4px;
+    text-transform: uppercase; color: rgba(255,255,255,0.18);
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+  }
+  .section-label i { color: #ff2a2a; }
+  .section-label::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.05); }
+
+  .timeline-wrap {
+    padding: 28px 28px 24px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    position: relative; overflow: hidden;
+  }
+  .timeline-wrap::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #8a0000, #ff2a2a, #8a0000, transparent);
+  }
+  .timeline-steps {
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto; padding-bottom: 6px;
+  }
+  .tl-step { display: flex; flex-direction: column; align-items: center; gap: 9px; min-width: 82px; flex-shrink: 0; }
+  .tl-circle {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    border: 2px solid var(--rc, rgba(60,60,60,0.4));
+    background: rgba(0,0,0,0.7);
+    transition: box-shadow 0.25s, transform 0.25s;
+    position: relative; z-index: 1;
+  }
+  .tl-step:hover .tl-circle {
+    box-shadow: 0 0 22px -4px var(--rc);
+    transform: scale(1.12);
+  }
+  .tl-name {
+    font-size: 8px; font-weight: 800; letter-spacing: 0.8px;
+    text-transform: uppercase; color: rgba(255,255,255,0.28);
+    text-align: center; line-height: 1.3;
+  }
+  .tl-step:hover .tl-name { color: rgba(255,255,255,0.6); }
+  .tl-arr {
+    flex: 1; min-width: 14px; height: 1px; margin-bottom: 34px; flex-shrink: 0;
+    background: linear-gradient(90deg, rgba(255,42,42,0.25), rgba(255,42,42,0.06));
+    position: relative;
+  }
+  .tl-arr::after {
+    content: '';
+    position: absolute; right: -1px; top: -3px;
+    border: 4px solid transparent;
+    border-left-color: rgba(255,42,42,0.3);
+  }
+</style>
+
+<script type="module" is:inline>
+import { requireAuth }        from "/js/auth-guard.js";
+import { initPageLoader }     from "/js/page-loader.js";
+import { initPageTransition } from "/js/page-transition.js";
+import { initEasterEgg }      from "/js/easter-egg.js";
+
+const TIERS = [
+  {
+    id: 'boss', num: '01',
+    icon: 'fa-solid fa-crown', iconChar: '♛',
+    rank: 'Family Boss', sub: 'Создатель · Высшая власть',
+    color: '#ff2a2a', colorRgb: '255,42,42',
+    glow: '#ff2a2a', count: '1', countLbl: 'участник',
+    access: 'CREATOR ACCESS',
+    members: ['Eddie Miller'],
+    duties: ['Абсолютная власть над всей организацией','Принятие стратегических решений','Объявление войны и мира','Управление финансами семьи','Назначение всех должностей','Последнее слово в любом вопросе'],
+    pts: '215,10 345,10 370,72 190,72',
+    cx: 280, cy: 42,
+  },
+  {
+    id: 'directors', num: '02',
+    icon: 'fa-solid fa-chess-king', iconChar: '♜',
+    rank: 'Директора', sub: 'Управление · Командование',
+    color: '#c9a227', colorRgb: '201,162,39',
+    glow: '#c9a227', count: '2', countLbl: 'участника',
+    access: 'DIRECTOR ACCESS',
+    members: ['Adam Miller — Директор', 'Roy Miller — Зам. Директора'],
+    duties: ['Управление внутренними процессами','Замещение Boss в его отсутствие','Кадровые решения и назначения','Руководство силовыми операциями','Контроль территорий и стратегия','Боевое командование на войнах'],
+    pts: '170,80 390,80 415,142 145,142',
+    cx: 280, cy: 112,
+  },
+  {
+    id: 'admins', num: '03',
+    icon: 'fa-solid fa-star', iconChar: '★',
+    rank: 'Администрация', sub: 'Надзор · Порядок · Поддержка',
+    color: '#b06fe8', colorRgb: '176,111,232',
+    glow: '#b06fe8', count: '10', countLbl: 'участников',
+    access: 'ADMIN ACCESS',
+    members: ['Ст. Администраторы ×3', 'Модераторы ×5', 'Тех. Администраторы ×2'],
+    duties: ['Надзор за рядовыми участниками','Рассмотрение жалоб и нарушений','Организация событий и собраний','Техническая поддержка сайта','Выдача предупреждений и санкций','Мониторинг активности'],
+    pts: '122,152 438,152 462,214 98,214',
+    cx: 280, cy: 184,
+  },
+  {
+    id: 'soldiers', num: '04',
+    icon: 'fa-solid fa-users', iconChar: '⚔',
+    rank: 'Солдаты', sub: 'Основная сила · Рядовые бойцы',
+    color: '#6a7080', colorRgb: '106,112,128',
+    glow: '#8a9ab0', count: '58+', countLbl: 'участников',
+    access: 'MEMBER ACCESS',
+    members: ['Ветераны', 'Солдаты', 'Новобранцы'],
+    duties: ['Выполнение приказов командования','Участие в войнах и операциях','Охрана территорий семьи','Набор и проверка кандидатов','Активность в Discord','Рост через лояльность и активность'],
+    pts: '72,224 488,224 510,286 50,286',
+    cx: 280, cy: 256,
+  },
+];
+
+let activeId = null;
+
+requireAuth().then(user => {
+  if (!user) return;
+  initPageTransition();
+  initEasterEgg();
+  initPageLoader({ password:'MF·POWER·STRUCTURE·2026', label:'ЗАГРУЗКА ИЕРАРХИИ', onComplete: init });
+});
+
+function ns(tag) { return document.createElementNS('http://www.w3.org/2000/svg', tag); }
+
+function init() {
+  buildSVG();
+  buildCards();
+  selectTier('boss');
+}
+
+function parsePts(pts) {
+  return pts.trim().split(/\s+/).map(p => {
+    const [x,y] = p.split(',').map(Number);
+    return {x,y};
+  });
+}
+
+function buildSVG() {
+  const svg = document.getElementById('pyramidSvg');
+  svg.innerHTML = '';
+
+  const defs = ns('defs');
+
+  TIERS.forEach(t => {
+    const grad = ns('linearGradient');
+    grad.id = 'grad_' + t.id;
+    grad.setAttribute('x1','0%'); grad.setAttribute('y1','0%');
+    grad.setAttribute('x2','0%'); grad.setAttribute('y2','100%');
+    const s1 = ns('stop'); s1.setAttribute('offset','0%');   s1.setAttribute('stop-color', t.color); s1.setAttribute('stop-opacity','0.55'); grad.appendChild(s1);
+    const s2 = ns('stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color', t.color); s2.setAttribute('stop-opacity','0.1');  grad.appendChild(s2);
+    defs.appendChild(grad);
+
+    const blurF = ns('filter'); blurF.id = 'blur_' + t.id;
+    blurF.setAttribute('x','-30%'); blurF.setAttribute('y','-30%');
+    blurF.setAttribute('width','160%'); blurF.setAttribute('height','160%');
+    const blurEl = ns('feGaussianBlur'); blurEl.setAttribute('stdDeviation','10'); blurEl.setAttribute('in','SourceGraphic');
+    blurF.appendChild(blurEl); defs.appendChild(blurF);
+
+    const glowF = ns('filter'); glowF.id = 'glow_' + t.id;
+    glowF.setAttribute('x','-30%'); glowF.setAttribute('y','-30%');
+    glowF.setAttribute('width','160%'); glowF.setAttribute('height','160%');
+    const gb = ns('feGaussianBlur'); gb.setAttribute('stdDeviation','3'); gb.setAttribute('in','SourceGraphic'); gb.setAttribute('result','b');
+    const gm = ns('feMerge');
+    const gm1 = ns('feMergeNode'); gm1.setAttribute('in','b');
+    const gm2 = ns('feMergeNode'); gm2.setAttribute('in','SourceGraphic');
+    gm.appendChild(gm1); gm.appendChild(gm2);
+    glowF.appendChild(gb); glowF.appendChild(gm);
+    defs.appendChild(glowF);
+  });
+
+  const clGrad = ns('linearGradient');
+  clGrad.id = 'centerLineGrad'; clGrad.setAttribute('x1','0%'); clGrad.setAttribute('y1','0%');
+  clGrad.setAttribute('x2','0%'); clGrad.setAttribute('y2','100%');
+  const cl1 = ns('stop'); cl1.setAttribute('offset','0%');   cl1.setAttribute('stop-color','#ff2a2a'); cl1.setAttribute('stop-opacity','0.8'); clGrad.appendChild(cl1);
+  const cl2 = ns('stop'); cl2.setAttribute('offset','100%'); cl2.setAttribute('stop-color','#ff2a2a'); cl2.setAttribute('stop-opacity','0.05'); clGrad.appendChild(cl2);
+  defs.appendChild(clGrad);
+
+  const sepGrad = ns('linearGradient');
+  sepGrad.id = 'sepGrad'; sepGrad.setAttribute('x1','0%'); sepGrad.setAttribute('y1','0%');
+  sepGrad.setAttribute('x2','100%'); sepGrad.setAttribute('y2','0%');
+  const sp1 = ns('stop'); sp1.setAttribute('offset','0%');   sp1.setAttribute('stop-color','rgba(255,255,255,0)'); sepGrad.appendChild(sp1);
+  const sp2 = ns('stop'); sp2.setAttribute('offset','40%');  sp2.setAttribute('stop-color','rgba(255,255,255,0.18)'); sepGrad.appendChild(sp2);
+  const sp3 = ns('stop'); sp3.setAttribute('offset','60%');  sp3.setAttribute('stop-color','rgba(255,255,255,0.18)'); sepGrad.appendChild(sp3);
+  const sp4 = ns('stop'); sp4.setAttribute('offset','100%'); sp4.setAttribute('stop-color','rgba(255,255,255,0)'); sepGrad.appendChild(sp4);
+  defs.appendChild(sepGrad);
+
+  svg.appendChild(defs);
+
+  const bgTri = ns('polygon');
+  bgTri.setAttribute('points', '280,4 16,296 544,296');
+  bgTri.setAttribute('fill', 'none');
+  bgTri.setAttribute('stroke', 'rgba(255,42,42,0.06)');
+  bgTri.setAttribute('stroke-width', '1');
+  bgTri.setAttribute('pointer-events', 'none');
+  svg.appendChild(bgTri);
+
+  const cl = ns('line');
+  cl.setAttribute('x1','280'); cl.setAttribute('y1','10');
+  cl.setAttribute('x2','280'); cl.setAttribute('y2','290');
+  cl.setAttribute('stroke','url(#centerLineGrad)'); cl.setAttribute('stroke-width','1');
+  cl.setAttribute('pointer-events', 'none');
+  svg.appendChild(cl);
+
+  const apexG = ns('g');
+  apexG.setAttribute('transform','translate(280,10)');
+  apexG.setAttribute('pointer-events', 'none');
+  const ad = ns('rect');
+  ad.setAttribute('x','-5'); ad.setAttribute('y','-5');
+  ad.setAttribute('width','10'); ad.setAttribute('height','10');
+  ad.setAttribute('transform','rotate(45)');
+  ad.setAttribute('fill','#ff2a2a'); ad.setAttribute('opacity','0.9');
+  ad.setAttribute('filter','url(#glow_boss)');
+  apexG.appendChild(ad);
+  svg.appendChild(apexG);
+
+  TIERS.forEach((t, ti) => {
+    const corners = parsePts(t.pts);
+    const [TL, TR, BR, BL] = corners;
+
+    const g = ns('g');
+    g.classList.add('py-tier-group');
+    g.id = 'tier_' + t.id;
+
+    function noHit(el) { el.setAttribute('pointer-events', 'none'); return el; }
+
+    g.appendChild(noHit((() => {
+      const outer = ns('polygon');
+      outer.classList.add('py-outer');
+      outer.setAttribute('points', t.pts);
+      outer.setAttribute('fill', t.color);
+      outer.setAttribute('filter', `url(#blur_${t.id})`);
+      return outer;
+    })()));
+
+    g.appendChild(noHit((() => {
+      const fill = ns('polygon');
+      fill.classList.add('py-fill');
+      fill.setAttribute('points', t.pts);
+      fill.setAttribute('fill', `url(#grad_${t.id})`);
+      return fill;
+    })()));
+
+    const scanH = Math.round((BL.y - TL.y) / 8);
+    for (let s = 1; s < scanH; s++) {
+      const frac = s / scanH;
+      const ly = TL.y + (BL.y - TL.y) * frac;
+      const lx = TL.x + (BL.x - TL.x) * frac;
+      const rx = TR.x + (BR.x - TR.x) * frac;
+      const scan = ns('line');
+      scan.setAttribute('x1', lx + 4); scan.setAttribute('y1', ly);
+      scan.setAttribute('x2', rx - 4); scan.setAttribute('y2', ly);
+      scan.setAttribute('stroke', 'rgba(255,255,255,0.04)');
+      scan.setAttribute('stroke-width', '1');
+      g.appendChild(noHit(scan));
+    }
+
+    g.appendChild(noHit((() => {
+      const stroke = ns('polygon');
+      stroke.classList.add('py-stroke');
+      stroke.setAttribute('points', t.pts);
+      stroke.setAttribute('fill', 'none');
+      stroke.setAttribute('stroke', t.color);
+      stroke.setAttribute('stroke-width', '1.2');
+      return stroke;
+    })()));
+
+    g.appendChild(noHit((() => {
+      const topEdge = ns('line');
+      topEdge.classList.add('py-top-edge');
+      topEdge.setAttribute('x1', TL.x); topEdge.setAttribute('y1', TL.y);
+      topEdge.setAttribute('x2', TR.x); topEdge.setAttribute('y2', TR.y);
+      topEdge.setAttribute('stroke', t.color);
+      topEdge.setAttribute('stroke-width', '2.5');
+      topEdge.setAttribute('filter', `url(#glow_${t.id})`);
+      return topEdge;
+    })()));
+
+    corners.forEach(c => {
+      const d = ns('rect');
+      d.classList.add('py-corner');
+      d.setAttribute('x', c.x - 3.5); d.setAttribute('y', c.y - 3.5);
+      d.setAttribute('width', '7'); d.setAttribute('height', '7');
+      d.setAttribute('transform', `rotate(45,${c.x},${c.y})`);
+      d.setAttribute('fill', t.color);
+      g.appendChild(noHit(d));
+    });
+
+    if (ti > 0) {
+      const sep = ns('line');
+      sep.setAttribute('x1', TL.x - 10); sep.setAttribute('y1', TL.y);
+      sep.setAttribute('x2', TR.x + 10); sep.setAttribute('y2', TL.y);
+      sep.setAttribute('stroke', 'url(#sepGrad)'); sep.setAttribute('stroke-width', '1');
+      g.appendChild(noHit(sep));
+    }
+
+    g.appendChild(noHit((() => {
+      const bigIcon = ns('text');
+      bigIcon.setAttribute('x', t.cx); bigIcon.setAttribute('y', t.cy + 4);
+      bigIcon.setAttribute('text-anchor','middle'); bigIcon.setAttribute('dominant-baseline','middle');
+      bigIcon.setAttribute('font-size', t.id === 'boss' ? '42' : '34');
+      bigIcon.setAttribute('fill', t.color); bigIcon.setAttribute('opacity','0.12');
+      bigIcon.textContent = t.iconChar;
+      return bigIcon;
+    })()));
+
+    g.appendChild(noHit((() => {
+      const label = ns('text');
+      label.classList.add('py-label');
+      label.setAttribute('x', t.cx); label.setAttribute('y', t.cy - 8);
+      label.setAttribute('text-anchor','middle'); label.setAttribute('dominant-baseline','middle');
+      label.setAttribute('font-family', "'Montserrat', sans-serif");
+      label.setAttribute('font-size', t.id === 'boss' ? '10' : '8.5');
+      label.setAttribute('font-weight', '900');
+      label.setAttribute('letter-spacing', '2.5');
+      label.setAttribute('fill', '#fff');
+      label.setAttribute('filter', `url(#glow_${t.id})`);
+      label.textContent = t.rank.toUpperCase();
+      return label;
+    })()));
+
+    g.appendChild(noHit((() => {
+      const count = ns('text');
+      count.classList.add('py-count');
+      count.setAttribute('x', t.cx); count.setAttribute('y', t.cy + 12);
+      count.setAttribute('text-anchor','middle'); count.setAttribute('dominant-baseline','middle');
+      count.setAttribute('font-family', "'Montserrat', sans-serif");
+      count.setAttribute('font-size', '8');
+      count.setAttribute('font-weight', '700');
+      count.setAttribute('letter-spacing', '1');
+      count.setAttribute('fill', t.color);
+      count.textContent = t.count + ' ' + t.countLbl.toUpperCase();
+      return count;
+    })()));
+
+    const hitArea = ns('polygon');
+    hitArea.setAttribute('points', t.pts);
+    hitArea.setAttribute('fill', 'transparent');
+    hitArea.setAttribute('stroke', 'none');
+    hitArea.setAttribute('pointer-events', 'all');
+    g.appendChild(hitArea);
+
+    g.addEventListener('click', () => selectTier(t.id));
+    svg.appendChild(g);
+  });
+
+  [
+    { x: 16, y1: 60, y2: 296 },
+    { x: 544, y1: 60, y2: 296 },
+  ].forEach((b) => {
+    const bracket = ns('line');
+    bracket.setAttribute('x1', b.x); bracket.setAttribute('y1', b.y1);
+    bracket.setAttribute('x2', b.x); bracket.setAttribute('y2', b.y2);
+    bracket.setAttribute('stroke', 'rgba(255,42,42,0.08)');
+    bracket.setAttribute('stroke-width', '1');
+    bracket.setAttribute('stroke-dasharray', '4 4');
+    bracket.setAttribute('pointer-events', 'none');
+    svg.appendChild(bracket);
+  });
+}
+
+function selectTier(id) {
+  activeId = id;
+  const t = TIERS.find(x => x.id === id);
+  if (!t) return;
+
+  document.querySelectorAll('.py-tier-group').forEach(g => g.classList.remove('active'));
+  const activeTier = document.getElementById('tier_' + id);
+  if (activeTier) activeTier.classList.add('active');
+
+  document.getElementById('dpAccent').style.background = t.color;
+  document.getElementById('detailPanel').style.setProperty('--dc', t.color);
+
+  const memberTags = t.members.map(m =>
+    `<span class="dp-m-tag"><i class="fa-solid fa-circle-dot"></i>${m}</span>`
+  ).join('');
+
+  const dutyRows = t.duties.map(d =>
+    `<div class="dp-d-row"><i class="fa-solid fa-chevron-right"></i>${d}</div>`
+  ).join('');
+
+  document.getElementById('dpBody').innerHTML = `
+    <div class="dp-icon-wrap"><i class="${t.icon}"></i></div>
+    <div class="dp-num">УРОВЕНЬ ${t.num}</div>
+    <div class="dp-name">${t.rank}</div>
+    <div class="dp-sub">${t.sub}</div>
+    <div class="dp-count-row">
+      <div class="dp-stat">
+        <span class="dp-stat-v">${t.count}</span>
+        <span class="dp-stat-k">${t.countLbl}</span>
+      </div>
+      <div class="dp-stat">
+        <span class="dp-stat-v" style="font-size:14px;padding-top:4px"><i class="fa-solid fa-lock-open" style="font-size:14px"></i></span>
+        <span class="dp-stat-k">${t.access}</span>
+      </div>
+    </div>
+    <div class="dp-divider"></div>
+    <div class="dp-members">
+      <div class="dp-m-title">Участники</div>
+      ${memberTags}
+    </div>
+    <div class="dp-duties">
+      <div class="dp-d-title">Обязанности</div>
+      ${dutyRows}
+    </div>
+    <div class="dp-access"><i class="fa-solid fa-lock-open"></i>${t.access}</div>
+  `;
+}
+
+function buildCards() {
+  const wrap = document.getElementById('rankCards');
+  TIERS.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'rc-card';
+    card.style.setProperty('--rc', t.color);
+    card.style.setProperty('--rc-wash', `rgba(${t.colorRgb},0.06)`);
+    card.style.setProperty('--rnum', `"${t.num}"`);
+    card.innerHTML = `
+      <div class="rc-icon-col"><i class="${t.icon}"></i></div>
+      <div class="rc-text">
+        <div class="rc-title">${t.rank}</div>
+        <div class="rc-sub">${t.sub}</div>
+      </div>
+      <div class="rc-right">
+        <span class="rc-count">${t.count}</span>
+        <span class="rc-lbl">${t.countLbl}</span>
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      selectTier(t.id);
+      document.getElementById('pyramidSvg').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    wrap.appendChild(card);
+  });
+}
+</script>

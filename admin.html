@@ -256,10 +256,12 @@
     <!-- Вкладки -->
     <div class="admin-tabs">
       <button class="admin-tab active" data-tab="applications">📋 Заявки</button>
+      <button class="admin-tab" data-tab="users">👤 Участники</button>
       <button class="admin-tab" data-tab="monitor">🔊 Мониторинг</button>
       <button class="admin-tab" data-tab="hof">🏆 Доска почёта</button>
       <button class="admin-tab" data-tab="event">📅 Событие</button>
       <button class="admin-tab" data-tab="allies">🤝 Союзники</button>
+      <button class="admin-tab" data-tab="alert">🚨 Тревога</button>
     </div>
 
     <!-- Вкладка: Заявки -->
@@ -281,6 +283,15 @@
         </thead>
         <tbody id="appsBody"></tbody>
       </table>
+    </div>
+
+    <!-- Вкладка: Участники -->
+    <div class="admin-tab-content" id="tab-users">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <div class="admin-section-title" style="margin:0">УЧАСТНИКИ САЙТА</div>
+        <input type="text" id="userSearch" placeholder="Поиск по нику..." style="padding:8px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;width:220px">
+      </div>
+      <div id="usersGrid" style="display:flex;flex-direction:column;gap:10px;"></div>
     </div>
 
     <!-- Вкладка: Мониторинг -->
@@ -317,6 +328,32 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Send message block -->
+      <div class="mon-card" style="margin-top:20px">
+        <div class="mon-card-head">
+          <span class="mon-card-title"><i class="fa-solid fa-paper-plane" style="margin-right:6px;color:rgba(255,42,42,0.7)"></i>Отправить сообщение в Discord</span>
+          <span id="sendMsgStatus" style="font-size:10px;letter-spacing:1px;opacity:0;transition:opacity 0.3s"></span>
+        </div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:10px">
+          <select id="discordChannelSelect" style="padding:9px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;width:100%">
+            <option value="" style="background:#111">— Выбери канал —</option>
+          </select>
+          <div id="replyBanner" style="display:none;align-items:center;gap:10px;padding:8px 12px;background:rgba(99,179,237,0.07);border:1px solid rgba(99,179,237,0.2);border-radius:8px;font-size:11px;color:rgba(99,179,237,0.8)">
+            <i class="fa-solid fa-reply"></i>
+            <span id="replyBannerText" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+            <button onclick="clearReply()" style="background:none;border:none;color:rgba(99,179,237,0.5);cursor:pointer;font-size:13px;line-height:1;padding:0" title="Отменить ответ">✕</button>
+          </div>
+          <textarea id="discordMsgText" placeholder="Текст сообщения..." rows="3"
+            style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;resize:vertical;outline:none;box-sizing:border-box;min-height:80px"></textarea>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button id="sendDiscordMsg" class="content-save" style="margin:0">
+              <i class="fa-solid fa-paper-plane"></i>&nbsp; Отправить
+            </button>
+            <span id="sendMsgCounter" style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px">0 / 2000</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -361,6 +398,20 @@
       <br>
       <button class="content-save" id="saveAllies">💾 СОХРАНИТЬ</button>
       <span class="content-saved" id="alliesSaved">✓ Сохранено</span>
+    </div>
+
+    <!-- Вкладка: Тревога -->
+    <div class="admin-tab-content" id="tab-alert">
+      <div class="admin-section-title">УПРАВЛЕНИЕ УРОВНЕМ УГРОЗЫ</div>
+      <div class="content-card" style="max-width:600px">
+        <div class="content-card-title">🚨 Текущий статус</div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:20px">Выбранный уровень отображается на странице <strong style="color:#fff">Тревога</strong> для всех посетителей сайта.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px" id="alertLevelBtns"></div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="content-save" id="saveAlertLevel">💾 ПРИМЕНИТЬ</button>
+          <span class="content-saved" id="alertSaved">✓ Уровень обновлён</span>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -432,6 +483,196 @@ function initAdmin() {
   initHofEditor();
   initEventEditor();
   initAlliesEditor();
+  initUsersTab();
+}
+
+// ══════════════════════════════════════════════════════════
+//  УЧАСТНИКИ
+// ══════════════════════════════════════════════════════════
+let adminSecret = "";
+let allUsers = [];
+
+const ALL_TITLES = ["Создатель","Легенда","Директор","Заместитель","Босс","Ветеран","Элита","Офицер","Страж","Новобранец"];
+const TITLE_COLORS = {
+  "Создатель":"#ffd700","Легенда":"#ff9800","Директор":"#4a9eff","Заместитель":"#9b59b6",
+  "Босс":"#ff2a2a","Ветеран":"#c9a227","Элита":"#43b581","Офицер":"#e74c3c","Страж":"#888","Новобранец":"#aaa"
+};
+const STAT_KEYS = ["kills","deaths","wins","events","money","reputation","hours","arrests"];
+const STAT_LABELS = {kills:"Убийства",deaths:"Смерти",wins:"Победы",events:"Ивенты",money:"Деньги",reputation:"Репутация",hours:"Часы",arrests:"Аресты"};
+const ALL_ACH_ADMIN = [
+  {id:"recruit",icon:"🪖",name:"Новобранец"},{id:"applicant",icon:"📋",name:"Заявитель"},{id:"social",icon:"💬",name:"Болтун"},
+  {id:"loyal",icon:"🤝",name:"Верность"},{id:"diplomat",icon:"🕊️",name:"Дипломат"},{id:"commander",icon:"🎖️",name:"Командир"},
+  {id:"streetwise",icon:"🌆",name:"Уличный"},{id:"firstblood",icon:"🩸",name:"Первая кровь"},
+  {id:"war100",icon:"⚔️",name:"Ветеран войн"},{id:"terror",icon:"🔥",name:"Гроза улиц"},{id:"builder",icon:"🏗️",name:"Строитель"},
+  {id:"ironwill",icon:"🛡️",name:"Железная воля"},{id:"hunter",icon:"🎯",name:"Охотник"},{id:"shadow",icon:"🌑",name:"Тень"},
+  {id:"boss",icon:"🔱",name:"Босс"},{id:"rich",icon:"💰",name:"Миллиардер"},{id:"ghost",icon:"👻",name:"Призрак"},
+  {id:"warlord",icon:"💀",name:"Военачальник"},{id:"territory",icon:"🗺️",name:"Территориальный"},{id:"enforcer",icon:"🔫",name:"Enforcer"},
+  {id:"legend",icon:"⭐",name:"Легенда"},{id:"unbeaten",icon:"🏆",name:"Непобедимый"},{id:"cardinal",icon:"🦅",name:"Кардинал"},
+  {id:"loyalty5",icon:"⏳",name:"Пять лет"},{id:"crimgenius",icon:"🧠",name:"Крим. гений"},{id:"feared",icon:"☠️",name:"Страх улиц"},
+  {id:"untouchable",icon:"💎",name:"Неприкасаемый"},{id:"founder",icon:"👑",name:"Основатель"},
+];
+
+function initUsersTab() {
+  adminSecret = document.getElementById("secretInput").value.trim();
+  document.getElementById("userSearch").addEventListener("input", e => renderUsersGrid(e.target.value));
+  loadUsers();
+}
+
+async function loadUsers() {
+  try {
+    const res = await fetch("/api/admin/users", { headers: { "x-admin-secret": adminSecret } });
+    allUsers = await res.json();
+    renderUsersGrid("");
+  } catch(e) {
+    document.getElementById("usersGrid").innerHTML = `<div style="color:rgba(255,100,100,0.6);font-size:13px;padding:20px">Ошибка загрузки участников</div>`;
+  }
+}
+
+function renderUsersGrid(search = "") {
+  const filtered = allUsers.filter(u => !search || (u.username||"").toLowerCase().includes(search.toLowerCase()));
+  const grid = document.getElementById("usersGrid");
+  if (!filtered.length) {
+    grid.innerHTML = `<div style="color:rgba(255,255,255,0.2);font-size:13px;padding:20px;text-align:center">Участников не найдено</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(u => {
+    const ach = u.achievements || [];
+    const st  = u.stats || {};
+    const titleColor = TITLE_COLORS[u.title] || "rgba(255,255,255,0.3)";
+    return `
+    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;">
+      <!-- Шапка -->
+      <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:rgba(0,0,0,0.3);cursor:pointer"
+           onclick="toggleUserEdit('${u.id}')">
+        ${u.discordAvatar
+          ? `<img src="${u.discordAvatar}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,42,42,0.3)">`
+          : `<div style="width:40px;height:40px;border-radius:50%;background:rgba(255,42,42,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#ff2a2a">${(u.username||"?")[0].toUpperCase()}</div>`}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:1px">${u.username||"—"}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px">${u.discordTag ? "@"+u.discordTag : u.email||""}</div>
+        </div>
+        ${u.title ? `<span style="font-size:9px;font-weight:800;letter-spacing:2px;padding:3px 10px;border-radius:12px;background:${titleColor}18;border:1px solid ${titleColor}44;color:${titleColor}">${u.title}</span>` : ""}
+        <div style="font-size:10px;color:rgba(255,255,255,0.2);margin-left:8px">${ach.length} достижений · ${Object.values(st).reduce((a,b)=>a+b,0)} всего</div>
+        <i class="fa-solid fa-chevron-down" style="color:rgba(255,255,255,0.2);font-size:11px;margin-left:8px;transition:transform 0.2s" id="chevron-${u.id}"></i>
+      </div>
+      <!-- Редактор (скрыт) -->
+      <div id="user-edit-${u.id}" style="display:none;padding:20px;border-top:1px solid rgba(255,255,255,0.05)">
+        <!-- Титул -->
+        <div style="margin-bottom:18px">
+          <div class="content-label">Титул</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+            <button onclick="setUserTitle('${u.id}','')" style="padding:4px 12px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:${!u.title?'rgba(255,42,42,0.15)':'rgba(255,255,255,0.03)'};color:${!u.title?'#ff4444':'rgba(255,255,255,0.3)'};font-family:'Montserrat',sans-serif" id="title-btn-${u.id}-none">Без титула</button>
+            ${ALL_TITLES.map(t => {
+              const c = TITLE_COLORS[t]||"#fff";
+              const active = u.title === t;
+              return `<button onclick="setUserTitle('${u.id}','${t}')" style="padding:4px 12px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid ${active?c+'66':'rgba(255,255,255,0.08)'};background:${active?c+'1a':'rgba(255,255,255,0.02)'};color:${active?c:'rgba(255,255,255,0.35)'};font-family:'Montserrat',sans-serif;transition:all 0.15s" id="title-btn-${u.id}-${t.replace(/\s/g,'_')}">${t}</button>`;
+            }).join("")}
+          </div>
+        </div>
+        <!-- Статистика -->
+        <div style="margin-bottom:18px">
+          <div class="content-label">Статистика</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+            ${STAT_KEYS.map(k => `
+              <div>
+                <div style="font-size:8px;color:rgba(255,255,255,0.25);letter-spacing:1px;margin-bottom:4px;text-transform:uppercase">${STAT_LABELS[k]}</div>
+                <input type="number" min="0" id="stat-${u.id}-${k}" value="${st[k]||0}"
+                  style="width:100%;padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;outline:none">
+              </div>`).join("")}
+          </div>
+          <button onclick="saveUserStats('${u.id}')" class="content-save" style="margin-top:10px">💾 Сохранить статистику</button>
+          <span id="stats-saved-${u.id}" style="color:#4caf50;font-size:11px;letter-spacing:1px;margin-left:10px;opacity:0;transition:opacity 0.3s">✓ Сохранено</span>
+        </div>
+        <!-- Достижения -->
+        <div>
+          <div class="content-label">Достижения</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+            ${ALL_ACH_ADMIN.map(a => {
+              const on = ach.includes(a.id);
+              return `<button onclick="toggleAch('${u.id}','${a.id}')" id="ach-btn-${u.id}-${a.id}"
+                style="padding:4px 10px;border-radius:8px;font-size:9px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.15s;
+                border:1px solid ${on?'rgba(255,152,0,0.4)':'rgba(255,255,255,0.08)'};
+                background:${on?'rgba(255,152,0,0.12)':'rgba(255,255,255,0.02)'};
+                color:${on?'#ffa726':'rgba(255,255,255,0.3)'}"
+                title="${a.name}">${a.icon} ${a.name}</button>`;
+            }).join("")}
+          </div>
+          <button onclick="saveUserAch('${u.id}')" class="content-save" style="margin-top:10px">💾 Сохранить достижения</button>
+          <span id="ach-saved-${u.id}" style="color:#4caf50;font-size:11px;letter-spacing:1px;margin-left:10px;opacity:0;transition:opacity 0.3s">✓ Сохранено</span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleUserEdit(id) {
+  const el  = document.getElementById("user-edit-" + id);
+  const ch  = document.getElementById("chevron-" + id);
+  const open = el.style.display === "none";
+  el.style.display = open ? "block" : "none";
+  if (ch) ch.style.transform = open ? "rotate(180deg)" : "";
+}
+
+async function setUserTitle(userId, title) {
+  const res = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type":"application/json","x-admin-secret": adminSecret },
+    body: JSON.stringify({ title }),
+  });
+  if ((await res.json()).success) {
+    const u = allUsers.find(x => x.id === userId);
+    if (u) u.title = title;
+    renderUsersGrid(document.getElementById("userSearch").value);
+    // Переоткрыть панель
+    setTimeout(() => { toggleUserEdit(userId); }, 50);
+  }
+}
+
+function toggleAch(userId, achId) {
+  const u   = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  u.achievements = u.achievements || [];
+  const idx = u.achievements.indexOf(achId);
+  if (idx === -1) u.achievements.push(achId);
+  else u.achievements.splice(idx, 1);
+  const btn = document.getElementById(`ach-btn-${userId}-${achId}`);
+  const on  = u.achievements.includes(achId);
+  if (btn) {
+    btn.style.borderColor  = on ? "rgba(255,152,0,0.4)"  : "rgba(255,255,255,0.08)";
+    btn.style.background   = on ? "rgba(255,152,0,0.12)" : "rgba(255,255,255,0.02)";
+    btn.style.color        = on ? "#ffa726"               : "rgba(255,255,255,0.3)";
+  }
+}
+
+async function saveUserStats(userId) {
+  const u    = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  const stats = {};
+  STAT_KEYS.forEach(k => { stats[k] = parseInt(document.getElementById(`stat-${userId}-${k}`)?.value)||0; });
+  const res  = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type":"application/json","x-admin-secret": adminSecret },
+    body: JSON.stringify({ stats }),
+  });
+  if ((await res.json()).success) {
+    u.stats = stats;
+    const el = document.getElementById(`stats-saved-${userId}`);
+    if (el) { el.style.opacity = 1; setTimeout(() => el.style.opacity = 0, 2500); }
+  }
+}
+
+async function saveUserAch(userId) {
+  const u = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  const res = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type":"application/json","x-admin-secret": adminSecret },
+    body: JSON.stringify({ achievements: u.achievements || [] }),
+  });
+  if ((await res.json()).success) {
+    const el = document.getElementById(`ach-saved-${userId}`);
+    if (el) { el.style.opacity = 1; setTimeout(() => el.style.opacity = 0, 2500); }
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -658,6 +899,49 @@ function initAlliesEditor() {
     renderAlliesEditor();
   });
 
+  // ── Alert Level ──────────────────────────────────────────
+  const ALERT_LEVELS = [
+    { id:'peace',  name:'МИР',        icon:'🟢', color:'#44ff88', desc:'Угроз не обнаружено' },
+    { id:'watch',  name:'НАБЛЮДЕНИЕ', icon:'🟡', color:'#f0c040', desc:'Фиксируется активность врагов' },
+    { id:'ready',  name:'ГОТОВНОСТЬ', icon:'🟠', color:'#ff8800', desc:'Возможна атака' },
+    { id:'war',    name:'ВОЙНА',      icon:'🔴', color:'#ff2a2a', desc:'Идут боевые действия' },
+    { id:'siege',  name:'ОСАДА',      icon:'💀', color:'#ff0000', desc:'Штаб под атакой' },
+  ];
+  let selectedAlertLevel = localStorage.getItem('mf_alert_level') || 'peace';
+
+  function renderAlertBtns() {
+    document.getElementById('alertLevelBtns').innerHTML = ALERT_LEVELS.map(l => `
+      <div onclick="selectAlertLevel('${l.id}')" style="
+        display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;cursor:pointer;
+        border:1px solid ${selectedAlertLevel===l.id ? l.color : 'rgba(255,255,255,0.07)'};
+        background:${selectedAlertLevel===l.id ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.02)'};
+        box-shadow:${selectedAlertLevel===l.id ? '0 0 16px -4px '+l.color : 'none'};
+        transition:all 0.2s;
+      ">
+        <span style="font-size:22px">${l.icon}</span>
+        <div style="flex:1">
+          <div style="font-size:12px;font-weight:800;letter-spacing:2px;color:${selectedAlertLevel===l.id?l.color:'rgba(255,255,255,0.6)'}">${l.name}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px">${l.desc}</div>
+        </div>
+        ${selectedAlertLevel===l.id ? `<span style="font-size:10px;font-weight:800;letter-spacing:1px;color:${l.color}">● АКТИВЕН</span>` : ''}
+      </div>
+    `).join('');
+  }
+
+  window.selectAlertLevel = function(id) {
+    selectedAlertLevel = id;
+    renderAlertBtns();
+  };
+
+  document.getElementById('saveAlertLevel').addEventListener('click', () => {
+    localStorage.setItem('mf_alert_level', selectedAlertLevel);
+    const s = document.getElementById('alertSaved');
+    s.style.opacity = 1;
+    setTimeout(() => s.style.opacity = 0, 2500);
+  });
+
+  renderAlertBtns();
+
   document.getElementById("saveAllies").addEventListener("click", () => {
     const items = [...document.querySelectorAll(".ally-editor-item")].map(el => ({
       name:    el.querySelector("[data-field=name]").value,
@@ -718,16 +1002,14 @@ function removeAlly(i) {
 //  МОНИТОРИНГ — войсы и чаты
 // ══════════════════════════════════════════════════════════
 
-let adminSecret = "";
 let monitorInterval = null;
 let allMessages = [];
 let chatFilter = "";
 
-// Запускаем мониторинг после логина (получаем секрет из поля ввода)
+// Запускаем мониторинг после логина
 const _origInitAdmin = initAdmin;
 initAdmin = function() {
   _origInitAdmin();
-  adminSecret = document.getElementById("secretInput").value.trim();
   startMonitor();
 };
 
@@ -816,8 +1098,9 @@ function renderChat(hasNew) {
   el.innerHTML = filtered.map((m, i) => {
     const time = new Date(m.ts).toLocaleTimeString("ru-RU", { hour:"2-digit", minute:"2-digit" });
     const isNew = hasNew && i < 3;
+    const safeContent = escHtml(m.content).substring(0, 80) + (m.content.length > 80 ? "…" : "");
     return `
-      <div class="chat-msg${isNew ? " new-msg" : ""}">
+      <div class="chat-msg${isNew ? " new-msg" : ""}" style="position:relative" onmouseenter="this.querySelector('.reply-btn').style.opacity='1'" onmouseleave="this.querySelector('.reply-btn').style.opacity='0'">
         <img class="chat-msg-avatar" src="${m.avatar}" alt="" onerror="this.src='images/family-logo.jpeg'">
         <div class="chat-msg-body">
           <div class="chat-msg-head">
@@ -827,6 +1110,14 @@ function renderChat(hasNew) {
           </div>
           <div class="chat-msg-text">${escHtml(m.content)}</div>
         </div>
+        <button class="reply-btn" onclick='setReply(${JSON.stringify(m)})' title="Ответить"
+          style="position:absolute;top:8px;right:8px;opacity:0;transition:opacity 0.15s;
+          background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.25);
+          color:rgba(99,179,237,0.8);border-radius:6px;padding:4px 9px;
+          font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;
+          font-family:'Montserrat',sans-serif">
+          <i class="fa-solid fa-reply"></i> Ответить
+        </button>
       </div>
     `;
   }).join("");
@@ -870,6 +1161,120 @@ document.querySelectorAll(".admin-tab").forEach(tab => {
     }
   });
 });
+
+// ── Reply state ───────────────────────────────────────────
+let replyTarget = null; // { id, channelId, author, content }
+
+function setReply(msg) {
+  replyTarget = msg;
+  const banner = document.getElementById("replyBanner");
+  document.getElementById("replyBannerText").textContent =
+    `${msg.author}: ${msg.content.substring(0, 80)}${msg.content.length > 80 ? "…" : ""}`;
+  banner.style.display = "flex";
+  // Автовыбираем канал
+  const sel = document.getElementById("discordChannelSelect");
+  if (msg.channelId) sel.value = msg.channelId;
+  document.getElementById("discordMsgText").focus();
+  // Прокручиваем к блоку отправки
+  document.getElementById("sendDiscordMsg").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function clearReply() {
+  replyTarget = null;
+  document.getElementById("replyBanner").style.display = "none";
+  document.getElementById("replyBannerText").textContent = "";
+}
+
+// ── Отправка сообщений в Discord ──────────────────────────
+async function loadChannels() {
+  try {
+    const data = await fetch("/api/admin/channels", {
+      headers: { "x-admin-secret": adminSecret }
+    }).then(r => r.json());
+    if (!Array.isArray(data)) return;
+    const sel = document.getElementById("discordChannelSelect");
+    let lastParent = null;
+    let optgroup = null;
+    data.forEach(ch => {
+      if (ch.parentName !== lastParent) {
+        optgroup = document.createElement("optgroup");
+        optgroup.label = ch.parentName || "Каналы";
+        optgroup.style.background = "#111";
+        sel.appendChild(optgroup);
+        lastParent = ch.parentName;
+      }
+      const opt = document.createElement("option");
+      opt.value = ch.id;
+      opt.textContent = "# " + ch.name;
+      opt.style.background = "#111";
+      (optgroup || sel).appendChild(opt);
+    });
+  } catch {}
+}
+
+document.getElementById("discordMsgText").addEventListener("input", function() {
+  document.getElementById("sendMsgCounter").textContent = this.value.length + " / 2000";
+});
+
+document.getElementById("discordMsgText").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    document.getElementById("sendDiscordMsg").click();
+  }
+});
+
+document.getElementById("sendDiscordMsg").addEventListener("click", async function() {
+  const channelId = document.getElementById("discordChannelSelect").value;
+  const content   = document.getElementById("discordMsgText").value.trim();
+  const status    = document.getElementById("sendMsgStatus");
+
+  if (!channelId) { showSendStatus("Выбери канал", "#f0c040"); return; }
+  if (!content)   { showSendStatus("Введи текст", "#f0c040"); return; }
+
+  this.disabled = true;
+  this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Отправка...';
+
+  try {
+    const body = { channelId, content };
+    if (replyTarget?.id) body.replyToId = replyTarget.id;
+    const res  = await fetch("/api/admin/send-message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-secret": adminSecret },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById("discordMsgText").value = "";
+      document.getElementById("sendMsgCounter").textContent = "0 / 2000";
+      clearReply();
+      showSendStatus("✓ Отправлено!", "#43b581");
+    } else {
+      showSendStatus("✗ " + (data.message || "Ошибка"), "#f44336");
+    }
+  } catch {
+    showSendStatus("✗ Нет соединения", "#f44336");
+  }
+
+  this.disabled = false;
+  this.innerHTML = '<i class="fa-solid fa-paper-plane"></i>&nbsp; Отправить';
+});
+
+function showSendStatus(text, color) {
+  const el = document.getElementById("sendMsgStatus");
+  el.textContent = text;
+  el.style.color = color;
+  el.style.opacity = 1;
+  setTimeout(() => el.style.opacity = 0, 3000);
+}
+
+// Загружаем каналы вместе с монитором
+const _origStartMonitor = startMonitor;
+startMonitor = function() {
+  _origStartMonitor();
+  if (document.getElementById("discordChannelSelect").options.length <= 1) {
+    loadChannels();
+  }
+};
 </script>
 </body>
 </html>

@@ -1,0 +1,41 @@
+---
+interface Props {
+  barTitle: string;
+  logoSub: string;
+  section: string;
+  initialLabel: string;
+  barMetaLabel: string;
+}
+const { barTitle, logoSub, section, initialLabel, barMetaLabel } = Astro.props;
+---
+
+<div id="pageLoaderOverlay">
+  <div class="loader-terminal">
+    <div class="loader-titlebar">
+      <div class="loader-dot red"></div>
+      <div class="loader-dot yellow"></div>
+      <div class="loader-dot green"></div>
+      <div class="loader-title">{barTitle}</div>
+    </div>
+    <div class="loader-body">
+      <div class="loader-logo">
+        <div class="loader-logo-text">MILLER FAMILY</div>
+        <div class="loader-logo-sub">{logoSub}</div>
+      </div>
+      <div class="loader-divider"></div>
+      <div class="loader-row">Раздел: <span>{section}</span></div>
+      <div id="loaderLabel">{initialLabel}</div>
+      <div class="loader-pw-line">
+        <span class="loader-prompt">&gt;_</span>
+        <span id="loaderPassword"></span>
+        <span class="loader-cursor"></span>
+      </div>
+      <div class="loader-bar-wrap"><div id="loaderBar"></div></div>
+      <div class="loader-bar-meta">
+        <span>{barMetaLabel}</span>
+        <span id="loaderBarPct">0%</span>
+      </div>
+      <div class="loader-status" id="loaderStatus">ОЖИДАНИЕ...</div>
+    </div>
+  </div>
+</div>

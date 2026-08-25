@@ -124,15 +124,21 @@ cp .env.example .env
 ```env
 DISCORD_TOKEN=токен_бота
 DISCORD_WEBHOOK=ссылка_на_вебхук
-ADMIN_SECRET=секретный_ключ
 PORT=3001
 
 # Discord OAuth (для кнопки «Войти через Discord»)
 DISCORD_CLIENT_ID=id_приложения
 DISCORD_CLIENT_SECRET=секрет_приложения
 DISCORD_CALLBACK_URL=http://localhost:3001/api/auth/discord/callback
-SESSION_SECRET=любая_случайная_строка
+
+# Случайная строка от 32 символов. В production сервер не запустится
+# без неё (или если она короче 32 символов) — задайте её обязательно.
+SESSION_SECRET=любая_случайная_строка_32+_символа
 ```
+
+Доступ к `/api/admin/*` больше не защищён общим паролем — он выдаётся по полю
+`"role": "admin"` в `users.json` для конкретного пользователя (по умолчанию
+все новые пользователи получают `"role": "user"`).
 
 ### 4. Запустить
 

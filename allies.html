@@ -184,17 +184,21 @@
 </main>
 
 <script type="module">
+  import { requireAuth }    from "./js/auth-guard.js";
   import { initPageLoader } from "./js/page-loader.js";
 import { initPageTransition } from "./js/page-transition.js";
 import { initEasterEgg }      from "./js/easter-egg.js";
   import { ALLIES }         from "./js/config/events.js";
 
-  initPageTransition();
-initEasterEgg();
-initPageLoader({
-    password: "MF·ALLIANCE·PACT·2026",
-    label:    "ЗАГРУЗКА РЕЕСТРА СОЮЗНИКОВ",
-    onComplete: render,
+  requireAuth().then(user => {
+    if (!user) return;
+    initPageTransition();
+    initEasterEgg();
+    initPageLoader({
+      password: "MF·ALLIANCE·PACT·2026",
+      label:    "ЗАГРУЗКА РЕЕСТРА СОЮЗНИКОВ",
+      onComplete: render,
+    });
   });
 
   function render() {

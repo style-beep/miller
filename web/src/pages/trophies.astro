@@ -1,0 +1,503 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLoader from '../components/PageLoader.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PageFooter from '../components/PageFooter.astro';
+---
+
+<BaseLayout title="ТРОФЕИ | MILLER FAMILY">
+  <PageLoader
+    barTitle="MILLER FAMILY · TROPHY ROOM"
+    logoSub="War Trophies & Victories"
+    section="ТРОФЕИ"
+    initialLabel="Загрузка архива..."
+    barMetaLabel="ИНИЦИАЛИЗАЦИЯ"
+  />
+
+  <PageHeader
+    links={[
+      { href: '/gallery.html', label: 'Галерея' },
+      { href: '/history.html', label: 'История' },
+      { href: '/rules.html', label: 'Правила' },
+    ]}
+  />
+
+  <main id="pageContent">
+    <section class="page-section">
+      <div class="page-bg-title">TROPHY</div>
+      <h1 class="page-section-title">Трофеи</h1>
+      <p class="page-section-sub">Победы · Добыча · Рекорды · Miller Family</p>
+
+      <div class="trophy-summary">
+        <div class="ts-card" style="--tc:#ffd700">
+          <span class="ts-icon">🏆</span>
+          <span class="ts-val" data-target="12">0</span>
+          <span class="ts-lbl">Войн выиграно</span>
+        </div>
+        <div class="ts-card" style="--tc:#ff4444">
+          <span class="ts-icon">💀</span>
+          <span class="ts-val" data-target="3841">0</span>
+          <span class="ts-lbl">Убийств всего</span>
+        </div>
+        <div class="ts-card" style="--tc:#44ff88">
+          <span class="ts-icon">🗺️</span>
+          <span class="ts-val" data-target="8">0</span>
+          <span class="ts-lbl">Районов захвачено</span>
+        </div>
+        <div class="ts-card" style="--tc:#5090f0">
+          <span class="ts-icon">💰</span>
+          <span class="ts-val">$520M</span>
+          <span class="ts-lbl">Добыто денег</span>
+        </div>
+      </div>
+
+      <div class="trophies-section-title"><i class="fa-solid fa-skull-crossbones"></i>История войн</div>
+      <div class="wars-grid">
+
+        <div class="war-card">
+          <div class="war-result win"><i class="fa-solid fa-check"></i>ПОБЕДА</div>
+          <div class="war-enemy">Los Diablos</div>
+          <div class="war-date">Март 2026 · 3 дня</div>
+          <div class="war-score">
+            <div class="ws-side"><div class="ws-num" style="color:#ff4444">47</div><div class="ws-name">Miller</div></div>
+            <div class="ws-sep">:</div>
+            <div class="ws-side"><div class="ws-num" style="color:#444">21</div><div class="ws-name">Diablos</div></div>
+          </div>
+          <div class="war-desc">Северная кампания. Выбили Diablos из Blaine County и закрепились на 2 района.</div>
+        </div>
+
+        <div class="war-card">
+          <div class="war-result win"><i class="fa-solid fa-check"></i>ПОБЕДА</div>
+          <div class="war-enemy">Vagos</div>
+          <div class="war-date">Январь 2026 · 5 дней</div>
+          <div class="war-score">
+            <div class="ws-side"><div class="ws-num" style="color:#ff4444">63</div><div class="ws-name">Miller</div></div>
+            <div class="ws-sep">:</div>
+            <div class="ws-side"><div class="ws-num" style="color:#444">38</div><div class="ws-name">Vagos</div></div>
+          </div>
+          <div class="war-desc">Захват Davis и Harmony. Vagos вынуждены подписать перемирие на наших условиях.</div>
+        </div>
+
+        <div class="war-card">
+          <div class="war-result win"><i class="fa-solid fa-check"></i>ПОБЕДА</div>
+          <div class="war-enemy">Ballas</div>
+          <div class="war-date">Ноябрь 2025 · 2 дня</div>
+          <div class="war-score">
+            <div class="ws-side"><div class="ws-num" style="color:#ff4444">29</div><div class="ws-name">Miller</div></div>
+            <div class="ws-sep">:</div>
+            <div class="ws-side"><div class="ws-num" style="color:#444">14</div><div class="ws-name">Ballas</div></div>
+          </div>
+          <div class="war-desc">Молниеносная операция. East LS перешёл под наш контроль за 48 часов.</div>
+        </div>
+
+        <div class="war-card">
+          <div class="war-result win"><i class="fa-solid fa-check"></i>ПОБЕДА</div>
+          <div class="war-enemy">Unnamed Crew</div>
+          <div class="war-date">Сентябрь 2025 · 1 день</div>
+          <div class="war-score">
+            <div class="ws-side"><div class="ws-num" style="color:#ff4444">18</div><div class="ws-name">Miller</div></div>
+            <div class="ws-sep">:</div>
+            <div class="ws-side"><div class="ws-num" style="color:#444">3</div><div class="ws-name">Unnamed</div></div>
+          </div>
+          <div class="war-desc">Попытка захвата Del Perro. Устранена за один вечер. Группировка распалась.</div>
+        </div>
+
+        <div class="war-card">
+          <div class="war-result draw"><i class="fa-solid fa-minus"></i>НИЧЬЯ</div>
+          <div class="war-enemy">Los Diablos</div>
+          <div class="war-date">Июль 2025 · 7 дней</div>
+          <div class="war-score">
+            <div class="ws-side"><div class="ws-num" style="color:#ff4444">54</div><div class="ws-name">Miller</div></div>
+            <div class="ws-sep">:</div>
+            <div class="ws-side"><div class="ws-num" style="color:#666">51</div><div class="ws-name">Diablos</div></div>
+          </div>
+          <div class="war-desc">Изнурительная война на севере. Завершилась подписанием нейтралитета с обеих сторон.</div>
+        </div>
+
+        <div class="war-card">
+          <div class="war-result win"><i class="fa-solid fa-check"></i>ПОБЕДА</div>
+          <div class="war-enemy">Vagos</div>
+          <div class="war-date">Апрель 2025 · 4 дня</div>
+          <div class="war-score">
+            <div class="ws-side"><div class="ws-num" style="color:#ff4444">41</div><div class="ws-name">Miller</div></div>
+            <div class="ws-sep">:</div>
+            <div class="ws-side"><div class="ws-num" style="color:#444">27</div><div class="ws-name">Vagos</div></div>
+          </div>
+          <div class="war-desc">Первая большая война семьи. Установила репутацию Miller на Del Perro RP.</div>
+        </div>
+
+      </div>
+
+      <div class="trophies-section-title"><i class="fa-solid fa-boxes-stacked"></i>Захваченная добыча</div>
+      <div class="loot-grid">
+        <div class="loot-card">
+          <span class="loot-icon">🚗</span>
+          <span class="loot-name">Машины</span>
+          <span class="loot-val">247</span>
+          <span class="loot-sub">захвачено у врагов</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">🔫</span>
+          <span class="loot-name">Оружие</span>
+          <span class="loot-val">1.2K</span>
+          <span class="loot-sub">единиц изъято</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">💊</span>
+          <span class="loot-name">Наркотики</span>
+          <span class="loot-val">84 кг</span>
+          <span class="loot-sub">конфисковано</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">🏠</span>
+          <span class="loot-name">Точки</span>
+          <span class="loot-val">16</span>
+          <span class="loot-sub">захвачено у врагов</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">🚁</span>
+          <span class="loot-name">Вертолёты</span>
+          <span class="loot-val">7</span>
+          <span class="loot-sub">захвачено</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">⛵</span>
+          <span class="loot-name">Яхты и лодки</span>
+          <span class="loot-val">12</span>
+          <span class="loot-sub">захвачено</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">💣</span>
+          <span class="loot-name">Взрывчатка</span>
+          <span class="loot-val">430 шт</span>
+          <span class="loot-sub">захвачено</span>
+        </div>
+        <div class="loot-card">
+          <span class="loot-icon">🛡️</span>
+          <span class="loot-name">Броня</span>
+          <span class="loot-val">89 к-тов</span>
+          <span class="loot-sub">захвачено</span>
+        </div>
+      </div>
+
+      <div class="trophies-section-title"><i class="fa-solid fa-crosshairs"></i>Топ убийц семьи</div>
+      <div class="kills-board">
+        <div class="kb-row gold">
+          <div class="kb-rank">🥇</div>
+          <div>
+            <div class="kb-name">Eddie Miller</div>
+            <div class="kb-faction">Family Boss</div>
+          </div>
+          <div style="text-align:right">
+            <div class="kb-kills">847</div>
+            <div class="kb-kills-lbl">убийств</div>
+          </div>
+        </div>
+        <div class="kb-row silver">
+          <div class="kb-rank">🥈</div>
+          <div>
+            <div class="kb-name">Roy Miller</div>
+            <div class="kb-faction">Deputy Director</div>
+          </div>
+          <div style="text-align:right">
+            <div class="kb-kills">712</div>
+            <div class="kb-kills-lbl">убийств</div>
+          </div>
+        </div>
+        <div class="kb-row bronze">
+          <div class="kb-rank">🥉</div>
+          <div>
+            <div class="kb-name">Adam Miller</div>
+            <div class="kb-faction">Director</div>
+          </div>
+          <div style="text-align:right">
+            <div class="kb-kills">634</div>
+            <div class="kb-kills-lbl">убийств</div>
+          </div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-rank" style="font-size:10px;color:rgba(255,255,255,0.3)">4</div>
+          <div>
+            <div class="kb-name">—</div>
+            <div class="kb-faction">Soldier</div>
+          </div>
+          <div style="text-align:right">
+            <div class="kb-kills" style="color:#888">?</div>
+            <div class="kb-kills-lbl">убийств</div>
+          </div>
+        </div>
+        <div class="kb-row">
+          <div class="kb-rank" style="font-size:10px;color:rgba(255,255,255,0.3)">5</div>
+          <div>
+            <div class="kb-name">—</div>
+            <div class="kb-faction">Soldier</div>
+          </div>
+          <div style="text-align:right">
+            <div class="kb-kills" style="color:#888">?</div>
+            <div class="kb-kills-lbl">убийств</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trophies-section-title"><i class="fa-solid fa-medal"></i>Знаковые достижения</div>
+      <div class="milestones-grid">
+        <div class="milestone-card">
+          <div class="mc-icon">👑</div>
+          <div>
+            <div class="mc-title">Первая война</div>
+            <div class="mc-desc">Победа над Vagos в апреле 2025. Первое доказательство силы семьи на Del Perro RP.</div>
+            <div class="mc-date">АПРЕЛЬ 2025</div>
+          </div>
+        </div>
+        <div class="milestone-card">
+          <div class="mc-icon">🏙️</div>
+          <div>
+            <div class="mc-title">Захват Downtown</div>
+            <div class="mc-desc">Установлен контроль над деловым центром города — крупнейшим экономическим узлом LS.</div>
+            <div class="mc-date">АВГУСТ 2025</div>
+          </div>
+        </div>
+        <div class="milestone-card">
+          <div class="mc-icon">✈️</div>
+          <div>
+            <div class="mc-title">Захват LSIA</div>
+            <div class="mc-desc">Международный аэропорт под контролем Miller. Полная логистическая свобода.</div>
+            <div class="mc-date">ОКТЯБРЬ 2025</div>
+          </div>
+        </div>
+        <div class="milestone-card">
+          <div class="mc-icon">💯</div>
+          <div>
+            <div class="mc-title">100 участников</div>
+            <div class="mc-desc">Семья достигла отметки в 100 активных членов за историю существования.</div>
+            <div class="mc-date">ДЕКАБРЬ 2025</div>
+          </div>
+        </div>
+        <div class="milestone-card">
+          <div class="mc-icon">🔱</div>
+          <div>
+            <div class="mc-title">Разгром Diablos</div>
+            <div class="mc-desc">Северная кампания марта 2026 — самая убедительная победа в истории семьи.</div>
+            <div class="mc-date">МАРТ 2026</div>
+          </div>
+        </div>
+        <div class="milestone-card">
+          <div class="mc-icon">🗺️</div>
+          <div>
+            <div class="mc-title">35% карты</div>
+            <div class="mc-desc">Miller Family контролирует более трети районов Los Santos — рекорд сервера.</div>
+            <div class="mc-date">АПРЕЛЬ 2026</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <PageFooter />
+  </main>
+</BaseLayout>
+
+<style>
+  .trophy-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 700px) { .trophy-summary { grid-template-columns: 1fr 1fr; } }
+
+  .ts-card {
+    padding: 22px 18px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .ts-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--tc);
+  }
+  .ts-icon { font-size: 26px; margin-bottom: 10px; display: block; }
+  .ts-val  { font-size: 34px; font-weight: 900; color: var(--tc); display: block; line-height: 1; margin-bottom: 6px; }
+  .ts-lbl  { font-size: 8px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+  .trophies-section-title {
+    font-size: 9px; font-weight: 800; letter-spacing: 4px;
+    text-transform: uppercase; color: rgba(255,255,255,0.2);
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  }
+  .trophies-section-title::after {
+    content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
+  }
+  .trophies-section-title i { color: #ff2a2a; }
+
+  .wars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 900px) { .wars-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .wars-grid { grid-template-columns: 1fr; } }
+
+  .war-card {
+    padding: 22px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .war-card:hover {
+    border-color: rgba(255,42,42,0.25);
+    box-shadow: 0 4px 24px -8px rgba(255,42,42,0.3);
+  }
+  .war-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #8a0000, #ff2a2a);
+  }
+  .war-result {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 8px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .war-result.win  { background: rgba(68,255,136,0.1); color: #44ff88; border: 1px solid rgba(68,255,136,0.25); }
+  .war-result.draw { background: rgba(255,136,0,0.1);  color: #ff8800; border: 1px solid rgba(255,136,0,0.25); }
+
+  .war-enemy { font-size: 16px; font-weight: 900; letter-spacing: 1.5px; color: #fff; margin-bottom: 4px; text-transform: uppercase; }
+  .war-date  { font-size: 10px; color: rgba(255,255,255,0.25); letter-spacing: 1px; margin-bottom: 16px; }
+
+  .war-score {
+    display: flex; align-items: center; gap: 0; margin-bottom: 16px;
+  }
+  .ws-side {
+    flex: 1; text-align: center;
+  }
+  .ws-num  { font-size: 28px; font-weight: 900; line-height: 1; }
+  .ws-name { font-size: 8px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+  .ws-sep  { font-size: 18px; font-weight: 900; color: rgba(255,255,255,0.2); padding: 0 10px; }
+
+  .war-desc { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
+
+  .loot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 800px) { .loot-grid { grid-template-columns: 1fr 1fr; } }
+
+  .loot-card {
+    padding: 18px 14px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .loot-card:hover { border-color: rgba(255,42,42,0.2); transform: translateY(-3px); }
+  .loot-icon { font-size: 30px; line-height: 1; }
+  .loot-name { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #fff; }
+  .loot-val  { font-size: 18px; font-weight: 900; color: #ff4444; line-height: 1; }
+  .loot-sub  { font-size: 9px; color: rgba(255,255,255,0.25); letter-spacing: 1px; }
+
+  .kills-board {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 48px;
+  }
+  .kb-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
+    transition: border-color 0.2s;
+  }
+  .kb-row:hover { border-color: rgba(255,42,42,0.2); }
+  .kb-row.gold   { border-color: rgba(255,215,0,0.2); background: rgba(255,215,0,0.04); }
+  .kb-row.silver { border-color: rgba(192,192,192,0.15); background: rgba(192,192,192,0.03); }
+  .kb-row.bronze { border-color: rgba(205,127,50,0.15); background: rgba(205,127,50,0.03); }
+
+  .kb-rank {
+    width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 900;
+  }
+  .kb-row.gold   .kb-rank { background: rgba(255,215,0,0.15); color: #ffd700; }
+  .kb-row.silver .kb-rank { background: rgba(192,192,192,0.1); color: #c0c0c0; }
+  .kb-row.bronze .kb-rank { background: rgba(205,127,50,0.1);  color: #cd7f32; }
+  .kb-row:not(.gold):not(.silver):not(.bronze) .kb-rank { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.3); }
+
+  .kb-name { flex: 1; font-size: 13px; font-weight: 700; color: #fff; }
+  .kb-faction { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+  .kb-kills { font-size: 20px; font-weight: 900; color: #ff4444; }
+  .kb-kills-lbl { font-size: 8px; color: rgba(255,255,255,0.2); letter-spacing: 1px; }
+
+  .milestones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 700px) { .milestones-grid { grid-template-columns: 1fr; } }
+
+  .milestone-card {
+    padding: 20px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    display: flex; gap: 14px; align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+  .milestone-card:hover { border-color: rgba(255,42,42,0.2); }
+  .mc-icon {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    background: rgba(255,42,42,0.08);
+    border: 1px solid rgba(255,42,42,0.18);
+  }
+  .mc-title { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 5px; }
+  .mc-desc  { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.55; }
+  .mc-date  { font-size: 9px; color: rgba(255,42,42,0.6); letter-spacing: 1px; margin-top: 8px; font-weight: 700; }
+</style>
+
+<script type="module" is:inline>
+  import { requireAuth }       from "/js/auth-guard.js";
+  import { initPageLoader }    from "/js/page-loader.js";
+  import { initPageTransition } from "/js/page-transition.js";
+  import { initEasterEgg }     from "/js/easter-egg.js";
+
+  requireAuth().then(user => {
+    if (!user) return;
+    initPageTransition();
+    initEasterEgg();
+    initPageLoader({
+      password: "MF·TROPHIES·2026",
+      label: "ЗАГРУЗКА ТРОФЕЙНОЙ КОМНАТЫ",
+      onComplete: animateCounters,
+    });
+  });
+
+  function animateCounters() {
+    document.querySelectorAll('.ts-val[data-target]').forEach(el => {
+      const target = parseInt(el.dataset.target);
+      const duration = 1800;
+      const step = 16;
+      const inc = target / (duration / step);
+      let cur = 0;
+      const timer = setInterval(() => {
+        cur = Math.min(cur + inc, target);
+        el.textContent = Math.floor(cur).toLocaleString('ru-RU');
+        if (cur >= target) clearInterval(timer);
+      }, step);
+    });
+  }
+</script>

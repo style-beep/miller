@@ -7,6 +7,14 @@
       "runtimeArgs": ["start"],
       "port": 3001,
       "autoPort": true
+    },
+    {
+      "name": "astro-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--port", "4322"],
+      "cwd": "web",
+      "port": 4322,
+      "autoPort": true
     }
   ]
 }

@@ -1,0 +1,249 @@
+/* ── Базовые стили подстраниц Miller Family ── */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #ff2a2a;
+  --dark: #050505;
+  --glass: rgba(255,255,255,0.03);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--dark);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Фон ── */
+.bg-overlay {
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(120,0,0,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(80,0,0,0.10) 0%, transparent 50%),
+    linear-gradient(180deg, #080000 0%, #020000 100%);
+  pointer-events: none;
+}
+
+.particles {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.particles span {
+  position: absolute; width: 2px; height: 2px;
+  background: rgba(255,42,42,0.4); border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+.particles span:nth-child(1)  { left:10%; animation-duration:18s; animation-delay:0s;  width:3px; height:3px; }
+.particles span:nth-child(2)  { left:25%; animation-duration:22s; animation-delay:3s;  }
+.particles span:nth-child(3)  { left:40%; animation-duration:16s; animation-delay:1s;  width:1px; height:1px; }
+.particles span:nth-child(4)  { left:55%; animation-duration:25s; animation-delay:5s;  width:3px; height:3px; }
+.particles span:nth-child(5)  { left:70%; animation-duration:19s; animation-delay:2s;  }
+.particles span:nth-child(6)  { left:85%; animation-duration:21s; animation-delay:4s;  width:1px; height:1px; }
+.particles span:nth-child(7)  { left:15%; animation-duration:24s; animation-delay:7s;  }
+.particles span:nth-child(8)  { left:90%; animation-duration:17s; animation-delay:6s;  width:3px; height:3px; }
+@keyframes floatUp {
+  0%   { bottom: -10px; opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { bottom: 110%; opacity: 0; }
+}
+
+/* ── Header ── */
+.page-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 7%; height: 70px;
+  background: rgba(5,0,0,0.75);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+}
+.page-logo {
+  font-size: 16px; font-weight: 900; letter-spacing: 4px;
+  color: #fff; text-decoration: none;
+}
+.page-logo span { color: var(--red); }
+.page-nav { display: flex; align-items: center; gap: 24px; }
+.page-nav a {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  color: rgba(255,255,255,0.45); text-decoration: none;
+  text-transform: uppercase; transition: color 0.2s;
+}
+.page-nav a:hover { color: #fff; }
+.page-nav a.back-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 18px; border: 1px solid rgba(255,42,42,0.3);
+  border-radius: 8px; color: var(--red);
+  transition: background 0.2s, border-color 0.2s;
+}
+.page-nav a.back-btn:hover { background: rgba(255,42,42,0.1); border-color: var(--red); color: #fff; }
+
+/* ── Loader Overlay ── */
+#pageLoaderOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background: #020000;
+  transition: opacity 0.7s ease;
+}
+#pageLoaderOverlay.loader-exit { opacity: 0; pointer-events: none; }
+
+.loader-terminal {
+  width: 540px; max-width: 90vw;
+  background: rgba(0,0,0,0.9);
+  border: 1px solid rgba(255,42,42,0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(255,0,0,0.15), 0 0 120px rgba(255,0,0,0.05);
+}
+
+/* Terminal titlebar */
+.loader-titlebar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255,42,42,0.06);
+  border-bottom: 1px solid rgba(255,42,42,0.15);
+}
+.loader-dot { width: 12px; height: 12px; border-radius: 50%; }
+.loader-dot.red    { background: #ff5f57; }
+.loader-dot.yellow { background: #ffbd2e; }
+.loader-dot.green  { background: #28c840; }
+.loader-title {
+  flex: 1; text-align: center;
+  font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,0.3);
+  text-transform: uppercase; margin-right: 36px;
+}
+
+/* Terminal body */
+.loader-body { padding: 32px 28px; }
+
+.loader-logo {
+  text-align: center; margin-bottom: 28px;
+}
+.loader-logo-text {
+  font-size: 22px; font-weight: 900; letter-spacing: 6px;
+  color: var(--red); text-shadow: 0 0 20px rgba(255,42,42,0.5);
+}
+.loader-logo-sub {
+  font-size: 9px; letter-spacing: 5px;
+  color: rgba(255,255,255,0.2); margin-top: 6px; text-transform: uppercase;
+}
+
+.loader-divider {
+  height: 1px; background: rgba(255,42,42,0.15); margin: 0 0 24px;
+}
+
+.loader-row {
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase;
+}
+.loader-row span { color: rgba(255,42,42,0.7); }
+
+#loaderLabel {
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(255,255,255,0.25); text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Password line */
+.loader-pw-line {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px;
+}
+.loader-prompt { color: var(--red); font-size: 14px; font-weight: 700; }
+#loaderPassword {
+  font-size: 16px; font-weight: 700; letter-spacing: 3px;
+  color: #fff; font-family: 'Courier New', monospace;
+  min-height: 24px;
+}
+.loader-cursor {
+  display: inline-block; width: 10px; height: 18px;
+  background: var(--red); animation: blink 0.8s step-end infinite;
+  vertical-align: middle; margin-left: 2px;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Progress bar */
+.loader-bar-wrap {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px; overflow: hidden; height: 6px; margin-bottom: 10px;
+}
+#loaderBar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #8a0000, #ff2a2a);
+  border-radius: 4px;
+  transition: width 0.06s linear;
+  box-shadow: 0 0 10px rgba(255,42,42,0.5);
+}
+.loader-bar-meta {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.loader-status {
+  font-size: 13px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; min-height: 20px;
+  transition: color 0.3s;
+}
+.loader-status.verifying { color: rgba(255,180,0,0.7); }
+.loader-status.granted   { color: #4caf50; text-shadow: 0 0 16px rgba(76,175,80,0.5); }
+
+/* ── Page Content ── */
+#pageContent {
+  position: relative; z-index: 1;
+  padding-top: 70px;
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+#pageContent.content-visible { opacity: 1; transform: translateY(0); }
+
+/* ── Section base ── */
+.page-section {
+  position: relative; padding: 80px 7%;
+  overflow: hidden;
+}
+.page-bg-title {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 160px; font-weight: 900;
+  color: rgba(255,255,255,0.02); white-space: nowrap;
+  letter-spacing: 20px; pointer-events: none; user-select: none;
+  font-family: 'Montserrat', sans-serif;
+}
+.page-section-title {
+  text-align: center; font-size: 52px; font-weight: 900;
+  letter-spacing: 8px; text-transform: uppercase;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff 30%, rgba(255,42,42,0.8));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.page-section-sub {
+  text-align: center; font-size: 12px; letter-spacing: 4px;
+  color: rgba(255,255,255,0.25); text-transform: uppercase;
+  margin-bottom: 56px;
+}
+
+/* ── Footer ── */
+.page-footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 28px 7%;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-size: 11px; color: rgba(255,255,255,0.15);
+  letter-spacing: 2px;
+}
+.page-footer span { color: rgba(255,42,42,0.3); }
+
+/* ── Адаптив ── */
+@media (max-width: 768px) {
+  .page-header { padding: 0 20px; }
+  .page-section { padding: 60px 5%; }
+  .page-section-title { font-size: 32px; letter-spacing: 4px; }
+  .loader-terminal { width: 90vw; }
+  .loader-body { padding: 24px 20px; }
+  #loaderPassword { font-size: 13px; letter-spacing: 2px; }
+}

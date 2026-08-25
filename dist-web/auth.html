@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="ru"><head><script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ВХОД | MILLER FAMILY</title><link rel="icon" type="image/png" href="/images/family-logo.jpeg"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><link rel="stylesheet" href="/css/lite.css"><link rel="stylesheet" href="/_astro/auth.CUQX-wdA.css"></head><body><div class="auth-bg"></div><div class="auth-line"></div><div class="auth-line"></div><a href="/index.html" class="auth-back"><i class="fa-solid fa-arrow-left"></i> Главная</a><a href="/index.html" class="auth-logo"><img src="/images/family-logo.jpeg" alt="Miller Family"><span><em>MILLER</em> FAMILY</span></a><div class="auth-card"><div class="auth-head"><img src="/images/family-logo.jpeg" alt=""><h1>Miller Family</h1><p>Del Perro RP — Личный кабинет</p></div><div class="auth-tabs"><button class="auth-tab active" data-tab="login">Вход</button><button class="auth-tab" data-tab="register">Регистрация</button></div><form class="auth-form active" id="loginForm"><div class="auth-error" id="loginError"></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" name="email" placeholder="your@email.com" required></div><div class="form-group"><label class="form-label">Пароль</label><input class="form-input" type="password" name="password" placeholder="••••••••" required></div><button class="auth-btn" type="submit"><i class="fa-solid fa-right-to-bracket"></i> &nbsp;Войти</button><div class="auth-divider"><span>или</span></div><a class="discord-btn" href="/api/auth/discord"><i class="fa-brands fa-discord"></i> Войти через Discord</a></form><form class="auth-form" id="registerForm"><div class="auth-error" id="registerError"></div><div class="auth-success" id="registerSuccess"></div><div class="form-group"><label class="form-label">Никнейм</label><input class="form-input" type="text" name="username" placeholder="YourName" maxlength="32" required></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" name="email" placeholder="your@email.com" required></div><div class="form-group"><label class="form-label">Пароль</label><input class="form-input" type="password" name="password" placeholder="Минимум 6 символов" required></div><button class="auth-btn" type="submit"><i class="fa-solid fa-user-plus"></i> &nbsp;Создать аккаунт</button><div class="auth-divider"><span>или</span></div><a class="discord-btn" href="/api/auth/discord"><i class="fa-brands fa-discord"></i> Войти через Discord</a></form></div><script>
+    const params = new URLSearchParams(location.search);
+    if (params.get('error') === 'discord') {
+      document.getElementById('loginError').textContent = 'Ошибка авторизации Discord. Попробуйте снова.';
+      document.getElementById('loginError').classList.add('show');
+    }
+
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab + 'Form').classList.add('active');
+      });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      const err = document.getElementById('loginError');
+      err.classList.remove('show');
+      btn.disabled = true;
+
+      const data = Object.fromEntries(new FormData(e.target));
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (json.success) {
+          location.href = '/profile.html';
+        } else {
+          err.textContent = json.message;
+          err.classList.add('show');
+        }
+      } catch {
+        err.textContent = 'Ошибка сервера. Попробуйте позже.';
+        err.classList.add('show');
+      }
+      btn.disabled = false;
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type=submit]');
+      const err = document.getElementById('registerError');
+      const ok  = document.getElementById('registerSuccess');
+      err.classList.remove('show');
+      ok.classList.remove('show');
+      btn.disabled = true;
+
+      const data = Object.fromEntries(new FormData(e.target));
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json();
+        if (json.success) {
+          location.href = '/profile.html';
+        } else {
+          err.textContent = json.message;
+          err.classList.add('show');
+        }
+      } catch {
+        err.textContent = 'Ошибка сервера. Попробуйте позже.';
+        err.classList.add('show');
+      }
+      btn.disabled = false;
+    });
+
+    fetch('/api/auth/me').then(r => r.json()).then(d => {
+      if (d.user) location.href = '/profile.html';
+    });
+  </script></body></html>

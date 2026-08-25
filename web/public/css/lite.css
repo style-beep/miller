@@ -1,0 +1,186 @@
+/*
+  ██╗     ██╗████████╗███████╗    ███╗   ███╗ ██████╗ ██████╗ ███████╗
+  ██║     ██║╚══██╔══╝██╔════╝    ████╗ ████║██╔═══██╗██╔══██╗██╔════╝
+  ██║     ██║   ██║   █████╗      ██╔████╔██║██║   ██║██║  ██║█████╗
+  ██║     ██║   ██║   ██╔══╝      ██║╚██╔╝██║██║   ██║██║  ██║██╔══╝
+  ███████╗██║   ██║   ███████╗    ██║ ╚═╝ ██║╚██████╔╝██████╔╝███████╗
+  ╚══════╝╚═╝   ╚═╝   ╚══════╝    ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝
+
+  Применяется при body.lite-mode
+  Отключает тяжёлые эффекты: blur, анимации, glow, fixed-bg
+*/
+
+/* ── Ранний класс (до загрузки JS) ── */
+html.lite-mode-early body { }
+
+/* ═══════════════════════════════════════════════════════════════
+   1. УБИРАЕМ ВСЕ backdrop-filter (самый тяжёлый эффект)
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode *,
+body.lite-mode *::before,
+body.lite-mode *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. ФОНОВОЕ ИЗОБРАЖЕНИЕ — убираем fixed (тормозит скролл)
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .bg-overlay {
+  background: linear-gradient(rgba(0,0,0,0.88), rgba(0,0,0,0.96)),
+              url("../images/background.png") center/cover no-repeat scroll !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   3. КУРСОР — возвращаем системный, убираем glow
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode * { cursor: auto !important; }
+body.lite-mode a,
+body.lite-mode button,
+body.lite-mode [role="button"],
+body.lite-mode .gallery-item,
+body.lite-mode input,
+body.lite-mode select,
+body.lite-mode textarea { cursor: pointer !important; }
+
+body.lite-mode .cursor-outer,
+body.lite-mode .cursor-inner,
+body.lite-mode .cursor-glow { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   4. АНИМИРОВАННАЯ ГРАНИЦА ХЕДЕРА — отключаем
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .header-border-anim { display: none !important; }
+body.lite-mode header {
+  background: rgba(7,1,1,0.97) !important;
+  animation: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   5. ЧАСТИЦЫ — скрываем
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .particles { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   6. ПУЛЬСИРУЮЩИЕ АНИМАЦИИ — отключаем
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+/* Исключение: переходы страниц и галерея — оставляем короткими */
+body.lite-mode .gallery-item,
+body.lite-mode .gallery-item img,
+body.lite-mode .gallery-item video { transition-duration: 0.15s !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   7. BOX-SHADOW — облегчаем (убираем blur-heavy shadows)
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .rank-card,
+body.lite-mode .member-card,
+body.lite-mode .stat-card,
+body.lite-mode .hof-card,
+body.lite-mode .music-player {
+  box-shadow: none !important;
+}
+
+body.lite-mode header {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.8) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. TEXT-SHADOW — убираем свечение
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .hero-title span,
+body.lite-mode .loader-text,
+body.lite-mode .cd-num {
+  text-shadow: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. EMBLEM GLOW в хедере — отключаем
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .header-logo-emblem-glow { display: none !important; }
+body.lite-mode .header-logo-emblem-img { filter: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   10. ПЕРЕХОДЫ — ускоряем или убираем тяжёлые
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .rank-card,
+body.lite-mode .member-card,
+body.lite-mode .classified-card,
+body.lite-mode .ally-card,
+body.lite-mode .hof-card {
+  transition: border-color 0.15s !important;
+  transform: none !important;
+}
+body.lite-mode .rank-card:hover,
+body.lite-mode .member-card:hover,
+body.lite-mode .classified-card:hover,
+body.lite-mode .ally-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   11. ВИДЕО-ПЛЕЕР — убираем пульсацию кнопки
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .video-play-btn { animation: none !important; box-shadow: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   12. ТЯЖЁЛЫЕ RADIAL GRADIENT GLOW — заменяем простыми
+═══════════════════════════════════════════════════════════════ */
+body.lite-mode .cc-glow,
+body.lite-mode .hof-glow,
+body.lite-mode .classified-card::before { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   13. КНОПКА ПЕРЕКЛЮЧЕНИЯ РЕЖИМА
+   Всегда поверх всего (z-index выше alert-container: 99999)
+   Курсор принудительно pointer — перебивает cursor:none из style.css
+═══════════════════════════════════════════════════════════════ */
+#perfToggleBtn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999999 !important;   /* выше всего на странице */
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(8,8,8,0.92);
+  color: rgba(255,255,255,0.55);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer !important;    /* перебивает cursor:none !important */
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  user-select: none;
+  text-transform: uppercase;
+  pointer-events: all !important;
+}
+#perfToggleBtn:hover {
+  border-color: rgba(255,42,42,0.5);
+  color: #fff;
+  background: rgba(20,0,0,0.95);
+  cursor: pointer !important;
+}
+#perfToggleBtn .ptb-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 6px rgba(76,175,80,0.8);
+  flex-shrink: 0;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+body.lite-mode #perfToggleBtn .ptb-dot {
+  background: #f0c040;
+  box-shadow: 0 0 6px rgba(240,192,64,0.8);
+}
+#perfToggleBtn .ptb-label-full { display: inline; }
+#perfToggleBtn .ptb-label-lite { display: none; }
+body.lite-mode #perfToggleBtn .ptb-label-full { display: none; }
+body.lite-mode #perfToggleBtn .ptb-label-lite { display: inline; }

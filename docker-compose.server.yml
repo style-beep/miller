@@ -1,0 +1,19 @@
+services:
+  app:
+    image: donskoyyy/miller-app:latest
+    container_name: miller-app
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    volumes:
+      - ./sessions:/app/sessions
+      - ./users.json:/app/users.json
+      - ./applications.json:/app/applications.json
+    networks:
+      - caddy_default
+
+networks:
+  caddy_default:
+    external: true

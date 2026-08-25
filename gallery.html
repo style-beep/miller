@@ -299,17 +299,21 @@
 </div>
 
 <script type="module">
+  import { requireAuth }         from "./js/auth-guard.js";
   import { initPageLoader }      from "./js/page-loader.js";
   import { initPageTransition }  from "./js/page-transition.js";
   import { initEasterEgg }       from "./js/easter-egg.js";
   import { GALLERY }             from "./js/config/events.js";
 
-  initPageTransition();
-  initEasterEgg();
-  initPageLoader({
-    password:   "MF·VISUAL·ACCESS·2026",
-    label:      "ВВОД КОДА ДОСТУПА К АРХИВУ",
-    onComplete: renderGallery,
+  requireAuth().then(user => {
+    if (!user) return;
+    initPageTransition();
+    initEasterEgg();
+    initPageLoader({
+      password:   "MF·VISUAL·ACCESS·2026",
+      label:      "ВВОД КОДА ДОСТУПА К АРХИВУ",
+      onComplete: renderGallery,
+    });
   });
 
   // ── Извлечь YouTube ID из разных форматов ссылок ──────────────

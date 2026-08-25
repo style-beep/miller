@@ -1,0 +1,485 @@
+<!DOCTYPE html><html lang="ru"><head><script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><title>ПРОФИЛЬ | MILLER FAMILY</title><link rel="icon" type="image/png" href="/images/family-logo.jpeg"><link rel="manifest" href="/manifest.json"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="/css/page.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><link rel="stylesheet" href="/css/lite.css"><link rel="stylesheet" href="/_astro/profile.DGeZbb6Q.css"></head><body><div class="bg-overlay"></div><div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><header class="page-header"><a href="/index.html" class="page-logo">MILLER <span>FAMILY</span></a><nav class="page-nav"><a href="/map.html">Карта</a><a href="/gallery.html">Галерея</a><a href="/index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a></nav></header><main id="pageContent" style="opacity:1;transform:none" data-astro-cid-y72oufaf><section class="page-section" data-astro-cid-y72oufaf><div class="page-bg-title" data-astro-cid-y72oufaf>PROFILE</div><div id="profileContent" class="profile-wrap" data-astro-cid-y72oufaf></div></section><footer class="page-footer">© 2023–2026 Miller Family · Del Perro RP · <span>dev by donskoyy</span></footer></main><script type="module">import { initPerf } from "/js/perf.js"; initPerf();</script></body></html><script type="module">
+import { initPerf }    from "/js/perf.js";
+import { initUserBar } from "/js/userbar.js";
+initPerf();
+initUserBar();
+
+import { HALL_OF_FAME } from "/js/config/events.js";
+
+// ── Личный кабинет / публичный профиль по Discord ID ─────────
+const urlId = new URLSearchParams(location.search).get("id");
+const STATIC_IDS = ["eddie", "adam", "roy"];
+const isStaticProfile = urlId && STATIC_IDS.includes(urlId);
+
+if (!urlId || !isStaticProfile) {
+  let user, isOwn;
+  if (!urlId) {
+    isOwn = true;
+    ({ user } = await fetch("/api/auth/me").then(r => r.json()).catch(() => ({ user: null })));
+    if (!user) { location.href = "/auth.html"; throw new Error("redirect"); }
+  } else {
+    isOwn = false;
+    const res = await fetch(`/api/users/${encodeURIComponent(urlId)}`).catch(() => null);
+    if (!res || !res.ok) { location.href = "/404.html"; throw new Error("not found"); }
+    ({ user } = await res.json());
+  }
+
+  const st = user.stats || {};
+  const topRole   = user.discordRoles?.[0];
+  const roleName  = topRole?.name  || "Участник";
+  const roleColor = (!topRole || topRole.color === "#000000") ? "#ff2a2a" : topRole.color;
+  const joinDate  = new Date(user.createdAt).toLocaleDateString("ru-RU", { day:"numeric", month:"long", year:"numeric" });
+  const statusCls = user.discordStatus || "offline";
+  const displayName = user.discordName || user.username;
+
+  const STAT_DEFS = [
+    { key:"kills",      icon:"fa-skull",          label:"Убийства",   color:"#ff2a2a", bg:"rgba(255,42,42,0.12)"  },
+    { key:"deaths",     icon:"fa-cross",           label:"Смерти",     color:"#ff6b6b", bg:"rgba(255,107,107,0.1)" },
+    { key:"wins",       icon:"fa-trophy",          label:"Победы",     color:"#c9a227", bg:"rgba(201,162,39,0.1)"  },
+    { key:"events",     icon:"fa-calendar-check",  label:"Ивенты",     color:"#4a9eff", bg:"rgba(74,158,255,0.1)"  },
+    { key:"money",      icon:"fa-dollar-sign",     label:"Деньги ($)", color:"#43b581", bg:"rgba(67,181,129,0.1)"  },
+    { key:"reputation", icon:"fa-star",            label:"Репутация",  color:"#9b59b6", bg:"rgba(155,89,182,0.1)"  },
+    { key:"hours",      icon:"fa-clock",           label:"Часов",      color:"#e67e22", bg:"rgba(230,126,34,0.1)"  },
+    { key:"arrests",    icon:"fa-handcuffs",       label:"Арестов",    color:"#888",    bg:"rgba(136,136,136,0.1)" },
+  ];
+
+  const TITLES = {
+    "Создатель":    { icon:"👑", color:"#ffd700", bg:"rgba(255,215,0,0.12)",  border:"rgba(255,215,0,0.35)"  },
+    "Легенда":      { icon:"⭐", color:"#ff9800", bg:"rgba(255,152,0,0.12)",  border:"rgba(255,152,0,0.35)"  },
+    "Директор":     { icon:"🛡️", color:"#4a9eff", bg:"rgba(74,158,255,0.12)", border:"rgba(74,158,255,0.35)" },
+    "Заместитель":  { icon:"⚡", color:"#9b59b6", bg:"rgba(155,89,182,0.12)", border:"rgba(155,89,182,0.35)" },
+    "Босс":         { icon:"🔱", color:"#ff2a2a", bg:"rgba(255,42,42,0.12)",  border:"rgba(255,42,42,0.35)"  },
+    "Ветеран":      { icon:"🎖️", color:"#c9a227", bg:"rgba(201,162,39,0.12)", border:"rgba(201,162,39,0.35)" },
+    "Элита":        { icon:"💎", color:"#43b581", bg:"rgba(67,181,129,0.12)", border:"rgba(67,181,129,0.35)" },
+    "Офицер":       { icon:"🎯", color:"#e74c3c", bg:"rgba(231,76,60,0.12)",  border:"rgba(231,76,60,0.35)"  },
+    "Страж":        { icon:"🛡️", color:"#888",    bg:"rgba(136,136,136,0.1)", border:"rgba(136,136,136,0.3)" },
+    "Новобранец":   { icon:"🪖", color:"#aaa",    bg:"rgba(180,180,180,0.08)",border:"rgba(180,180,180,0.2)" },
+  };
+
+  const RARITIES = {
+    COMMON:    { color:"#9e9e9e", shine:"#9e9e9e" },
+    UNCOMMON:  { color:"#43b581", shine:"#43b581" },
+    RARE:      { color:"#4a9eff", shine:"#4a9eff" },
+    EPIC:      { color:"#b44fe8", shine:"#b44fe8" },
+    LEGENDARY: { color:"#ff9800", shine:"#ff9800" },
+    MYTHIC:    { color:"#ff3c78", shine:"#ff3c78" },
+    GOD:       { color:"#ffd700", shine:"#ffd700" },
+  };
+
+  const ALL_ACH = [
+    { id:"recruit",    icon:"🪖", name:"Новобранец",      desc:"Впервые зарегистрировался на сайте",        rare:"COMMON"    },
+    { id:"applicant",  icon:"📋", name:"Заявитель",       desc:"Подал заявку на вступление в семью",        rare:"COMMON"    },
+    { id:"social",     icon:"💬", name:"Болтун",          desc:"Написал 100+ сообщений в Discord",          rare:"COMMON"    },
+    { id:"loyal",      icon:"🤝", name:"Верность",        desc:"1 год в составе Miller Family",             rare:"UNCOMMON"  },
+    { id:"diplomat",   icon:"🕊️", name:"Дипломат",        desc:"Лично заключил союзный пакт",               rare:"UNCOMMON"  },
+    { id:"commander",  icon:"🎖️", name:"Командир",        desc:"Руководил 5+ боевыми операциями",           rare:"UNCOMMON"  },
+    { id:"streetwise", icon:"🌆", name:"Уличный",         desc:"100+ часов на сервере Del Perro",           rare:"UNCOMMON"  },
+    { id:"firstblood", icon:"🩸", name:"Первая кровь",    desc:"Первое задокументированное убийство",       rare:"UNCOMMON"  },
+    { id:"war100",     icon:"⚔️", name:"Ветеран войн",    desc:"Участник 10+ войн за территорию",          rare:"RARE"      },
+    { id:"terror",     icon:"🔥", name:"Гроза улиц",      desc:"Лучший боец месяца по версии семьи",        rare:"RARE"      },
+    { id:"builder",    icon:"🏗️", name:"Строитель",       desc:"Открыл 10+ легальных бизнесов",            rare:"RARE"      },
+    { id:"ironwill",   icon:"🛡️", name:"Железная воля",   desc:"Ни разу не нарушил кодекс чести",          rare:"RARE"      },
+    { id:"hunter",     icon:"🎯", name:"Охотник",          desc:"500+ подтверждённых устранений",            rare:"RARE"      },
+    { id:"shadow",     icon:"🌑", name:"Тень",             desc:"Провёл 10 тайных операций без следов",      rare:"RARE"      },
+    { id:"boss",       icon:"🔱", name:"Босс",             desc:"Достиг ранга Family Boss",                  rare:"EPIC"      },
+    { id:"rich",       icon:"💰", name:"Миллиардер",       desc:"Личный капитал превысил $500,000,000",      rare:"EPIC"      },
+    { id:"ghost",      icon:"👻", name:"Призрак",           desc:"Ни одного провала за 20 операций подряд",  rare:"EPIC"      },
+    { id:"warlord",    icon:"💀", name:"Военачальник",     desc:"Участник 50+ войн — всегда на передовой",  rare:"EPIC"      },
+    { id:"territory",  icon:"🗺️", name:"Территориальный",  desc:"Лично захватил 20+ районов города",        rare:"EPIC"      },
+    { id:"enforcer",   icon:"🔫", name:"Enforcer",          desc:"1000+ убийств — живое оружие семьи",       rare:"EPIC"      },
+    { id:"legend",     icon:"⭐", name:"Легенда",           desc:"Официально признан легендой Del Perro RP", rare:"LEGENDARY" },
+    { id:"unbeaten",   icon:"🏆", name:"Непобедимый",       desc:"Серия из 20 побед в войнах без поражений", rare:"LEGENDARY" },
+    { id:"cardinal",   icon:"🦅", name:"Кардинал",          desc:"Тайно управлял 5 фракциями одновременно",  rare:"LEGENDARY" },
+    { id:"loyalty5",   icon:"⏳", name:"Пять лет",          desc:"5 лет непрерывно в рядах Miller Family",   rare:"LEGENDARY" },
+    { id:"crimgenius", icon:"🧠", name:"Крим. гений",       desc:"Организовал операцию года на сервере",     rare:"MYTHIC"    },
+    { id:"feared",     icon:"☠️", name:"Страх улиц",        desc:"Твоё имя вызывает панику у всех фракций",  rare:"MYTHIC"    },
+    { id:"untouchable",icon:"💎", name:"Неприкасаемый",      desc:"Ни одного ареста за всё время на сервере", rare:"MYTHIC"    },
+    { id:"founder",    icon:"👑", name:"Основатель",        desc:"Создал и возглавил Miller Family",          rare:"GOD"       },
+  ];
+
+  function fmtNum(n) {
+    if (n >= 1000000) return (n/1000000).toFixed(1)+"M";
+    if (n >= 1000)    return (n/1000).toFixed(1)+"K";
+    return String(n || 0);
+  }
+
+  function achCard(a, unlocked) {
+    const on  = unlocked.includes(a.id);
+    const r   = RARITIES[a.rare];
+    return `<div class="mypf-ach${on?"":" locked"}" data-rare="${a.rare}" style="--ach-shine:${r.shine}">
+      <div class="mypf-ach-shine"></div>
+      <div class="mypf-ach-badge" style="color:${r.color};background:${r.color}20">${a.rare}</div>
+      <div class="mypf-ach-icon">${a.icon}</div>
+      <div class="mypf-ach-name">${a.name}</div>
+      <div class="mypf-ach-desc">${a.desc}</div>
+    </div>`;
+  }
+
+  document.querySelector("main")?.remove();
+  document.title = `${displayName} | MILLER FAMILY`;
+
+  const wrap = document.createElement("div");
+  wrap.className = "mypf";
+  wrap.innerHTML = `
+    <div class="mypf-hero">
+      <div class="mypf-banner">
+        <div class="mypf-banner-pattern"></div>
+      </div>
+      <div class="mypf-hero-body">
+        <div class="mypf-avatar-wrap">
+          ${user.discordAvatar
+            ? `<img src="${user.discordAvatar}" class="mypf-avatar" onerror="this.outerHTML='<div class=mypf-avatar-placeholder>${displayName[0].toUpperCase()}</div>'">`
+            : `<div class="mypf-avatar-placeholder">${displayName[0].toUpperCase()}</div>`}
+          <span class="mypf-status-dot ${statusCls}"></span>
+        </div>
+        <div class="mypf-info">
+          <div class="mypf-role-label" style="color:${roleColor}">${roleName}</div>
+          <h1 class="mypf-name">${displayName}</h1>
+          ${user.discordTag ? `<div class="mypf-tag">@${user.discordTag}</div>` : ""}
+          ${(() => {
+            const t = user.title ? TITLES[user.title] : null;
+            if (!t) return "";
+            return `<div style="display:inline-flex;align-items:center;gap:7px;margin-top:6px;margin-bottom:4px;
+              padding:5px 13px;border-radius:20px;
+              background:${t.bg};border:1px solid ${t.border};
+              font-size:10px;font-weight:800;letter-spacing:2px;color:${t.color};text-transform:uppercase;">
+              ${t.icon}&nbsp;${user.title}
+            </div>`;
+          })()}
+          <div class="mypf-bio" id="mypfBioDisplay">${user.bio || '<em style="color:rgba(255,255,255,0.2)">Нет описания — нажми «Редактировать»</em>'}</div>
+          ${user.statusText ? `<div class="mypf-status-text"><i class="fa-solid fa-circle-dot" style="color:${roleColor}"></i> ${user.statusText}</div>` : ""}
+        </div>
+        ${isOwn ? `
+        <div class="mypf-actions">
+          <button class="mypf-edit-btn" id="openEditModal">
+            <i class="fa-solid fa-pen-to-square"></i> Редактировать
+          </button>
+          <button class="mypf-logout-btn" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/')">
+            <i class="fa-solid fa-right-from-bracket"></i> Выйти
+          </button>
+        </div>` : ""}
+      </div>
+    </div>
+
+    <div class="mypf-stats">
+      ${STAT_DEFS.map(s => `
+        <div class="mypf-stat-card" style="--sc:${s.color}">
+          <div class="mypf-stat-icon" style="background:${s.bg}">
+            <i class="fa-solid ${s.icon}" style="color:${s.color};filter:drop-shadow(0 0 6px ${s.color}66)"></i>
+          </div>
+          <div class="mypf-stat-body">
+            <div class="mypf-stat-val" id="stat_${s.key}">${fmtNum(st[s.key])}</div>
+            <div class="mypf-stat-label">${s.label}</div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="mypf-grid">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        ${user.discordRoles?.length ? `
+        <div class="mypf-card">
+          <div class="mypf-card-title"><i class="fa-solid fa-shield-halved"></i>&nbsp; Роли</div>
+          <div class="mypf-roles">
+            ${user.discordRoles.slice(0,10).map(r => {
+              const c = r.color === "#000000" ? "rgba(255,255,255,0.4)" : r.color;
+              const bg = r.color === "#000000" ? "rgba(255,255,255,0.05)" : r.color+"18";
+              const bd = r.color === "#000000" ? "rgba(255,255,255,0.08)" : r.color+"44";
+              return `<span class="mypf-role-chip" style="color:${c};background:${bg};border:1px solid ${bd}">${r.name}</span>`;
+            }).join("")}
+          </div>
+        </div>` : ""}
+
+        <div class="mypf-card">
+          <div class="mypf-card-title"><i class="fa-solid fa-circle-info"></i>&nbsp; Инфо</div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">На сайте с</span>
+            <span class="mypf-info-val">${joinDate}</span>
+          </div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">Статус</span>
+            <span class="mypf-info-val" style="display:flex;align-items:center;gap:6px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:${statusCls==='online'?'#4cff72':statusCls==='idle'?'#faa61a':statusCls==='dnd'?'#f04747':'#555'}"></span>
+              ${statusCls==='online'?'В сети':statusCls==='idle'?'Неактивен':statusCls==='dnd'?'Не беспокоить':'Не в сети'}
+            </span>
+          </div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">Достижений</span>
+            <span class="mypf-info-val" id="achCount">${(user.achievements||[]).length} / ${ALL_ACH.length}</span>
+          </div>
+          <div class="mypf-info-row">
+            <span class="mypf-info-key">K/D</span>
+            <span class="mypf-info-val">${st.deaths ? ((st.kills||0)/st.deaths).toFixed(2) : (st.kills||0)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="mypf-tabs">
+          <button class="mypf-tab${(user.achievements||[]).length===0?" active":""}" data-panel="about">О себе</button>
+          <button class="mypf-tab${(user.achievements||[]).length>0?" active":""}" data-panel="achievements">Достижения${(user.achievements||[]).length>0?` <span style="background:rgba(255,152,0,0.2);color:#ffa726;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:800;margin-left:4px">${(user.achievements||[]).length}</span>`:""}</button>
+        </div>
+
+        <div class="mypf-tabpanel${(user.achievements||[]).length===0?" active":""}" id="panel-about">
+          <div class="mypf-card">
+            <div class="mypf-card-title"><i class="fa-solid fa-user"></i>&nbsp; О участнике</div>
+            <p class="mypf-bio-full">${user.bio || '<em style="color:rgba(255,255,255,0.2)">Описание не добавлено</em>'}</p>
+            ${user.statusText ? `<div style="margin-top:12px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:12px;color:rgba(255,255,255,0.4);font-style:italic;"><i class="fa-solid fa-quote-left" style="margin-right:8px;color:rgba(255,42,42,0.4)"></i>${user.statusText}</div>` : ""}
+          </div>
+        </div>
+
+        <div class="mypf-tabpanel${(user.achievements||[]).length>0?" active":""}" id="panel-achievements">
+          <div class="mypf-card">
+            <div class="mypf-card-title"><i class="fa-solid fa-trophy"></i>&nbsp; Достижения — <span id="achCountTab">${(user.achievements||[]).length}</span> / ${ALL_ACH.length}</div>
+            <div class="mypf-ach-grid" id="achGridDisplay">
+              ${ALL_ACH.map(a => achCard(a, user.achievements||[])).join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(wrap);
+
+  wrap.querySelectorAll(".mypf-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      wrap.querySelectorAll(".mypf-tab,.mypf-tabpanel").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById("panel-" + btn.dataset.panel)?.classList.add("active");
+    });
+  });
+
+  if (isOwn) {
+  const modalHtml = `
+  <div class="pf-modal-overlay" id="editModalOverlay">
+    <div class="pf-modal">
+      <div class="pf-modal-head">
+        <span class="pf-modal-title"><i class="fa-solid fa-pen-to-square" style="margin-right:10px;color:#ff2a2a"></i>Редактировать профиль</span>
+        <button class="pf-modal-close" id="closeEditModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="pf-modal-body">
+        <div class="pf-modal-panel active" id="mpanel-profile">
+          <div class="pf-field">
+            <label class="pf-label">Отображаемое имя</label>
+            <input class="pf-input" id="edit_username" value="${user.username}" placeholder="Никнейм">
+          </div>
+          <div class="pf-field">
+            <label class="pf-label">О себе <span style="color:rgba(255,255,255,0.2);font-size:9px">(макс 300 символов)</span></label>
+            <textarea class="pf-textarea" id="edit_bio" placeholder="Расскажи о себе...">${user.bio||""}</textarea>
+          </div>
+          <div class="pf-field">
+            <label class="pf-label">Статус / Цитата <span style="color:rgba(255,255,255,0.2);font-size:9px">(макс 60 символов)</span></label>
+            <input class="pf-input" id="edit_status" value="${user.statusText||""}" placeholder="Что у тебя на уме...">
+          </div>
+          <div style="padding:12px 14px;border-radius:9px;background:rgba(255,180,0,0.05);border:1px solid rgba(255,180,0,0.15);margin-bottom:16px;font-size:11px;color:rgba(255,180,0,0.6);letter-spacing:1px;">
+            <i class="fa-solid fa-shield-halved" style="margin-right:7px"></i>
+            Статистика, достижения и титул редактируются только через администрацию
+          </div>
+          <button class="pf-save-btn" id="saveProfile">
+            <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить профиль
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+  document.getElementById("openEditModal").onclick = () => document.getElementById("editModalOverlay").classList.add("open");
+  document.getElementById("closeEditModal").onclick = () => document.getElementById("editModalOverlay").classList.remove("open");
+  document.getElementById("editModalOverlay").addEventListener("click", e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove("open");
+  });
+
+  async function save(payload, btn) {
+    btn.disabled = true;
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Сохранение...';
+    try {
+      const res = await fetch("/api/auth/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (data.success) {
+        btn.innerHTML = '<i class="fa-solid fa-check"></i>&nbsp; Сохранено!';
+        btn.style.background = "linear-gradient(135deg,#1a7a4a,#0f4a2e)";
+        setTimeout(() => location.reload(), 900);
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-xmark"></i>&nbsp; Ошибка';
+        btn.style.background = "rgba(255,42,42,0.3)";
+        setTimeout(() => { btn.innerHTML = orig; btn.style.background = ""; btn.disabled = false; }, 2000);
+      }
+    } catch {
+      btn.innerHTML = orig; btn.style.background = ""; btn.disabled = false;
+    }
+  }
+
+  document.getElementById("saveProfile").onclick = async function() {
+    await save({
+      username:   document.getElementById("edit_username").value.trim().substring(0,32),
+      bio:        document.getElementById("edit_bio").value.trim().substring(0,300),
+      statusText: document.getElementById("edit_status").value.trim().substring(0,60),
+    }, this);
+  };
+  }
+
+} else {
+
+const ALL_ACHIEVEMENTS = [
+  { id: "founder",    icon: "👑", name: "Основатель",    desc: "Создал Miller Family",          rare: "RARE"      },
+  { id: "boss",       icon: "🔱", name: "Босс",          desc: "Получил ранг Family Boss",       rare: "EPIC"      },
+  { id: "war100",     icon: "⚔️", name: "Ветеран войн",  desc: "Участник 10+ войн",              rare: "UNCOMMON"  },
+  { id: "rich",       icon: "💰", name: "Миллиардер",    desc: "Капитал 500M+",                  rare: "EPIC"      },
+  { id: "loyal",      icon: "🤝", name: "Верность",      desc: "1 год в составе семьи",          rare: "UNCOMMON"  },
+  { id: "terror",     icon: "🔥", name: "Гроза улиц",    desc: "Лучший боец месяца",             rare: "RARE"      },
+  { id: "diplomat",   icon: "🕊️", name: "Дипломат",      desc: "Заключил союзный пакт",          rare: "UNCOMMON"  },
+  { id: "legend",     icon: "⭐", name: "Легенда",        desc: "Признан легендой сервера",       rare: "LEGENDARY" },
+  { id: "builder",    icon: "🏗️", name: "Строитель",     desc: "Открыл 10+ бизнесов",           rare: "RARE"      },
+  { id: "ghost",      icon: "👻", name: "Призрак",        desc: "Ни одного провала операции",     rare: "EPIC"      },
+  { id: "commander",  icon: "🎖️", name: "Командир",      desc: "Руководил 5+ операциями",        rare: "UNCOMMON"  },
+  { id: "ironwill",   icon: "🛡️", name: "Железная воля", desc: "Не нарушил кодекс ни разу",     rare: "RARE"      },
+];
+
+const RARE_COLORS = {
+  UNCOMMON:  "#4caf50",
+  RARE:      "#2196f3",
+  EPIC:      "#9c27b0",
+  LEGENDARY: "#ff9800",
+};
+
+const PROFILES = {
+  eddie: {
+    ...HALL_OF_FAME[0],
+    photo: "/images/eddie.jpg",
+    bio: "Основатель и глава Miller Family. Опытный ролевик с многолетним стажем на серверах GTA. Отвечает за стратегию, финансы и развитие организации. Под его руководством семья выросла с 5 до 70+ участников.",
+    skills: [
+      { name: "Лидерство",    val: 98 },
+      { name: "Финансы",      val: 95 },
+      { name: "Стратегия",    val: 97 },
+      { name: "Боевые навыки",val: 85 },
+    ],
+    joined: "Январь 2023",
+    wars: "24 победы",
+    rep: "Легенда сервера",
+    achievements: ["founder","boss","war100","rich","loyal","legend","builder","ghost","ironwill"],
+  },
+  adam: {
+    ...HALL_OF_FAME[1],
+    photo: "/images/adam.jpg",
+    bio: "Директор Miller Family. Управляет внутренней структурой, набором персонала и организационными процессами. Обеспечивает стабильность и дисциплину в рядах семьи.",
+    skills: [
+      { name: "Менеджмент",   val: 94 },
+      { name: "Переговоры",   val: 90 },
+      { name: "Дисциплина",   val: 96 },
+      { name: "Боевые навыки",val: 80 },
+    ],
+    joined: "Февраль 2023",
+    wars: "18 победы",
+    rep: "Элита сервера",
+    achievements: ["war100","loyal","diplomat","commander","ironwill","builder"],
+  },
+  roy: {
+    ...HALL_OF_FAME[2],
+    photo: "/images/roy.jpg",
+    bio: "Заместитель директора. Руководит боевыми операциями, войнами и контролем территорий. Лучший боец семьи с непревзойдёнными показателями в PVP.",
+    skills: [
+      { name: "PVP",          val: 96 },
+      { name: "Тактика",      val: 88 },
+      { name: "Территории",   val: 84 },
+      { name: "Лидерство",    val: 82 },
+    ],
+    joined: "Март 2023",
+    wars: "31 победа",
+    rep: "Лучший боец",
+    achievements: ["war100","terror","loyal","commander","ghost","ironwill"],
+  },
+};
+
+const params = new URLSearchParams(location.search);
+const id = params.get("id") || "eddie";
+const p  = PROFILES[id] || PROFILES.eddie;
+
+document.title = `${p.name} | MILLER FAMILY`;
+
+function renderAchievements(unlocked) {
+  return ALL_ACHIEVEMENTS.map(a => {
+    const isUnlocked = unlocked.includes(a.id);
+    const color = RARE_COLORS[a.rare] || "#fff";
+    return `
+      <div class="achievement-item${isUnlocked ? "" : " locked"}" title="${isUnlocked ? a.desc : "Не получено"}">
+        <div class="achievement-glow"></div>
+        <div class="achievement-badge" style="color:${color};background:${color}22">${a.rare}</div>
+        <div class="achievement-icon">${a.icon}</div>
+        <div class="achievement-name">${a.name}</div>
+        <div class="achievement-desc">${a.desc}</div>
+      </div>`;
+  }).join("");
+}
+
+document.getElementById("profileContent").innerHTML = `
+  <div class="profile-hero">
+    <img loading="lazy" src="${p.photo}" alt="${p.name}" class="profile-photo">
+    <div class="profile-info">
+      <div class="profile-rank">MILLER FAMILY · DEL PERRO RP</div>
+      <div class="profile-name">${p.name}</div>
+      <div class="profile-role">${p.role}</div>
+      <div class="profile-badge">${p.badge} ${p.role.toUpperCase()}</div>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    ${Object.entries(p.stats).map(([k,v]) => `
+      <div class="profile-stat">
+        <span class="profile-stat-val">${v}</span>
+        <span class="profile-stat-key">${k}</span>
+      </div>
+    `).join("")}
+    <div class="profile-stat">
+      <span class="profile-stat-val">${p.joined}</span>
+      <span class="profile-stat-key">В семье с</span>
+    </div>
+    <div class="profile-stat">
+      <span class="profile-stat-val">${p.wars}</span>
+      <span class="profile-stat-key">Войн</span>
+    </div>
+    <div class="profile-stat">
+      <span class="profile-stat-val" style="font-size:14px">${p.rep}</span>
+      <span class="profile-stat-key">Репутация</span>
+    </div>
+  </div>
+
+  <div class="profile-bottom">
+    <div class="profile-card">
+      <div class="profile-card-title">О УЧАСТНИКЕ</div>
+      <p>${p.bio}</p>
+    </div>
+    <div class="profile-card">
+      <div class="profile-card-title">НАВЫКИ</div>
+      ${p.skills.map(s => `
+        <div class="profile-skill">
+          <span class="profile-skill-name">${s.name}</span>
+          <div class="profile-skill-bar"><div class="profile-skill-fill" style="width:${s.val}%"></div></div>
+          <span class="profile-skill-val">${s.val}%</span>
+        </div>
+      `).join("")}
+    </div>
+  </div>
+
+  <div class="profile-card achievements-section" style="margin-top:14px;padding:24px">
+    <div class="achievements-title">🏆 ДОСТИЖЕНИЯ — ${p.achievements.length}/${ALL_ACHIEVEMENTS.length} получено</div>
+    <div class="achievements-grid">
+      ${renderAchievements(p.achievements)}
+    </div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+    ${Object.keys(PROFILES).map(pid => `
+      <a href="/profile.html?id=${pid}" style="padding:10px 20px;border-radius:8px;background:${pid===id?'rgba(255,42,42,0.2)':'rgba(0,0,0,0.4)'};border:1px solid ${pid===id?'rgba(255,42,42,0.4)':'rgba(255,255,255,0.07)'};color:${pid===id?'#ff4444':'rgba(255,255,255,0.4)'};text-decoration:none;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s">
+        ${PROFILES[pid].name.split(' ')[0]}
+      </a>
+    `).join("")}
+  </div>
+`;
+}
+</script>

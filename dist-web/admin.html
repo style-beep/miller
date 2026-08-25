@@ -1,0 +1,830 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ADMIN | MILLER FAMILY</title><link rel="icon" type="image/png" href="/images/family-logo.jpeg"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><link rel="stylesheet" href="/_astro/admin.CoRwdKoS.css"></head><body><div id="loginScreen"><div class="login-box"><div class="login-logo"><div class="login-logo-text">MILLER FAMILY</div><div class="login-logo-sub">Admin Panel · Restricted Access</div></div><label class="login-label">Секретный ключ</label><input type="password" class="login-input" id="secretInput" placeholder="Введи ADMIN_SECRET" autocomplete="off"><button class="login-btn" id="loginBtn">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></button><div class="login-error" id="loginError"></div><a href="/index.html" style="display:block;text-align:center;margin-top:16px;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'"><i class="fa-solid fa-arrow-left"></i> ВЕРНУТЬСЯ НА САЙТ</a></div></div><div id="adminPanel"><div class="admin-header"><div class="admin-logo">MILLER FAMILY · ADMIN</div><div style="display:flex;gap:10px;align-items:center;"><a href="/index.html" class="admin-logout" title="На главную"><i class="fa-solid fa-house"></i> На сайт</a><button class="admin-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Выйти</button></div></div><div class="admin-body"><div class="admin-stats" id="adminStats"></div><div class="admin-tabs"><button class="admin-tab active" data-tab="applications">📋 Заявки</button><button class="admin-tab" data-tab="users">👤 Участники</button><button class="admin-tab" data-tab="monitor">🔊 Мониторинг</button><button class="admin-tab" data-tab="hof">🏆 Доска почёта</button><button class="admin-tab" data-tab="event">📅 Событие</button><button class="admin-tab" data-tab="allies">🤝 Союзники</button><button class="admin-tab" data-tab="alert">🚨 Тревога</button></div><div class="admin-tab-content active" id="tab-applications"><div class="admin-section-title">ЗАЯВКИ НА ВСТУПЛЕНИЕ</div><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap"><div class="filter-bar" id="filterBar" style="margin:0"><button class="filter-btn active" data-filter="all">ВСЕ</button><button class="filter-btn" data-filter="pending">ОЖИДАЮТ</button><button class="filter-btn" data-filter="approved">ОДОБРЕНЫ</button><button class="filter-btn" data-filter="rejected">ОТКЛОНЕНЫ</button></div><button class="action-btn" id="exportCsvBtn" style="border-color:rgba(76,175,80,0.3);color:#4caf50;margin-left:auto">📥 Скачать CSV</button><button class="action-btn btn-reject" id="clearAppsBtn">🗑 Очистить все</button></div><table class="apps-table"><thead><tr><th>Никнейм</th><th>Discord</th><th>Возраст</th><th>Опыт</th><th>Дата</th><th>Статус</th><th>Действия</th></tr></thead><tbody id="appsBody"></tbody></table></div><div class="admin-tab-content" id="tab-users"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px"><div class="admin-section-title" style="margin:0">УЧАСТНИКИ САЙТА</div><input type="text" id="userSearch" placeholder="Поиск по нику..." style="padding:8px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;width:220px"></div><div id="usersGrid" style="display:flex;flex-direction:column;gap:10px;"></div></div><div class="admin-tab-content" id="tab-monitor"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px"><div class="admin-section-title" style="margin:0">МОНИТОРИНГ DISCORD</div><button class="mon-refresh" id="monRefreshBtn"><i class="fa-solid fa-rotate-right"></i> Обновить</button></div><div class="monitor-grid"><div class="mon-card"><div class="mon-card-head"><span class="mon-card-title"><i class="fa-solid fa-microphone" style="margin-right:6px;color:rgba(99,179,237,0.6)"></i>Войс каналы</span><span class="mon-live-dot" id="voiceLiveDot">LIVE</span></div><div class="voice-channels" id="voiceList"><div class="voice-empty"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>Загрузка...</div></div></div><div class="mon-card" style="display:flex;flex-direction:column"><div class="mon-card-head"><span class="mon-card-title"><i class="fa-solid fa-comments" style="margin-right:6px;color:rgba(99,179,237,0.6)"></i>Чат сообщения</span><span class="mon-live-dot" id="chatLiveDot">LIVE</span></div><div class="chat-feed" id="chatFeed"><div class="voice-empty"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px"></i>Загрузка...</div></div><div class="chat-filter"><input type="text" id="chatSearch" placeholder="Фильтр по нику или каналу..."><button class="mon-refresh" id="chatScrollBtn" title="Прокрутить вниз"><i class="fa-solid fa-arrow-down"></i></button></div></div></div><div class="mon-card" style="margin-top:20px"><div class="mon-card-head"><span class="mon-card-title"><i class="fa-solid fa-paper-plane" style="margin-right:6px;color:rgba(255,42,42,0.7)"></i>Отправить сообщение в Discord</span><span id="sendMsgStatus" style="font-size:10px;letter-spacing:1px;opacity:0;transition:opacity 0.3s"></span></div><div style="padding:16px;display:flex;flex-direction:column;gap:10px"><select id="discordChannelSelect" style="padding:9px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;outline:none;width:100%"><option value="" style="background:#111">— Выбери канал —</option></select><div id="replyBanner" style="display:none;align-items:center;gap:10px;padding:8px 12px;background:rgba(99,179,237,0.07);border:1px solid rgba(99,179,237,0.2);border-radius:8px;font-size:11px;color:rgba(99,179,237,0.8)"><i class="fa-solid fa-reply"></i><span id="replyBannerText" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><button onclick="clearReply()" style="background:none;border:none;color:rgba(99,179,237,0.5);cursor:pointer;font-size:13px;line-height:1;padding:0" title="Отменить ответ">✕</button></div><textarea id="discordMsgText" placeholder="Текст сообщения..." rows="3" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;resize:vertical;outline:none;box-sizing:border-box;min-height:80px"></textarea><div style="display:flex;align-items:center;gap:10px"><button id="sendDiscordMsg" class="content-save" style="margin:0"><i class="fa-solid fa-paper-plane"></i>&nbsp; Отправить</button><span id="sendMsgCounter" style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px">0 / 2000</span></div></div></div></div><div class="admin-tab-content" id="tab-hof"><div class="admin-section-title">РЕДАКТОР ДОСКИ ПОЧЁТА</div><div id="hofEditorWrap"></div><button class="content-save" id="saveHof">💾 СОХРАНИТЬ</button><span class="content-saved" id="hofSaved">✓ Сохранено</span><p style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.2)">⚠ Изменения сохраняются в браузере и применятся при перезагрузке страницы.</p></div><div class="admin-tab-content" id="tab-event"><div class="admin-section-title">СЛЕДУЮЩЕЕ СОБЫТИЕ</div><div class="content-grid" style="max-width:700px"><div class="content-card" style="grid-column:1/-1"><div class="content-card-title">⏱ Таймер обратного отсчёта</div><div class="content-field"><label class="content-label">Название события</label><input class="content-input" id="evtTitle" placeholder="СЕМЕЙНЫЙ СБОР"></div><div class="content-field"><label class="content-label">Описание</label><input class="content-input" id="evtDesc" placeholder="Описание события"></div><div class="content-field"><label class="content-label">Дата и время (формат: 2026-06-20T20:00:00)</label><input class="content-input" id="evtDate" placeholder="2026-06-20T20:00:00" type="datetime-local"></div><button class="content-save" id="saveEvent">💾 СОХРАНИТЬ</button><span class="content-saved" id="evtSaved">✓ Сохранено</span></div></div></div><div class="admin-tab-content" id="tab-allies"><div class="admin-section-title">УПРАВЛЕНИЕ СОЮЗНИКАМИ</div><div id="alliesEditorWrap"></div><button class="content-save" id="addAlly" style="background:rgba(255,255,255,0.08);margin-bottom:16px">+ ДОБАВИТЬ СОЮЗНИКА</button><br><button class="content-save" id="saveAllies">💾 СОХРАНИТЬ</button><span class="content-saved" id="alliesSaved">✓ Сохранено</span></div><div class="admin-tab-content" id="tab-alert"><div class="admin-section-title">УПРАВЛЕНИЕ УРОВНЕМ УГРОЗЫ</div><div class="content-card" style="max-width:600px"><div class="content-card-title">🚨 Текущий статус</div><p style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:20px">Выбранный уровень отображается на странице <strong style="color:#fff">Тревога</strong> для всех посетителей сайта.</p><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px" id="alertLevelBtns"></div><div style="display:flex;align-items:center;gap:12px"><button class="content-save" id="saveAlertLevel">💾 ПРИМЕНИТЬ</button><span class="content-saved" id="alertSaved">✓ Уровень обновлён</span></div></div></div></div></div><div class="detail-modal" id="detailModal"><div class="detail-box" style="position:relative" id="detailBox"><button class="detail-close" id="detailClose">✕</button><div id="detailContent"></div></div></div><script>
+// ══════════════════════════════════════════════════════════
+//  MILLER FAMILY ADMIN PANEL — localStorage версия
+// ══════════════════════════════════════════════════════════
+
+let allApps = [];
+let currentFilter = "all";
+
+const DEFAULT_HOF = [
+  { name:"EDDIE MILLER", role:"Family Boss",       reason:"Основатель и лидер организации", photo:"/images/eddie.jpg", badge:"👑" },
+  { name:"ADAM MILLER",  role:"Director",           reason:"Лучший менеджер месяца",         photo:"/images/adam.jpg",  badge:"🛡️" },
+  { name:"ROY MILLER",   role:"Deputy Director",    reason:"Лучший боец месяца",             photo:"/images/roy.jpg",   badge:"⚔️" },
+];
+const DEFAULT_EVENT = { title:"СЕМЕЙНЫЙ СБОР", desc:"Общий сбор Miller Family", date:"2026-06-20T20:00" };
+const DEFAULT_ALLIES = [
+  { name:"ПРИМЕРНЫЙ СОЮЗНИК", tag:"ALLY", desc:"Дружественная организация. Пакт о ненападении подписан в 2024 году.", discord:"https://discord.gg/", since:"Март 2024", status:"active" },
+];
+
+document.getElementById("loginBtn").addEventListener("click", tryLogin);
+document.getElementById("secretInput").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+
+function tryLogin() {
+  const s = document.getElementById("secretInput").value.trim();
+  if (!s) return;
+  if (s === "donskoyy") {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+    initAdmin();
+  } else {
+    document.getElementById("loginError").textContent = "Неверный ключ доступа";
+    setTimeout(() => document.getElementById("loginError").textContent = "", 2500);
+  }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  document.getElementById("adminPanel").style.display = "none";
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("secretInput").value = "";
+});
+
+document.querySelectorAll(".admin-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".admin-tab-content").forEach(c => c.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
+  });
+});
+
+function initAdmin() {
+  loadApps();
+  initHofEditor();
+  initEventEditor();
+  initAlliesEditor();
+  initUsersTab();
+}
+
+// ══════════════════════════════════════════════════════════
+//  УЧАСТНИКИ
+// ══════════════════════════════════════════════════════════
+let adminSecret = "";
+let allUsers = [];
+
+const ALL_TITLES = ["Создатель","Легенда","Директор","Заместитель","Босс","Ветеран","Элита","Офицер","Страж","Новобранец"];
+const TITLE_COLORS = {
+  "Создатель":"#ffd700","Легенда":"#ff9800","Директор":"#4a9eff","Заместитель":"#9b59b6",
+  "Босс":"#ff2a2a","Ветеран":"#c9a227","Элита":"#43b581","Офицер":"#e74c3c","Страж":"#888","Новобранец":"#aaa"
+};
+const STAT_KEYS = ["kills","deaths","wins","events","money","reputation","hours","arrests"];
+const STAT_LABELS = {kills:"Убийства",deaths:"Смерти",wins:"Победы",events:"Ивенты",money:"Деньги",reputation:"Репутация",hours:"Часы",arrests:"Аресты"};
+const ALL_ACH_ADMIN = [
+  {id:"recruit",icon:"🪖",name:"Новобранец"},{id:"applicant",icon:"📋",name:"Заявитель"},{id:"social",icon:"💬",name:"Болтун"},
+  {id:"loyal",icon:"🤝",name:"Верность"},{id:"diplomat",icon:"🕊️",name:"Дипломат"},{id:"commander",icon:"🎖️",name:"Командир"},
+  {id:"streetwise",icon:"🌆",name:"Уличный"},{id:"firstblood",icon:"🩸",name:"Первая кровь"},
+  {id:"war100",icon:"⚔️",name:"Ветеран войн"},{id:"terror",icon:"🔥",name:"Гроза улиц"},{id:"builder",icon:"🏗️",name:"Строитель"},
+  {id:"ironwill",icon:"🛡️",name:"Железная воля"},{id:"hunter",icon:"🎯",name:"Охотник"},{id:"shadow",icon:"🌑",name:"Тень"},
+  {id:"boss",icon:"🔱",name:"Босс"},{id:"rich",icon:"💰",name:"Миллиардер"},{id:"ghost",icon:"👻",name:"Призрак"},
+  {id:"warlord",icon:"💀",name:"Военачальник"},{id:"territory",icon:"🗺️",name:"Территориальный"},{id:"enforcer",icon:"🔫",name:"Enforcer"},
+  {id:"legend",icon:"⭐",name:"Легенда"},{id:"unbeaten",icon:"🏆",name:"Непобедимый"},{id:"cardinal",icon:"🦅",name:"Кардинал"},
+  {id:"loyalty5",icon:"⏳",name:"Пять лет"},{id:"crimgenius",icon:"🧠",name:"Крим. гений"},{id:"feared",icon:"☠️",name:"Страх улиц"},
+  {id:"untouchable",icon:"💎",name:"Неприкасаемый"},{id:"founder",icon:"👑",name:"Основатель"},
+];
+
+function initUsersTab() {
+  adminSecret = document.getElementById("secretInput").value.trim();
+  document.getElementById("userSearch").addEventListener("input", e => renderUsersGrid(e.target.value));
+  loadUsers();
+}
+
+async function loadUsers() {
+  try {
+    const res = await fetch("/api/admin/users", { headers: { "x-admin-secret": adminSecret } });
+    allUsers = await res.json();
+    renderUsersGrid("");
+  } catch(e) {
+    document.getElementById("usersGrid").innerHTML = `<div style="color:rgba(255,100,100,0.6);font-size:13px;padding:20px">Ошибка загрузки участников</div>`;
+  }
+}
+
+function renderUsersGrid(search = "") {
+  const filtered = allUsers.filter(u => !search || (u.username||"").toLowerCase().includes(search.toLowerCase()));
+  const grid = document.getElementById("usersGrid");
+  if (!filtered.length) {
+    grid.innerHTML = `<div style="color:rgba(255,255,255,0.2);font-size:13px;padding:20px;text-align:center">Участников не найдено</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(u => {
+    const ach = u.achievements || [];
+    const st  = u.stats || {};
+    const titleColor = TITLE_COLORS[u.title] || "rgba(255,255,255,0.3)";
+    return `
+    <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:rgba(0,0,0,0.3);cursor:pointer"
+           onclick="toggleUserEdit('${u.id}')">
+        ${u.discordAvatar
+          ? `<img src="${u.discordAvatar}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,42,42,0.3)">`
+          : `<div style="width:40px;height:40px;border-radius:50%;background:rgba(255,42,42,0.15);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#ff2a2a">${(u.username||"?")[0].toUpperCase()}</div>`}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:1px">${u.username||"—"}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px">${u.discordTag ? "@"+u.discordTag : u.email||""}</div>
+        </div>
+        ${u.title ? `<span style="font-size:9px;font-weight:800;letter-spacing:2px;padding:3px 10px;border-radius:12px;background:${titleColor}18;border:1px solid ${titleColor}44;color:${titleColor}">${u.title}</span>` : ""}
+        <div style="font-size:10px;color:rgba(255,255,255,0.2);margin-left:8px">${ach.length} достижений · ${Object.values(st).reduce((a,b)=>a+b,0)} всего</div>
+        <i class="fa-solid fa-chevron-down" style="color:rgba(255,255,255,0.2);font-size:11px;margin-left:8px;transition:transform 0.2s" id="chevron-${u.id}"></i>
+      </div>
+      <div id="user-edit-${u.id}" style="display:none;padding:20px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div style="margin-bottom:18px">
+          <div class="content-label">Титул</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
+            <button onclick="setUserTitle('${u.id}','')" style="padding:4px 12px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:${!u.title?'rgba(255,42,42,0.15)':'rgba(255,255,255,0.03)'};color:${!u.title?'#ff4444':'rgba(255,255,255,0.3)'};font-family:'Montserrat',sans-serif" id="title-btn-${u.id}-none">Без титула</button>
+            ${ALL_TITLES.map(t => {
+              const c = TITLE_COLORS[t]||"#fff";
+              const active = u.title === t;
+              return `<button onclick="setUserTitle('${u.id}','${t}')" style="padding:4px 12px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid ${active?c+'66':'rgba(255,255,255,0.08)'};background:${active?c+'1a':'rgba(255,255,255,0.02)'};color:${active?c:'rgba(255,255,255,0.35)'};font-family:'Montserrat',sans-serif;transition:all 0.15s" id="title-btn-${u.id}-${t.replace(/\s/g,'_')}">${t}</button>`;
+            }).join("")}
+          </div>
+        </div>
+        <div style="margin-bottom:18px">
+          <div class="content-label">Статистика</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+            ${STAT_KEYS.map(k => `
+              <div>
+                <div style="font-size:8px;color:rgba(255,255,255,0.25);letter-spacing:1px;margin-bottom:4px;text-transform:uppercase">${STAT_LABELS[k]}</div>
+                <input type="number" min="0" id="stat-${u.id}-${k}" value="${st[k]||0}"
+                  style="width:100%;padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;outline:none">
+              </div>`).join("")}
+          </div>
+          <button onclick="saveUserStats('${u.id}')" class="content-save" style="margin-top:10px">💾 Сохранить статистику</button>
+          <span id="stats-saved-${u.id}" style="color:#4caf50;font-size:11px;letter-spacing:1px;margin-left:10px;opacity:0;transition:opacity 0.3s">✓ Сохранено</span>
+        </div>
+        <div>
+          <div class="content-label">Достижения</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+            ${ALL_ACH_ADMIN.map(a => {
+              const on = ach.includes(a.id);
+              return `<button onclick="toggleAch('${u.id}','${a.id}')" id="ach-btn-${u.id}-${a.id}"
+                style="padding:4px 10px;border-radius:8px;font-size:9px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:all 0.15s;
+                border:1px solid ${on?'rgba(255,152,0,0.4)':'rgba(255,255,255,0.08)'};
+                background:${on?'rgba(255,152,0,0.12)':'rgba(255,255,255,0.02)'};
+                color:${on?'#ffa726':'rgba(255,255,255,0.3)'}"
+                title="${a.name}">${a.icon} ${a.name}</button>`;
+            }).join("")}
+          </div>
+          <button onclick="saveUserAch('${u.id}')" class="content-save" style="margin-top:10px">💾 Сохранить достижения</button>
+          <span id="ach-saved-${u.id}" style="color:#4caf50;font-size:11px;letter-spacing:1px;margin-left:10px;opacity:0;transition:opacity 0.3s">✓ Сохранено</span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function toggleUserEdit(id) {
+  const el  = document.getElementById("user-edit-" + id);
+  const ch  = document.getElementById("chevron-" + id);
+  const open = el.style.display === "none";
+  el.style.display = open ? "block" : "none";
+  if (ch) ch.style.transform = open ? "rotate(180deg)" : "";
+}
+
+async function setUserTitle(userId, title) {
+  const res = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type":"application/json","x-admin-secret": adminSecret },
+    body: JSON.stringify({ title }),
+  });
+  if ((await res.json()).success) {
+    const u = allUsers.find(x => x.id === userId);
+    if (u) u.title = title;
+    renderUsersGrid(document.getElementById("userSearch").value);
+    setTimeout(() => { toggleUserEdit(userId); }, 50);
+  }
+}
+
+function toggleAch(userId, achId) {
+  const u   = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  u.achievements = u.achievements || [];
+  const idx = u.achievements.indexOf(achId);
+  if (idx === -1) u.achievements.push(achId);
+  else u.achievements.splice(idx, 1);
+  const btn = document.getElementById(`ach-btn-${userId}-${achId}`);
+  const on  = u.achievements.includes(achId);
+  if (btn) {
+    btn.style.borderColor  = on ? "rgba(255,152,0,0.4)"  : "rgba(255,255,255,0.08)";
+    btn.style.background   = on ? "rgba(255,152,0,0.12)" : "rgba(255,255,255,0.02)";
+    btn.style.color        = on ? "#ffa726"               : "rgba(255,255,255,0.3)";
+  }
+}
+
+async function saveUserStats(userId) {
+  const u    = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  const stats = {};
+  STAT_KEYS.forEach(k => { stats[k] = parseInt(document.getElementById(`stat-${userId}-${k}`)?.value)||0; });
+  const res  = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type":"application/json","x-admin-secret": adminSecret },
+    body: JSON.stringify({ stats }),
+  });
+  if ((await res.json()).success) {
+    u.stats = stats;
+    const el = document.getElementById(`stats-saved-${userId}`);
+    if (el) { el.style.opacity = 1; setTimeout(() => el.style.opacity = 0, 2500); }
+  }
+}
+
+async function saveUserAch(userId) {
+  const u = allUsers.find(x => x.id === userId);
+  if (!u) return;
+  const res = await fetch(`/api/admin/users/${userId}`, {
+    method: "PATCH",
+    headers: { "Content-Type":"application/json","x-admin-secret": adminSecret },
+    body: JSON.stringify({ achievements: u.achievements || [] }),
+  });
+  if ((await res.json()).success) {
+    const el = document.getElementById(`ach-saved-${userId}`);
+    if (el) { el.style.opacity = 1; setTimeout(() => el.style.opacity = 0, 2500); }
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  ЗАЯВКИ
+// ══════════════════════════════════════════════════════════
+function loadApps() {
+  allApps = JSON.parse(localStorage.getItem("miller_applications") || "[]");
+  renderStats();
+  renderTable();
+}
+
+function saveApps() {
+  localStorage.setItem("miller_applications", JSON.stringify(allApps));
+}
+
+function renderStats() {
+  const total    = allApps.length;
+  const pending  = allApps.filter(a => a.status === "pending").length;
+  const approved = allApps.filter(a => a.status === "approved").length;
+  const rejected = allApps.filter(a => a.status === "rejected").length;
+  document.getElementById("adminStats").innerHTML = [
+    { val: total,    lbl: "Всего заявок", color: "#fff"     },
+    { val: pending,  lbl: "Ожидают",      color: "#f0c040"  },
+    { val: approved, lbl: "Одобрено",     color: "#4caf50"  },
+    { val: rejected, lbl: "Отклонено",    color: "#f44336"  },
+  ].map(s => `<div class="as-card"><span class="as-val" style="color:${s.color}">${s.val}</span><span class="as-lbl">${s.lbl}</span></div>`).join("");
+}
+
+function renderTable() {
+  const filtered = currentFilter === "all" ? allApps : allApps.filter(a => a.status === currentFilter);
+  const body = document.getElementById("appsBody");
+  if (!filtered.length) {
+    body.innerHTML = `<tr><td colspan="7" class="no-apps">Заявок нет</td></tr>`;
+    return;
+  }
+  const labels = { pending:"ОЖИДАЕТ", approved:"ОДОБРЕНО", rejected:"ОТКЛОНЕНО" };
+  body.innerHTML = filtered.map(a => `
+    <tr>
+      <td><b style="color:#fff">${a.nickname}</b></td>
+      <td>${a.discord}</td>
+      <td>${a.age}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.experience}</td>
+      <td>${new Date(a.createdAt).toLocaleDateString("ru-RU")}</td>
+      <td><span class="status-badge status-${a.status}">${labels[a.status]||a.status}</span></td>
+      <td>
+        <button class="action-btn btn-approve" onclick="setStatus('${a.id}','approved')">✓</button>
+        <button class="action-btn btn-reject"  onclick="setStatus('${a.id}','rejected')">✗</button>
+        <button class="action-btn" style="border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.4)" onclick="showDetail('${a.id}')">···</button>
+        <button class="action-btn btn-reject" onclick="deleteApp('${a.id}')" title="Удалить">🗑</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function setStatus(id, status) {
+  const app = allApps.find(a => a.id === id);
+  if (app) { app.status = status; saveApps(); renderStats(); renderTable(); }
+}
+
+function deleteApp(id) {
+  if (!confirm("Удалить заявку?")) return;
+  allApps = allApps.filter(a => a.id !== id);
+  saveApps(); renderStats(); renderTable();
+}
+
+document.getElementById("filterBar").addEventListener("click", e => {
+  const btn = e.target.closest(".filter-btn");
+  if (!btn) return;
+  currentFilter = btn.dataset.filter;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderTable();
+});
+
+document.getElementById("exportCsvBtn").addEventListener("click", () => {
+  if (!allApps.length) { alert("Нет заявок для экспорта"); return; }
+  const headers = ["ID","Никнейм","Discord","Возраст","Опыт","Причина","Статус","Комментарий","Дата"];
+  const rows = allApps.map(a => [
+    a.id, a.nickname, a.discord, a.age,
+    `"${(a.experience||"").replace(/"/g,'""')}"`,
+    `"${(a.reason||"").replace(/"/g,'""')}"`,
+    a.status,
+    `"${(a.comment||"").replace(/"/g,'""')}"`,
+    new Date(a.createdAt).toLocaleString("ru-RU"),
+  ].join(","));
+  const csv  = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement("a"), {
+    href: url, download: `miller-applications-${new Date().toISOString().slice(0,10)}.csv`
+  });
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("clearAppsBtn").addEventListener("click", () => {
+  if (!confirm("Очистить ВСЕ заявки? Действие необратимо.")) return;
+  allApps = [];
+  saveApps(); renderStats(); renderTable();
+});
+
+document.getElementById("detailClose").addEventListener("click", () => {
+  document.getElementById("detailModal").classList.remove("active");
+});
+document.getElementById("detailModal").addEventListener("click", e => {
+  if (e.target === document.getElementById("detailModal"))
+    document.getElementById("detailModal").classList.remove("active");
+});
+
+function showDetail(id) {
+  const a = allApps.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById("detailContent").innerHTML = `
+    <div style="font-size:16px;font-weight:900;letter-spacing:2px;margin-bottom:20px;color:#fff">${a.nickname}</div>
+    ${[
+      ["Discord", a.discord], ["Возраст", a.age],
+      ["RP Опыт", a.experience], ["Дата подачи", new Date(a.createdAt).toLocaleString("ru-RU")],
+      ["Причина", a.reason],
+    ].map(([l,v]) => `<div class="detail-field"><div class="detail-field-label">${l}</div><div class="detail-field-val">${v}</div></div>`).join("")}
+    <div class="detail-field">
+      <div class="detail-field-label">Комментарий администратора</div>
+      <textarea class="detail-comment" id="detailComment" placeholder="Оставь комментарий...">${a.comment||""}</textarea>
+    </div>
+    <div class="detail-actions">
+      <button class="action-btn btn-approve" style="flex:1;padding:10px" onclick="saveComment('${a.id}','approved')">✓ ОДОБРИТЬ</button>
+      <button class="action-btn btn-reject"  style="flex:1;padding:10px" onclick="saveComment('${a.id}','rejected')">✗ ОТКЛОНИТЬ</button>
+    </div>
+  `;
+  document.getElementById("detailModal").classList.add("active");
+}
+
+function saveComment(id, status) {
+  const comment = document.getElementById("detailComment").value;
+  const app = allApps.find(a => a.id === id);
+  if (app) { app.status = status; app.comment = comment; }
+  saveApps();
+  document.getElementById("detailModal").classList.remove("active");
+  renderStats(); renderTable();
+}
+
+// ══════════════════════════════════════════════════════════
+//  ДОСКА ПОЧЁТА
+// ══════════════════════════════════════════════════════════
+function initHofEditor() {
+  const saved = JSON.parse(localStorage.getItem("miller_hof") || "null") || DEFAULT_HOF;
+  renderHofEditor(saved);
+
+  document.getElementById("saveHof").addEventListener("click", () => {
+    const items = [...document.querySelectorAll(".hof-editor-item")].map(el => ({
+      name:   el.querySelector("[data-field=name]").value,
+      role:   el.querySelector("[data-field=role]").value,
+      reason: el.querySelector("[data-field=reason]").value,
+      photo:  el.querySelector("[data-field=photo]").value,
+      badge:  el.querySelector("[data-field=badge]").value,
+    }));
+    localStorage.setItem("miller_hof", JSON.stringify(items));
+    const saved = document.getElementById("hofSaved");
+    saved.style.opacity = 1;
+    setTimeout(() => saved.style.opacity = 0, 2500);
+  });
+}
+
+function renderHofEditor(data) {
+  document.getElementById("hofEditorWrap").innerHTML = data.map((m, i) => `
+    <div class="hof-editor-item">
+      <div class="hof-editor-head">#${i+1} МЕСТО</div>
+      <div class="content-field">
+        <label class="content-label">Имя</label>
+        <input class="content-input" data-field="name" value="${m.name}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Роль</label>
+        <input class="content-input" data-field="role" value="${m.role}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">За что награждён</label>
+        <input class="content-input" data-field="reason" value="${m.reason}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Фото (путь)</label>
+        <input class="content-input" data-field="photo" value="${m.photo}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Бейдж (эмодзи)</label>
+        <input class="content-input" data-field="badge" value="${m.badge}" style="width:80px">
+      </div>
+    </div>
+  `).join("");
+}
+
+// ══════════════════════════════════════════════════════════
+//  СОБЫТИЕ / ТАЙМЕР
+// ══════════════════════════════════════════════════════════
+function initEventEditor() {
+  const saved = JSON.parse(localStorage.getItem("miller_event") || "null") || DEFAULT_EVENT;
+  document.getElementById("evtTitle").value = saved.title || "";
+  document.getElementById("evtDesc").value  = saved.desc  || "";
+  document.getElementById("evtDate").value  = saved.date  || "";
+
+  document.getElementById("saveEvent").addEventListener("click", () => {
+    const data = {
+      title: document.getElementById("evtTitle").value,
+      desc:  document.getElementById("evtDesc").value,
+      date:  document.getElementById("evtDate").value,
+    };
+    localStorage.setItem("miller_event", JSON.stringify(data));
+    const saved = document.getElementById("evtSaved");
+    saved.style.opacity = 1;
+    setTimeout(() => saved.style.opacity = 0, 2500);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  СОЮЗНИКИ
+// ══════════════════════════════════════════════════════════
+let alliesData = [];
+
+function initAlliesEditor() {
+  alliesData = JSON.parse(localStorage.getItem("miller_allies") || "null") || DEFAULT_ALLIES;
+  renderAlliesEditor();
+
+  document.getElementById("addAlly").addEventListener("click", () => {
+    alliesData.push({ name:"НОВЫЙ СОЮЗНИК", tag:"ALLY", desc:"Описание организации", discord:"https://discord.gg/", since:"2026", status:"active" });
+    renderAlliesEditor();
+  });
+
+  const ALERT_LEVELS = [
+    { id:'peace',  name:'МИР',        icon:'🟢', color:'#44ff88', desc:'Угроз не обнаружено' },
+    { id:'watch',  name:'НАБЛЮДЕНИЕ', icon:'🟡', color:'#f0c040', desc:'Фиксируется активность врагов' },
+    { id:'ready',  name:'ГОТОВНОСТЬ', icon:'🟠', color:'#ff8800', desc:'Возможна атака' },
+    { id:'war',    name:'ВОЙНА',      icon:'🔴', color:'#ff2a2a', desc:'Идут боевые действия' },
+    { id:'siege',  name:'ОСАДА',      icon:'💀', color:'#ff0000', desc:'Штаб под атакой' },
+  ];
+  let selectedAlertLevel = localStorage.getItem('mf_alert_level') || 'peace';
+
+  function renderAlertBtns() {
+    document.getElementById('alertLevelBtns').innerHTML = ALERT_LEVELS.map(l => `
+      <div onclick="selectAlertLevel('${l.id}')" style="
+        display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:10px;cursor:pointer;
+        border:1px solid ${selectedAlertLevel===l.id ? l.color : 'rgba(255,255,255,0.07)'};
+        background:${selectedAlertLevel===l.id ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.02)'};
+        box-shadow:${selectedAlertLevel===l.id ? '0 0 16px -4px '+l.color : 'none'};
+        transition:all 0.2s;
+      ">
+        <span style="font-size:22px">${l.icon}</span>
+        <div style="flex:1">
+          <div style="font-size:12px;font-weight:800;letter-spacing:2px;color:${selectedAlertLevel===l.id?l.color:'rgba(255,255,255,0.6)'}">${l.name}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px">${l.desc}</div>
+        </div>
+        ${selectedAlertLevel===l.id ? `<span style="font-size:10px;font-weight:800;letter-spacing:1px;color:${l.color}">● АКТИВЕН</span>` : ''}
+      </div>
+    `).join('');
+  }
+
+  window.selectAlertLevel = function(id) {
+    selectedAlertLevel = id;
+    renderAlertBtns();
+  };
+
+  document.getElementById('saveAlertLevel').addEventListener('click', () => {
+    localStorage.setItem('mf_alert_level', selectedAlertLevel);
+    const s = document.getElementById('alertSaved');
+    s.style.opacity = 1;
+    setTimeout(() => s.style.opacity = 0, 2500);
+  });
+
+  renderAlertBtns();
+
+  document.getElementById("saveAllies").addEventListener("click", () => {
+    const items = [...document.querySelectorAll(".ally-editor-item")].map(el => ({
+      name:    el.querySelector("[data-field=name]").value,
+      tag:     el.querySelector("[data-field=tag]").value,
+      desc:    el.querySelector("[data-field=desc]").value,
+      discord: el.querySelector("[data-field=discord]").value,
+      since:   el.querySelector("[data-field=since]").value,
+      status:  el.querySelector("[data-field=status]").value,
+    }));
+    localStorage.setItem("miller_allies", JSON.stringify(items));
+    const saved = document.getElementById("alliesSaved");
+    saved.style.opacity = 1;
+    setTimeout(() => saved.style.opacity = 0, 2500);
+  });
+}
+
+function renderAlliesEditor() {
+  document.getElementById("alliesEditorWrap").innerHTML = alliesData.map((a, i) => `
+    <div class="hof-editor-item ally-editor-item" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="hof-editor-head" style="display:flex;justify-content:space-between;align-items:center">
+        <span>СОЮЗНИК #${i+1}</span>
+        <button onclick="removeAlly(${i})" style="background:rgba(244,67,54,0.1);border:1px solid rgba(244,67,54,0.3);color:#f44336;border-radius:4px;padding:2px 8px;cursor:pointer;font-size:10px">✗ Удалить</button>
+      </div>
+      <div class="content-field">
+        <label class="content-label">Название</label>
+        <input class="content-input" data-field="name" value="${a.name}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Тег</label>
+        <input class="content-input" data-field="tag" value="${a.tag}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Дата союза</label>
+        <input class="content-input" data-field="since" value="${a.since}">
+      </div>
+      <div class="content-field" style="grid-column:1/-1">
+        <label class="content-label">Описание</label>
+        <input class="content-input" data-field="desc" value="${a.desc}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Discord ссылка</label>
+        <input class="content-input" data-field="discord" value="${a.discord}">
+      </div>
+      <div class="content-field">
+        <label class="content-label">Статус (active / inactive)</label>
+        <input class="content-input" data-field="status" value="${a.status}">
+      </div>
+    </div>
+  `).join("");
+}
+
+function removeAlly(i) {
+  alliesData.splice(i, 1);
+  renderAlliesEditor();
+}
+
+// ══════════════════════════════════════════════════════════
+//  МОНИТОРИНГ — войсы и чаты
+// ══════════════════════════════════════════════════════════
+
+let monitorInterval = null;
+let allMessages = [];
+let chatFilter = "";
+
+const _origInitAdmin = initAdmin;
+initAdmin = function() {
+  _origInitAdmin();
+  startMonitor();
+};
+
+function startMonitor() {
+  fetchVoice();
+  fetchMessages();
+  clearInterval(monitorInterval);
+  monitorInterval = setInterval(() => {
+    fetchVoice();
+    fetchMessages();
+  }, 5000);
+}
+
+async function fetchVoice() {
+  try {
+    const data = await fetch("/api/admin/voice", {
+      headers: { "x-admin-secret": adminSecret }
+    }).then(r => r.json());
+
+    if (!Array.isArray(data)) return;
+    renderVoice(data);
+  } catch {}
+}
+
+async function fetchMessages() {
+  try {
+    const data = await fetch("/api/admin/messages?limit=100", {
+      headers: { "x-admin-secret": adminSecret }
+    }).then(r => r.json());
+
+    if (!Array.isArray(data)) return;
+    const prevLen = allMessages.length;
+    allMessages = data;
+    renderChat(prevLen < data.length);
+  } catch {}
+}
+
+function renderVoice(channels) {
+  const el = document.getElementById("voiceList");
+  if (!el) return;
+
+  if (!channels.length) {
+    el.innerHTML = `<div class="voice-empty"><i class="fa-solid fa-microphone-slash" style="margin-right:6px;opacity:0.4"></i>Никого в войсе</div>`;
+    return;
+  }
+
+  el.innerHTML = channels.map(ch => `
+    <div class="voice-ch">
+      <div class="voice-ch-head">
+        <i class="fa-solid fa-volume-high"></i>
+        ${ch.channelName}
+        <span class="voice-ch-count">${ch.members.length} участн.</span>
+      </div>
+      <div class="voice-members">
+        ${ch.members.map(m => `
+          <div class="voice-member">
+            <img src="${m.avatar}" alt="" onerror="this.style.display='none'">
+            ${m.name}
+            ${m.mute ? `<i class="fa-solid fa-microphone-slash vm-icon" title="Микрофон выкл"></i>` : ""}
+            ${m.deaf ? `<i class="fa-solid fa-headphones-slash vm-icon" title="Звук выкл"></i>` : ""}
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderChat(hasNew) {
+  const el = document.getElementById("chatFeed");
+  if (!el) return;
+
+  const filtered = chatFilter
+    ? allMessages.filter(m =>
+        m.author.toLowerCase().includes(chatFilter) ||
+        m.channel.toLowerCase().includes(chatFilter) ||
+        m.content.toLowerCase().includes(chatFilter))
+    : allMessages;
+
+  if (!filtered.length) {
+    el.innerHTML = `<div class="voice-empty"><i class="fa-solid fa-comment-slash" style="margin-right:6px;opacity:0.4"></i>Нет сообщений</div>`;
+    return;
+  }
+
+  const wasAtBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
+
+  el.innerHTML = filtered.map((m, i) => {
+    const time = new Date(m.ts).toLocaleTimeString("ru-RU", { hour:"2-digit", minute:"2-digit" });
+    const isNew = hasNew && i < 3;
+    const safeContent = escHtml(m.content).substring(0, 80) + (m.content.length > 80 ? "…" : "");
+    return `
+      <div class="chat-msg${isNew ? " new-msg" : ""}" style="position:relative" onmouseenter="this.querySelector('.reply-btn').style.opacity='1'" onmouseleave="this.querySelector('.reply-btn').style.opacity='0'">
+        <img class="chat-msg-avatar" src="${m.avatar}" alt="" onerror="this.src='/images/family-logo.jpeg'">
+        <div class="chat-msg-body">
+          <div class="chat-msg-head">
+            <span class="chat-msg-author">${escHtml(m.author)}</span>
+            <span class="chat-msg-ch"><i class="fa-solid fa-hashtag" style="font-size:8px"></i> ${escHtml(m.channel)}</span>
+            <span class="chat-msg-time">${time}</span>
+          </div>
+          <div class="chat-msg-text">${escHtml(m.content)}</div>
+        </div>
+        <button class="reply-btn" onclick='setReply(${JSON.stringify(m)})' title="Ответить"
+          style="position:absolute;top:8px;right:8px;opacity:0;transition:opacity 0.15s;
+          background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.25);
+          color:rgba(99,179,237,0.8);border-radius:6px;padding:4px 9px;
+          font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;
+          font-family:'Montserrat',sans-serif">
+          <i class="fa-solid fa-reply"></i> Ответить
+        </button>
+      </div>
+    `;
+  }).join("");
+
+  if (wasAtBottom || hasNew) el.scrollTop = el.scrollHeight;
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+document.getElementById("chatSearch").addEventListener("input", e => {
+  chatFilter = e.target.value.trim().toLowerCase();
+  renderChat(false);
+});
+
+document.getElementById("chatScrollBtn").addEventListener("click", () => {
+  const el = document.getElementById("chatFeed");
+  if (el) el.scrollTop = el.scrollHeight;
+});
+
+document.getElementById("monRefreshBtn").addEventListener("click", function() {
+  this.classList.add("spin");
+  fetchVoice();
+  fetchMessages();
+  setTimeout(() => this.classList.remove("spin"), 600);
+});
+
+document.querySelectorAll(".admin-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    if (tab.dataset.tab === "monitor" && !monitorInterval) {
+      startMonitor();
+    }
+  });
+});
+
+let replyTarget = null;
+
+function setReply(msg) {
+  replyTarget = msg;
+  const banner = document.getElementById("replyBanner");
+  document.getElementById("replyBannerText").textContent =
+    `${msg.author}: ${msg.content.substring(0, 80)}${msg.content.length > 80 ? "…" : ""}`;
+  banner.style.display = "flex";
+  const sel = document.getElementById("discordChannelSelect");
+  if (msg.channelId) sel.value = msg.channelId;
+  document.getElementById("discordMsgText").focus();
+  document.getElementById("sendDiscordMsg").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function clearReply() {
+  replyTarget = null;
+  document.getElementById("replyBanner").style.display = "none";
+  document.getElementById("replyBannerText").textContent = "";
+}
+
+async function loadChannels() {
+  try {
+    const data = await fetch("/api/admin/channels", {
+      headers: { "x-admin-secret": adminSecret }
+    }).then(r => r.json());
+    if (!Array.isArray(data)) return;
+    const sel = document.getElementById("discordChannelSelect");
+    let lastParent = null;
+    let optgroup = null;
+    data.forEach(ch => {
+      if (ch.parentName !== lastParent) {
+        optgroup = document.createElement("optgroup");
+        optgroup.label = ch.parentName || "Каналы";
+        optgroup.style.background = "#111";
+        sel.appendChild(optgroup);
+        lastParent = ch.parentName;
+      }
+      const opt = document.createElement("option");
+      opt.value = ch.id;
+      opt.textContent = "# " + ch.name;
+      opt.style.background = "#111";
+      (optgroup || sel).appendChild(opt);
+    });
+  } catch {}
+}
+
+document.getElementById("discordMsgText").addEventListener("input", function() {
+  document.getElementById("sendMsgCounter").textContent = this.value.length + " / 2000";
+});
+
+document.getElementById("discordMsgText").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    document.getElementById("sendDiscordMsg").click();
+  }
+});
+
+document.getElementById("sendDiscordMsg").addEventListener("click", async function() {
+  const channelId = document.getElementById("discordChannelSelect").value;
+  const content   = document.getElementById("discordMsgText").value.trim();
+  const status    = document.getElementById("sendMsgStatus");
+
+  if (!channelId) { showSendStatus("Выбери канал", "#f0c040"); return; }
+  if (!content)   { showSendStatus("Введи текст", "#f0c040"); return; }
+
+  this.disabled = true;
+  this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Отправка...';
+
+  try {
+    const body = { channelId, content };
+    if (replyTarget?.id) body.replyToId = replyTarget.id;
+    const res  = await fetch("/api/admin/send-message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-secret": adminSecret },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById("discordMsgText").value = "";
+      document.getElementById("sendMsgCounter").textContent = "0 / 2000";
+      clearReply();
+      showSendStatus("✓ Отправлено!", "#43b581");
+    } else {
+      showSendStatus("✗ " + (data.message || "Ошибка"), "#f44336");
+    }
+  } catch {
+    showSendStatus("✗ Нет соединения", "#f44336");
+  }
+
+  this.disabled = false;
+  this.innerHTML = '<i class="fa-solid fa-paper-plane"></i>&nbsp; Отправить';
+});
+
+function showSendStatus(text, color) {
+  const el = document.getElementById("sendMsgStatus");
+  el.textContent = text;
+  el.style.color = color;
+  el.style.opacity = 1;
+  setTimeout(() => el.style.opacity = 0, 3000);
+}
+
+const _origStartMonitor = startMonitor;
+startMonitor = function() {
+  _origStartMonitor();
+  if (document.getElementById("discordChannelSelect").options.length <= 1) {
+    loadChannels();
+  }
+};
+</script></body></html>

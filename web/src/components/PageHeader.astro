@@ -1,0 +1,18 @@
+---
+interface NavLink {
+  href: string;
+  label: string;
+}
+interface Props {
+  links: NavLink[];
+}
+const { links } = Astro.props;
+---
+
+<header class="page-header">
+  <a href="/index.html" class="page-logo">MILLER <span>FAMILY</span></a>
+  <nav class="page-nav">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    <a href="/index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+  </nav>
+</header>

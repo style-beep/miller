@@ -1,0 +1,19 @@
+{
+  "name": "Miller Family — Del Perro RP",
+  "short_name": "Miller Family",
+  "description": "Официальный сайт игровой семьи Miller Family. GTA 5 Roleplay — Del Perro RP.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050505",
+  "theme_color": "#ff2a2a",
+  "lang": "ru",
+  "icons": [
+    { "src": "images/family-logo.jpeg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "images/family-logo.jpeg", "sizes": "512x512", "type": "image/jpeg" }
+  ],
+  "screenshots": [
+    { "src": "images/background.png", "sizes": "1280x720", "type": "image/png" }
+  ],
+  "categories": ["games", "entertainment"]
+}

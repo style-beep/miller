@@ -1811,15 +1811,19 @@
 </main>
 
 <script type="module">
-import { initPageLoader } from "./js/page-loader.js";
+import { requireAuth }       from "./js/auth-guard.js";
+import { initPageLoader }    from "./js/page-loader.js";
 import { initPageTransition } from "./js/page-transition.js";
 import { initEasterEgg }      from "./js/easter-egg.js";
-initPageTransition();
-initEasterEgg();
-initPageLoader({
-  password: "MF·CLASSIFIED·DOSSIER·2026",
-  label: "РАСШИФРОВКА СЕКРЕТНЫХ ФАЙЛОВ",
-  onComplete: () => {},
+requireAuth().then(user => {
+  if (!user) return;
+  initPageTransition();
+  initEasterEgg();
+  initPageLoader({
+    password: "MF·CLASSIFIED·DOSSIER·2026",
+    label: "РАСШИФРОВКА СЕКРЕТНЫХ ФАЙЛОВ",
+    onComplete: () => {},
+  });
 });
 </script>
 

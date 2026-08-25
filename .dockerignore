@@ -1,0 +1,19 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+sessions
+users.json
+applications.json
+web
+# server now serves dist-web/ exclusively; legacy root static
+# assets below are duplicated there and just bloat the image
+/video
+/music
+/images
+/css
+/js
+/*.html
+/manifest.json
+/favicon.ico

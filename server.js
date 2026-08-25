@@ -4,9 +4,11 @@ const { Client, GatewayIntentBits } = require("discord.js");
 const express   = require("express");
 const path      = require("path");
 const fs        = require("fs");
+const crypto    = require("crypto");
 const http      = require("http");
 const WebSocket = require("ws");
-const session   = require("express-session");
+const session      = require("express-session");
+const FileStore    = require("session-file-store")(session);
 const bcrypt    = require("bcryptjs");
 const passport  = require("passport");
 const { Strategy: LocalStrategy }   = require("passport-local");
@@ -16,6 +18,32 @@ const app    = express();
 const server = http.createServer(app);
 const wss    = new WebSocket.Server({ server });
 const PORT   = process.env.PORT || 3001;
+const NODE_ENV = process.env.NODE_ENV || "development";
+
+// ── Session secret: fail-closed in production ──────────────
+function resolveSessionSecret() {
+  const secret = process.env.SESSION_SECRET;
+  const isWeak = !secret || secret.length < 32;
+  if (NODE_ENV === "production") {
+    if (isWeak) {
+      console.error(
+        "[FATAL] SESSION_SECRET отсутствует или короче 32 символов. " +
+        "Установите надёжный случайный SESSION_SECRET в .env перед запуском в production."
+      );
+      process.exit(1);
+    }
+    return secret;
+  }
+  if (isWeak) {
+    console.warn(
+      "[WARN] SESSION_SECRET не задан или слишком короткий — используется случайный " +
+      "секрет только для этого dev-процесса (сессии будут сброшены при перезапуске)."
+    );
+    return crypto.randomBytes(32).toString("hex");
+  }
+  return secret;
+}
+const SESSION_SECRET = resolveSessionSecret();
 
 // ── User storage ────────────────────────────────────────────
 const USERS_FILE = path.join(__dirname, "users.json");
@@ -69,6 +97,7 @@ if (process.env.DISCORD_CLIENT_ID && process.env.DISCORD_CLIENT_SECRET) {
         discordId:     profile.id,
         discordTag:    profile.username,
         discordAvatar: avatar,
+        role:          "user",
         bio:           "",
         statusText:    "",
         stats:         { kills: 0, deaths: 0, wins: 0, events: 0, money: 0, reputation: 0, hours: 0, arrests: 0 },
@@ -91,14 +120,36 @@ if (process.env.DISCORD_CLIENT_ID && process.env.DISCORD_CLIENT_SECRET) {
 // ── Middleware ──────────────────────────────────────────────
 app.use(express.json());
 app.use(session({
-  secret:            process.env.SESSION_SECRET || "miller-family-2026-secret",
+  store:             new FileStore({ path: "./sessions", ttl: 7 * 24 * 3600, retries: 1, logFn: () => {} }),
+  secret:            SESSION_SECRET,
   resave:            false,
   saveUninitialized: false,
   cookie:            { maxAge: 7 * 24 * 60 * 60 * 1000 },
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname)));
+
+// ── Блокировка доступа к чувствительным файлам через static ─
+const PUBLIC_DIR = path.join(__dirname, "dist-web");
+const SENSITIVE_PATHS = new Set(["/users.json", "/applications.json", "/users.json;C", "/applications.json;C", "/sessions;C"]);
+app.use((req, res, next) => {
+  if (SENSITIVE_PATHS.has(req.path) || req.path.startsWith("/sessions/") || req.path === "/sessions") {
+    return res.status(404).sendFile(path.join(PUBLIC_DIR, "404.html"));
+  }
+  next();
+});
+app.use(express.static(PUBLIC_DIR, { dotfiles: "deny" }));
+
+// ── Admin authorization: server-side session + role check ──
+function requireAdmin(req, res, next) {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ success: false, message: "Forbidden" });
+  }
+  next();
+}
 
 // ── WebSocket broadcast ─────────────────────────────────────
 function broadcast(data) {
@@ -158,13 +209,14 @@ client.on("ready", async () => {
 
 function updateCache(guild) {
   membersCache = guild.members.cache.map(m => ({
+    id:     m.id,
     name:   m.displayName,
     avatar: m.user.displayAvatarURL({ extension: "png", size: 64, forceStatic: true }),
     status: m.presence?.status || "offline",
     roles:  m.roles.cache
       .filter(r => r.name !== "@everyone")
       .sort((a, b) => b.position - a.position)
-      .map(r => ({ name: r.name, color: r.hexColor })),
+      .map(r => ({ id: r.id, name: r.name, color: r.hexColor })),
   }));
 }
 
@@ -213,19 +265,44 @@ client.on("messageCreate", msg => {
 // ── API: участники ──────────────────────────────────────────
 app.get("/api/members", (req, res) => res.json(membersCache));
 
+// ── API: текстовые каналы (admin) ──────────────────────────
+app.get("/api/admin/channels", requireAdmin, (req, res) => {
+  const guild = client.guilds.cache.first();
+  if (!guild) return res.json([]);
+  const channels = guild.channels.cache
+    .filter(ch => ch.type === 0) // GUILD_TEXT = 0
+    .sort((a, b) => a.rawPosition - b.rawPosition)
+    .map(ch => ({ id: ch.id, name: ch.name, parentName: ch.parent?.name || null }));
+  res.json(channels);
+});
+
+// ── API: отправить сообщение в канал (admin) ───────────────
+app.post("/api/admin/send-message", requireAdmin, async (req, res) => {
+  const { channelId, content } = req.body;
+  if (!channelId || !content?.trim())
+    return res.status(400).json({ success: false, message: "channelId и content обязательны" });
+  try {
+    const ch = await client.channels.fetch(channelId);
+    if (!ch || ch.type !== 0)
+      return res.status(404).json({ success: false, message: "Канал не найден" });
+    const { replyToId } = req.body;
+    const payload = { content: String(content).substring(0, 2000) };
+    if (replyToId) payload.reply = { messageReference: replyToId, failIfNotExists: false };
+    const msg = await ch.send(payload);
+    res.json({ success: true, messageId: msg.id });
+  } catch (err) {
+    console.error("[send-message]", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // ── API: войс-каналы (admin) ────────────────────────────────
-app.get("/api/admin/voice", (req, res) => {
-  const secret = req.headers["x-admin-secret"];
-  if (secret !== process.env.ADMIN_SECRET)
-    return res.status(403).json({ success: false });
+app.get("/api/admin/voice", requireAdmin, (req, res) => {
   res.json(voiceCache);
 });
 
 // ── API: сообщения (admin) ──────────────────────────────────
-app.get("/api/admin/messages", (req, res) => {
-  const secret = req.headers["x-admin-secret"];
-  if (secret !== process.env.ADMIN_SECRET)
-    return res.status(403).json({ success: false });
+app.get("/api/admin/messages", requireAdmin, (req, res) => {
   const limit = Math.min(parseInt(req.query.limit) || 50, MSG_LIMIT);
   res.json([...messagesCache].reverse().slice(0, limit));
 });
@@ -247,6 +324,7 @@ app.post("/api/auth/register", async (req, res) => {
     username,
     email:        email.toLowerCase(),
     passwordHash: await bcrypt.hash(password, 10),
+    role:         "user",
     bio:          "",
     statusText:   "",
     stats:        { kills: 0, deaths: 0, wins: 0, events: 0, money: 0, reputation: 0, hours: 0, arrests: 0 },
@@ -290,9 +368,7 @@ app.get("/api/auth/me", (req, res) => {
   const user = { ...safeUser(req.user) };
   // Подтягиваем роли с Discord сервера по discordId
   if (user.discordId) {
-    const member = membersCache.find(m =>
-      m.avatar?.includes(`/avatars/${user.discordId}/`)
-    );
+    const member = membersCache.find(m => m.id === user.discordId);
     if (member) {
       user.discordRoles  = member.roles;
       user.discordStatus = member.status;
@@ -300,6 +376,21 @@ app.get("/api/auth/me", (req, res) => {
     }
   }
   res.json({ user });
+});
+
+// ── Публичный профиль по Discord ID ────────────────────────
+app.get("/api/users/:discordId", (req, res) => {
+  const user = loadUsers().find(u => u.discordId === req.params.discordId);
+  if (!user) return res.status(404).json({ user: null });
+
+  const safe = safeUser(user);
+  const member = membersCache.find(m => m.id === req.params.discordId);
+  if (member) {
+    safe.discordRoles  = member.roles;
+    safe.discordStatus = member.status;
+    safe.discordName   = member.name;
+  }
+  res.json({ user: safe });
 });
 
 // ── AUTH: обновить профиль ─────────────────────────────────
@@ -324,13 +415,48 @@ app.patch("/api/auth/profile", (req, res) => {
   res.json({ success: true, user: safeUser(u) });
 });
 
+// ── ADMIN: список пользователей ────────────────────────────
+app.get("/api/admin/users", requireAdmin, (req, res) => {
+  res.json(loadUsers().map(safeUser));
+});
+
+// ── ADMIN: редактировать пользователя (статы, достижения, титул) ──
+app.patch("/api/admin/users/:id", requireAdmin, (req, res) => {
+  const users = loadUsers();
+  const u = users.find(x => x.id === req.params.id);
+  if (!u) return res.status(404).json({ success: false });
+  const { stats, achievements, title } = req.body;
+  if (stats !== undefined && typeof stats === "object") {
+    u.stats = u.stats || {};
+    const allowed = ["kills","deaths","wins","events","money","reputation","hours","arrests"];
+    allowed.forEach(k => { if (stats[k] !== undefined) u.stats[k] = Math.max(0, parseInt(stats[k]) || 0); });
+  }
+  if (achievements !== undefined && Array.isArray(achievements)) {
+    u.achievements = achievements.filter(a => typeof a === "string").slice(0, 50);
+  }
+  if (title !== undefined) u.title = String(title).substring(0, 40);
+  saveUsers(users);
+  res.json({ success: true, user: safeUser(u) });
+});
+
 // ── AUTH: Discord OAuth ────────────────────────────────────
 app.get("/api/auth/discord",
   passport.authenticate("discord")
 );
 app.get("/api/auth/discord/callback",
-  passport.authenticate("discord", { failureRedirect: "/auth.html?error=discord" }),
-  (req, res) => res.redirect("/profile.html")
+  (req, res, next) => {
+    passport.authenticate("discord", { failureRedirect: "/auth.html?error=discord" }, (err, user, info) => {
+      if (err) {
+        console.error("[discord-oauth] code:", err.code, "message:", err.message, "status:", err.status);
+        return res.redirect("/auth.html?error=discord");
+      }
+      if (!user) return res.redirect("/auth.html?error=discord");
+      req.login(user, loginErr => {
+        if (loginErr) return next(loginErr);
+        res.redirect("/profile.html");
+      });
+    })(req, res, next);
+  }
 );
 
 // ── API: подача заявки ──────────────────────────────────────
@@ -421,11 +547,7 @@ app.get("/api/application-status", (req, res) => {
 });
 
 // ── API: обновление статуса (защищён секретом) ──────────────
-app.patch("/api/application-status/:id", (req, res) => {
-  const secret = req.headers["x-admin-secret"];
-  if (secret !== process.env.ADMIN_SECRET)
-    return res.status(403).json({ success: false, message: "Forbidden" });
-
+app.patch("/api/application-status/:id", requireAdmin, (req, res) => {
   const apps   = loadApps();
   const idx    = apps.findIndex(a => a.id === req.params.id);
   if (idx === -1) return res.status(404).json({ success: false });
@@ -445,16 +567,13 @@ app.patch("/api/application-status/:id", (req, res) => {
 });
 
 // ── API: все заявки для админки ────────────────────────────
-app.get("/api/applications", (req, res) => {
-  const secret = req.headers["x-admin-secret"];
-  if (secret !== process.env.ADMIN_SECRET)
-    return res.status(403).json({ success: false });
+app.get("/api/applications", requireAdmin, (req, res) => {
   res.json(loadApps());
 });
 
 // ── 404 ─────────────────────────────────────────────────────
 app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "404.html"));
+  res.status(404).sendFile(path.join(PUBLIC_DIR, "404.html"));
 });
 
 // ── Запуск ──────────────────────────────────────────────────

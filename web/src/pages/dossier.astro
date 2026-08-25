@@ -1,0 +1,994 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLoader from '../components/PageLoader.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PageFooter from '../components/PageFooter.astro';
+---
+
+<BaseLayout title="CLASSIFIED | MILLER FAMILY DOSSIER">
+  <link slot="head" href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet"/>
+
+  <div class="dos-tape"></div>
+
+  <PageLoader
+    barTitle="CLASSIFIED · FBI DATABASE · MILLER FAMILY"
+    logoSub="Miller Family · Del Perro RP"
+    section="LEVEL-5 CLEARANCE"
+    initialLabel="Расшифровка засекреченных файлов..."
+    barMetaLabel="ДЕШИФРОВКА ДАННЫХ"
+  />
+
+  <PageHeader
+    links={[
+      { href: '/index.html#structure', label: 'Структура' },
+      { href: '/allies.html', label: 'Союзники' },
+    ]}
+  />
+
+  <main id="pageContent">
+    <section class="page-section" style="padding-bottom:0">
+      <div class="page-bg-title">FILES</div>
+      <h1 class="page-section-title">Досье</h1>
+      <p class="page-section-sub">Classified · FBI Level 5 · Miller Family Files</p>
+
+      <div class="dos-section-header">
+        <div class="dos-section-line"></div>
+        <div class="dos-section-label">Активные субъекты наблюдения</div>
+        <div class="dos-section-line"></div>
+      </div>
+
+      <div class="dos-header" style="padding-top:0">
+        <div class="dos-badge-row" style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+          <span class="dos-header-badge"><span class="dos-blink-dot"></span> АКТИВНОЕ РАССЛЕДОВАНИЕ</span>
+          <span class="dos-header-badge" style="border-color:rgba(255,150,0,0.3);color:rgba(255,150,0,0.7)">⚠ ВЫСШАЯ СТЕПЕНЬ ОПАСНОСТИ</span>
+        </div>
+        <div class="dos-case-id dos-font">
+          CASE №: MF-2026-0001<br>
+          FILED: 01/01/2026<br>
+          STATUS: OPEN
+        </div>
+      </div>
+    </section>
+
+    <div class="dos-grid">
+
+      <!-- ADAM -->
+      <div class="dos-card dos-card-adam">
+        <div class="dos-stamp dos-stamp-red dos-font">CLASSIFIED</div>
+        <div class="dos-stamp dos-stamp-top-secret dos-font">TOP SECRET</div>
+        <div class="dos-stamp dos-stamp-active-warrant dos-font">ACTIVE WARRANT</div>
+        <div class="dos-card-stripe">
+          <span>CASE №: MF-001 · SUBJECT ALPHA</span>
+          <span class="dos-blink"><span class="dos-blink-dot"></span>LIVE</span>
+        </div>
+        <div class="dos-card-body">
+          <div class="dos-top">
+            <div class="dos-photo-wrap">
+              <img loading="lazy" src="/images/adam.jpg" alt="Adam" class="dos-photo"/>
+              <div class="dos-photo-overlay"></div>
+              <div class="dos-photo-id">ID: MF-001-A</div>
+            </div>
+            <div class="dos-info">
+              <div class="dos-name">ADAM</div>
+              <div class="dos-alias dos-font">"The Director" · "Il Capo"</div>
+              <div class="dos-status active"><span class="dos-blink-dot"></span> ACTIVE THREAT</div>
+              <div class="dos-rank">👑 Director · Miller Family</div>
+            </div>
+          </div>
+          <div class="dos-danger-row">
+            <div class="dos-danger-label">DANGER LEVEL</div>
+            <div class="dos-skulls">
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+            </div>
+            <div class="dos-danger-text" style="color:#ff2a2a">МАКСИМАЛЬНЫЙ</div>
+          </div>
+          <div class="dos-divider"></div>
+          <div class="dos-section-title">Известные обвинения</div>
+          <ul class="dos-charges">
+            <li class="dos-charge">Организация и руководство ОПГ на территории Del Perro</li>
+            <li class="dos-charge">Рэкет, незаконное обогащение, уклонение от налогов</li>
+            <li class="dos-charge">Подстрекательство к вооружённому нападению</li>
+            <li class="dos-charge">Контроль над нелегальным бизнесом района</li>
+            <li class="dos-charge">Сокрытие доказательств · Подкуп должностных лиц</li>
+          </ul>
+          <div class="dos-section-title">Примечания следователя</div>
+          <div class="dos-notes dos-font">
+            Субъект демонстрирует высокий интеллект и навыки манипуляции. Контролирует
+            всю цепочку командования. Крайне осторожен — улики устраняет до появления
+            свидетелей. Не приближаться без поддержки.
+          </div>
+          <div class="dos-stats-row">
+            <div class="dos-stat-box"><div class="dos-stat-box-val">70+</div><div class="dos-stat-box-lbl">Бойцов</div></div>
+            <div class="dos-stat-box"><div class="dos-stat-box-val">3+</div><div class="dos-stat-box-lbl">лет актив.</div></div>
+            <div class="dos-stat-box"><div class="dos-stat-box-val">5</div><div class="dos-stat-box-lbl">Районов</div></div>
+          </div>
+          <div class="dos-barcode"></div>
+          <div class="dos-barcode-label">MF 0 0 1 · D I R E C T O R · 2 0 2 6</div>
+        </div>
+      </div>
+
+      <!-- ROY -->
+      <div class="dos-card dos-card-roy">
+        <div class="dos-stamp dos-stamp-red dos-font" style="color:rgba(255,150,0,0.6);border-color:rgba(255,150,0,0.4);transform:rotate(10deg)">WANTED</div>
+        <div class="dos-stamp dos-stamp-top-secret dos-font">CONFIDENTIAL</div>
+        <div class="dos-card-stripe">
+          <span>CASE №: MF-002 · SUBJECT BETA</span>
+          <span class="dos-blink"><span class="dos-blink-dot" style="background:#ff9800"></span>WANTED</span>
+        </div>
+        <div class="dos-card-body">
+          <div class="dos-top">
+            <div class="dos-photo-wrap">
+              <img loading="lazy" src="/images/roy.jpg" alt="Roy" class="dos-photo"/>
+              <div class="dos-photo-overlay"></div>
+              <div class="dos-photo-id">ID: MF-002-R</div>
+            </div>
+            <div class="dos-info">
+              <div class="dos-name">ROY</div>
+              <div class="dos-alias dos-font">"The Enforcer" · "R.M."</div>
+              <div class="dos-status wanted">⚠ WANTED</div>
+              <div class="dos-rank"><i class="fa-solid fa-gun"></i> Enforcer · Miller Family</div>
+            </div>
+          </div>
+          <div class="dos-danger-row">
+            <div class="dos-danger-label">DANGER LEVEL</div>
+            <div class="dos-skulls">
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull active"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull"><i class="fa-solid fa-skull"></i></span>
+            </div>
+            <div class="dos-danger-text" style="color:#ff9800">ВЫСОКИЙ</div>
+          </div>
+          <div class="dos-divider"></div>
+          <div class="dos-section-title">Известные обвинения</div>
+          <ul class="dos-charges">
+            <li class="dos-charge">Вооружённое нападение с применением огнестрельного оружия</li>
+            <li class="dos-charge">Торговля запрещёнными веществами в зонах Del Perro</li>
+            <li class="dos-charge">Угон транспортных средств — более 30 эпизодов</li>
+            <li class="dos-charge">Участие в организованных перестрелках между группировками</li>
+          </ul>
+          <div class="dos-section-title">Примечания следователя</div>
+          <div class="dos-notes dos-font">
+            Непосредственный исполнитель приказов Директора. Специализируется на
+            силовом давлении. Известен агрессивной тактикой. Неоднократно скрывался
+            от наблюдения — смена маршрутов хаотична.
+          </div>
+          <div class="dos-stats-row">
+            <div class="dos-stat-box"><div class="dos-stat-box-val">30+</div><div class="dos-stat-box-lbl">Операций</div></div>
+            <div class="dos-stat-box"><div class="dos-stat-box-val">2</div><div class="dos-stat-box-lbl">Побега</div></div>
+            <div class="dos-stat-box"><div class="dos-stat-box-val">HIGH</div><div class="dos-stat-box-lbl">Угроза</div></div>
+          </div>
+          <div class="dos-barcode"></div>
+          <div class="dos-barcode-label">MF 0 0 2 · E N F O R C E R · 2 0 2 6</div>
+        </div>
+      </div>
+
+      <!-- EDDIE BOSS -->
+      <div class="dos-card dos-card-boss">
+        <div class="boss-noise"></div>
+        <div class="boss-scan"></div>
+        <div class="boss-corner tl"></div>
+        <div class="boss-corner tr"></div>
+        <div class="boss-corner bl"></div>
+        <div class="boss-corner br"></div>
+        <div class="dos-boss-stamp dos-boss-stamp-1 dos-font">MOST WANTED</div>
+        <div class="dos-boss-stamp dos-boss-stamp-2 dos-font">TOP SECRET</div>
+        <div class="dos-boss-stamp dos-boss-stamp-3 dos-font">PRIORITY ALPHA</div>
+        <div class="dos-marquee-wrap">
+          <span class="dos-marquee">
+            ☠ ВООРУЖЁН И КРАЙНЕ ОПАСЕН &nbsp;·&nbsp; НЕ ПРИБЛИЖАТЬСЯ БЕЗ ПОДДЕРЖКИ &nbsp;·&nbsp;
+            SUBJECT OMEGA &nbsp;·&nbsp; PRIORITY ALPHA THREAT &nbsp;·&nbsp; CREATOR OF MILLER FAMILY &nbsp;·&nbsp;
+            ARMED AND EXTREMELY DANGEROUS &nbsp;·&nbsp; ALL UNITS ON HIGH ALERT &nbsp;·&nbsp;
+            ПРИКАЗ О НЕМЕДЛЕННОМ ЗАДЕРЖАНИИ &nbsp;·&nbsp; CASE MF-000 &nbsp;·&nbsp; ☠
+          </span>
+        </div>
+        <div class="dos-card-stripe">
+          <span>★ &nbsp; CASE №: MF-000 &nbsp;·&nbsp; SUBJECT OMEGA &nbsp;·&nbsp; CREATOR &nbsp; ★</span>
+          <span class="dos-blink"><span class="dos-blink-dot"></span>LIVE · PRIORITY ALPHA</span>
+        </div>
+        <div class="boss-photo-hero">
+          <img loading="lazy" src="/images/eddie.jpeg" alt="Eddie" class="dos-boss-photo"/>
+          <div class="boss-photo-scanlines"></div>
+          <div class="dos-boss-photo-overlay"></div>
+          <div class="boss-photo-name">EDDIE</div>
+          <div class="boss-photo-badge">
+            <div class="boss-photo-id-tag">ID: MF-000 · CREATOR · DIRECTOR</div>
+            <div class="boss-most-wanted">MOST WANTED</div>
+          </div>
+        </div>
+        <div class="boss-casebar">
+          <span class="boss-casebar-left">CASE №&nbsp;MF-000 &nbsp;·&nbsp; SUBJECT OMEGA &nbsp;·&nbsp; 2026</span>
+          <div class="boss-casebar-center">
+            <div class="boss-casebar-line"></div>
+            <span class="boss-casebar-icon">☠ DECEASED ☠</span>
+            <div class="boss-casebar-line r"></div>
+          </div>
+          <span class="boss-casebar-right">PRIORITY ALPHA &nbsp;·&nbsp; LEVEL 5 CLEARANCE</span>
+        </div>
+        <div class="boss-data-strip">
+          <div class="boss-data-item"><span class="boss-data-val">70+</span><span class="boss-data-lbl">Бойцов</span></div>
+          <div class="boss-data-item"><span class="boss-data-val">5</span><span class="boss-data-lbl">Районов</span></div>
+          <div class="boss-data-item"><span class="boss-data-val" style="color:#4caf50">0</span><span class="boss-data-lbl">Арестов</span></div>
+          <div class="boss-data-item"><span class="boss-data-val">100+</span><span class="boss-data-lbl">Операций</span></div>
+          <div class="boss-data-item"><span class="boss-data-val" style="color:#ff2a2a">∞</span><span class="boss-data-lbl">Угроза</span></div>
+          <div class="boss-data-item"><span class="boss-data-val" style="color:rgba(255,215,0,0.9)">2023</span><span class="boss-data-lbl">Актив с</span></div>
+        </div>
+        <div class="dos-boss-layout">
+          <div class="boss-panel">
+            <div class="boss-panel-label">Личность субъекта</div>
+            <div style="margin-bottom:10px">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:5px;color:rgba(255,215,0,0.6);margin-bottom:4px">★ CREATOR · MILLER FAMILY · DEL PERRO RP</div>
+              <div style="font-size:clamp(28px,5vw,46px);font-weight:900;letter-spacing:5px;line-height:1;background:linear-gradient(135deg,#fff 0%,#ffbbbb 45%,#ff2a2a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px">EDDIE</div>
+              <div class="dos-boss-alias">"The King" &nbsp;·&nbsp; "Il Direttore" &nbsp;·&nbsp; "The First"</div>
+            </div>
+            <div class="dos-boss-status-row" style="margin-bottom:10px">
+              <div class="dos-boss-status">MOST WANTED</div>
+              <div class="dos-boss-rank-badge">👑 CREATOR</div>
+            </div>
+            <div class="dos-boss-threat" style="margin-bottom:14px">⚠ ВООРУЖЁН &nbsp;·&nbsp; КРАЙНЕ ОПАСЕН &nbsp;·&nbsp; НЕ ПОДХОДИТЬ ОДНОМУ</div>
+            <div class="boss-skull-row">
+              <span class="boss-skull-row-label">THREAT</span>
+              <div class="dos-boss-skulls">
+                <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+                <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+                <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+                <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+                <span class="dos-boss-skull"><i class="fa-solid fa-skull"></i></span>
+              </div>
+              <div class="dos-boss-danger-label">КРИТИЧЕСКИЙ</div>
+            </div>
+          </div>
+          <div class="boss-panel">
+            <div class="boss-panel-label">Предъявленные обвинения</div>
+            <ul class="dos-boss-charges" style="margin-bottom:16px">
+              <li class="dos-boss-charge">Создание и руководство организованной преступной группой на территории Del Perro</li>
+              <li class="dos-boss-charge">Организация вооружённых нападений — заказные операции против конкурентов</li>
+              <li class="dos-boss-charge">Контроль над всеми нелегальными бизнес-структурами района — рэкет, отмывание</li>
+              <li class="dos-boss-charge">Подкуп государственных чиновников и силовых структур</li>
+              <li class="dos-boss-charge">Незаконный оборот оружия и веществ в промышленных масштабах</li>
+              <li class="dos-boss-charge">Похищение людей, сокрытие тел — более 12 эпизодов</li>
+              <li class="dos-boss-charge">Дестабилизация баланса Los Santos · <span style="color:rgba(255,255,255,0.1)">██████████</span></li>
+            </ul>
+            <div class="boss-panel-label">Примечания следователя</div>
+            <div class="dos-boss-notes">
+              Субъект — верховный лидер Miller Family, самой влиятельной ОПГ Del Perro.
+              Исключительный стратег, полный контроль над командованием.
+              Лично ни разу не задержан — все улики устраняются до следствия.<br><br>
+              Угроза уровня <span style="color:rgba(255,42,42,0.85)">ALPHA</span>. Без группы 5+ офицеров — не приближаться.
+            </div>
+          </div>
+          <div class="boss-panel">
+            <div class="boss-panel-label">Threat Assessment</div>
+            <div class="boss-threat-bars">
+              <div class="boss-bar-row"><div class="boss-bar-lbl">COMMAND</div><div class="boss-bar-track"><div class="boss-bar-fill" style="width:100%;background:linear-gradient(90deg,rgba(255,42,42,0.6),#ff1a1a)"></div></div><div class="boss-bar-val" style="color:#ff4040">100%</div></div>
+              <div class="boss-bar-row"><div class="boss-bar-lbl">COMBAT</div><div class="boss-bar-track"><div class="boss-bar-fill" style="width:94%;background:linear-gradient(90deg,rgba(255,80,0,0.5),rgba(255,80,0,0.95));animation-delay:0.25s"></div></div><div class="boss-bar-val">94%</div></div>
+              <div class="boss-bar-row"><div class="boss-bar-lbl">INTEL</div><div class="boss-bar-track"><div class="boss-bar-fill" style="width:98%;background:linear-gradient(90deg,rgba(255,200,0,0.4),rgba(255,210,0,0.9));animation-delay:0.5s"></div></div><div class="boss-bar-val">98%</div></div>
+              <div class="boss-bar-row"><div class="boss-bar-lbl">DANGER</div><div class="boss-bar-track"><div class="boss-bar-fill" style="width:100%;background:linear-gradient(90deg,rgba(200,0,0,0.7),#ff0000);animation-delay:0.75s"></div></div><div class="boss-bar-val" style="color:#ff2020">∞</div></div>
+              <div class="boss-bar-row"><div class="boss-bar-lbl">STEALTH</div><div class="boss-bar-track"><div class="boss-bar-fill" style="width:90%;background:linear-gradient(90deg,rgba(150,0,200,0.5),rgba(190,0,255,0.85));animation-delay:1s"></div></div><div class="boss-bar-val">90%</div></div>
+              <div class="boss-bar-row"><div class="boss-bar-lbl">INFLUENCE</div><div class="boss-bar-track"><div class="boss-bar-fill" style="width:100%;background:linear-gradient(90deg,rgba(255,215,0,0.4),rgba(255,215,0,0.85));animation-delay:1.25s"></div></div><div class="boss-bar-val" style="color:rgba(255,215,0,0.8)">MAX</div></div>
+            </div>
+            <div class="boss-panel-label" style="margin-top:14px">Оперативные данные</div>
+            <div class="dos-boss-mini-stats" style="margin-bottom:14px">
+              <div class="dos-boss-mini-stat"><span class="dos-boss-mini-stat-key">Арестов за всё время</span><span class="dos-boss-mini-stat-val" style="color:#4caf50">0</span></div>
+              <div class="dos-boss-mini-stat"><span class="dos-boss-mini-stat-key">Активен с</span><span class="dos-boss-mini-stat-val">2023</span></div>
+              <div class="dos-boss-mini-stat"><span class="dos-boss-mini-stat-key">Приоритет</span><span class="dos-boss-mini-stat-val" style="color:#ff2a2a">ALPHA</span></div>
+            </div>
+            <div class="dos-boss-barcode"></div>
+            <div class="dos-boss-barcode-label">MF · 0 0 0 · D I R E C T O R · 2 0 2 6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 69 SQUAD -->
+      <div class="dos-card dos-card-squad69">
+        <div class="sq-scan"></div>
+        <div class="sq-grid-bg"></div>
+        <div class="sq-corner tl"></div>
+        <div class="sq-corner tr"></div>
+        <div class="sq-corner bl"></div>
+        <div class="sq-corner br"></div>
+        <div class="sq-titlebar">
+          <div class="sq-tb-dots">
+            <div class="sq-tb-dot"></div>
+            <div class="sq-tb-dot"></div>
+            <div class="sq-tb-dot"></div>
+          </div>
+          <span class="sq-tb-title">CLASSIFIED_UNIT_FILE.db — /mf/squads/069/ — READ ONLY</span>
+          <div style="margin-left:auto;display:flex;gap:14px;align-items:center">
+            <div class="sq-tb-live">SIGNAL LIVE</div>
+            <span class="sq-tb-right">CLEARANCE LVL 5</span>
+          </div>
+        </div>
+        <div class="sq-marquee-wrap">
+          <span class="sq-marquee">⬛ INTERCEPTED TRANSMISSION · OPERATION BLACKWOOD · UNIT-69 · MILLER FAMILY · DEL PERRO RP · CIA/MF/2026/069 · ALL ACCESS RESTRICTED · EYES ONLY · DO NOT DUPLICATE · SIGNAL ENCRYPTED · ⬛ INTERCEPTED TRANSMISSION · OPERATION BLACKWOOD · UNIT-69 · MILLER FAMILY · DEL PERRO RP ·</span>
+        </div>
+        <div class="sq-hero">
+          <div class="sq-num-block"><div class="sq-big-num">69</div></div>
+          <div class="sq-hero-info">
+            <div class="sq-hero-eyebrow">▸ CLASSIFIED TACTICAL UNIT · MILLER FAMILY · DEL PERRO RP</div>
+            <div class="sq-hero-title"><span>69</span> SQUAD</div>
+            <div class="sq-hero-sub">Тактическое подразделение · Статус: АКТИВНА · Субъектов: 6<br>Операция BLACKWOOD · Санкционировано директивой CIA/OP/2026-069</div>
+            <div class="sq-hero-tags">
+              <span class="sq-tag green"><span class="sq-tb-live" style="margin:0"></span>&nbsp;ACTIVE</span>
+              <span class="sq-tag yellow">⚠ HIGH RISK</span>
+              <span class="sq-tag red">ARMED</span>
+              <span class="sq-tag green">LEVEL-5 CLEARANCE</span>
+            </div>
+          </div>
+          <div class="sq-threat-block">
+            <div class="sq-threat-label">THREAT METRICS</div>
+            <div class="sq-threat-bars">
+              <div class="sq-threat-bar-row"><div class="sq-threat-bar-label">COMBAT</div><div class="sq-threat-bar-track"><div class="sq-threat-bar-fill" style="width:88%;background:linear-gradient(90deg,rgba(0,255,100,0.5),rgba(0,255,100,0.8))"></div></div><div class="sq-threat-val">88%</div></div>
+              <div class="sq-threat-bar-row"><div class="sq-threat-bar-label">STEALTH</div><div class="sq-threat-bar-track"><div class="sq-threat-bar-fill" style="width:74%;background:linear-gradient(90deg,rgba(0,200,255,0.4),rgba(0,200,255,0.7));animation-delay:0.2s"></div></div><div class="sq-threat-val">74%</div></div>
+              <div class="sq-threat-bar-row"><div class="sq-threat-bar-label">COORD</div><div class="sq-threat-bar-track"><div class="sq-threat-bar-fill" style="width:95%;background:linear-gradient(90deg,rgba(255,200,0,0.5),rgba(255,200,0,0.9));animation-delay:0.4s"></div></div><div class="sq-threat-val">95%</div></div>
+              <div class="sq-threat-bar-row"><div class="sq-threat-bar-label">DANGER</div><div class="sq-threat-bar-track"><div class="sq-threat-bar-fill" style="width:80%;background:linear-gradient(90deg,rgba(255,60,60,0.5),rgba(255,60,60,0.9));animation-delay:0.6s"></div></div><div class="sq-threat-val">80%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="sq-content">
+          <div class="sq-panel">
+            <div class="sq-section-label">Установленные субъекты</div>
+            <div class="sq-members">
+              <div class="sq-member"><div class="sq-member-clr"></div><div class="sq-member-id">MF-069-01</div><div class="sq-member-name">Alina Millers</div><div class="sq-member-sub">Moder · 69</div><div class="sq-member-redact"></div></div>
+              <div class="sq-member"><div class="sq-member-clr" style="animation-delay:0.3s"></div><div class="sq-member-id">MF-069-02</div><div class="sq-member-name">DimkaMiller</div><div class="sq-member-sub">Димочка · 69</div><div class="sq-member-redact"></div></div>
+              <div class="sq-member"><div class="sq-member-clr" style="animation-delay:0.6s"></div><div class="sq-member-id">MF-069-03</div><div class="sq-member-name">Eddie Miller</div><div class="sq-member-sub">Фёдор · 69</div><div class="sq-member-redact"></div></div>
+              <div class="sq-member"><div class="sq-member-clr" style="animation-delay:0.9s"></div><div class="sq-member-id">MF-069-04</div><div class="sq-member-name">Nox Miller</div><div class="sq-member-sub">Макс · 69</div><div class="sq-member-redact"></div></div>
+              <div class="sq-member"><div class="sq-member-clr" style="animation-delay:1.2s"></div><div class="sq-member-id">MF-069-05</div><div class="sq-member-name">Arido Miller</div><div class="sq-member-sub">Гера · 69</div><div class="sq-member-redact"></div></div>
+              <div class="sq-member"><div class="sq-member-clr" style="animation-delay:1.5s"></div><div class="sq-member-id">MF-069-06</div><div class="sq-member-name">Lisa Miller</div><div class="sq-member-sub">Эва · 69</div><div class="sq-member-redact"></div></div>
+            </div>
+          </div>
+          <div class="sq-panel">
+            <div class="sq-section-label">Аналитическая справка</div>
+            <div class="sq-intel-lines">
+              <div class="sq-intel-line"><span class="sq-il-prompt">$&gt;</span><span class="sq-il-text">Тип: <span class="g">Тактическая единица</span> · Базирование: <span class="g">Del Perro</span></span></div>
+              <div class="sq-intel-line"><span class="sq-il-prompt">$&gt;</span><span class="sq-il-text">Координация: <span class="g">ВЫСОКАЯ 95%</span> · Иерархия: <span class="rx">████████</span></span></div>
+              <div class="sq-intel-line"><span class="sq-il-prompt">$&gt;</span><span class="sq-il-text">Активность: <span class="y">НОЧНОЕ ВРЕМЯ</span> · Паттерн: непредсказуем</span></div>
+              <div class="sq-intel-line"><span class="sq-il-prompt">$&gt;</span><span class="sq-il-text">Куратор операции: <span class="rx">██████████████</span></span></div>
+              <div class="sq-intel-line"><span class="sq-il-prompt">$&gt;</span><span class="sq-il-text">Директива: <span class="g">CIA/OP/2026-069</span> · Статус: <span class="g">АКТИВНА</span></span></div>
+            </div>
+            <div class="sq-section-label">Зафиксированные нарушения</div>
+            <ul class="sq-charges">
+              <li class="sq-charge">Организованная тактическая деятельность — координированные операции на территории Del Perro</li>
+              <li class="sq-charge">Вооружённые столкновения с конкурирующими группировками — более 20 эпизодов</li>
+              <li class="sq-charge">Систематический захват стратегических объектов района</li>
+              <li class="sq-charge">Связь с лицами под наблюдением ФБР · <span style="color:rgba(255,255,255,0.1)">████████████</span></li>
+              <li class="sq-charge dim">██████████████████████████████████████████</li>
+            </ul>
+          </div>
+        </div>
+        <div class="sq-footer">
+          <span class="sq-footer-code">MF · 0 6 9 · S Q U A D · U N I T · 2 0 2 6</span>
+          <span class="sq-footer-warn">⚠ НЕСАНКЦИОНИРОВАННОЕ РАСПРОСТРАНЕНИЕ ЗАПРЕЩЕНО</span>
+          <span class="sq-footer-code">CIA/MF/2026/069<span class="sq-footer-cursor"></span></span>
+        </div>
+      </div>
+
+      <!-- UNKNOWN -->
+      <div class="dos-card dos-card-unknown" style="opacity:0.7">
+        <div class="dos-stamp dos-stamp-red dos-font" style="transform:rotate(-15deg);top:40px;right:20px">REDACTED</div>
+        <div class="dos-card-stripe">
+          <span>CASE №: MF-??? · SUBJECT UNKNOWN</span>
+          <span class="dos-blink"><span class="dos-blink-dot" style="background:#666"></span>PENDING</span>
+        </div>
+        <div class="dos-card-body">
+          <div class="dos-top">
+            <div class="dos-photo-wrap" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center">
+              <i class="fa-solid fa-user-secret" style="font-size:40px;color:rgba(255,255,255,0.08)"></i>
+              <div class="dos-photo-id">ID: MF-???</div>
+            </div>
+            <div class="dos-info">
+              <div style="margin-bottom:6px">
+                <div class="dos-name" style="letter-spacing:4px">
+                  <span style="color:#fff">Its</span><span style="color:rgba(255,255,255,0.18)">██████</span>
+                </div>
+                <div style="font-size:8px;letter-spacing:2px;color:rgba(255,150,0,0.5);font-weight:700;margin-top:3px;font-family:'Special Elite',cursive">⚠ Частичная идентификация — установлено ФБР после длительного расследования</div>
+              </div>
+              <div class="dos-alias dos-font" style="color:rgba(255,255,255,0.12)">████████ · ██████</div>
+              <div class="dos-status" style="background:rgba(60,60,60,0.3);color:rgba(255,255,255,0.2);border-color:rgba(255,255,255,0.1)">🔒 CLASSIFIED</div>
+              <div class="dos-rank" style="color:rgba(255,255,255,0.15)">██████████</div>
+            </div>
+          </div>
+          <div class="dos-danger-row">
+            <div class="dos-danger-label">DANGER LEVEL</div>
+            <div class="dos-skulls">
+              <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+              <span class="dos-skull" style="opacity:0.08"><i class="fa-solid fa-skull"></i></span>
+            </div>
+            <div class="dos-danger-text" style="color:rgba(255,255,255,0.2)">██████</div>
+          </div>
+          <div class="dos-divider"></div>
+          <div class="dos-section-title">Известные обвинения</div>
+          <ul class="dos-charges">
+            <li class="dos-charge" style="color:rgba(255,255,255,0.15)">████████████████████████████████</li>
+            <li class="dos-charge" style="color:rgba(255,255,255,0.1)">██████████████████████████</li>
+            <li class="dos-charge" style="color:rgba(255,255,255,0.08)">████████████████████████████████████</li>
+          </ul>
+          <div class="dos-notes dos-font" style="color:rgba(255,255,0,0.12)">
+            Файл засекречен по запросу ████████. Доступ ограничен уровнем ██.
+            Сведения переданы в ████████. Дальнейшие комментарии — ████████.
+          </div>
+          <div class="dos-barcode" style="opacity:0.25"></div>
+          <div class="dos-barcode-label" style="color:rgba(255,255,255,0.05)">█ █ █ · R E D A C T E D · █ █ █ █</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="dos-footer-note dos-font">
+      <b>ПРЕДУПРЕЖДЕНИЕ:</b> Данный документ является строго конфиденциальным материалом организации
+      Miller Family. Несанкционированное распространение информации карается по законам семьи.<br>
+      <b>Power · Loyalty · Respect</b> — Miller Family © 2023–2026
+    </div>
+
+    <PageFooter />
+  </main>
+
+  <!-- Overlays -->
+  <div id="crt-overlay"></div>
+  <div id="red-vignette"></div>
+  <div id="classified-watermark"></div>
+
+  <div id="surveillance-cam">
+    <div class="cam-frame" style="position:relative">
+      <div class="cam-corner cam-corner-tl"></div>
+      <div class="cam-corner cam-corner-tr"></div>
+      <div class="cam-corner cam-corner-bl"></div>
+      <div class="cam-corner cam-corner-br"></div>
+      <div class="cam-top">
+        <div class="cam-rec"><div class="cam-rec-dot"></div>REC</div>
+        <div class="cam-label">CAM 01 · FBI</div>
+      </div>
+      <div class="cam-time" id="camTime">00:00:00</div>
+      <div class="cam-date" id="camDate">-- --- ----</div>
+      <div class="cam-divider"></div>
+      <div class="cam-info">
+        LOCATION: <span>DEL PERRO</span><br>
+        SUBJECT: <span>MILLER FAMILY</span><br>
+        STATUS: <span>ACTIVE SURVEILLANCE</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="fbi-statusbar">
+    <div class="fsb-item"><div class="fsb-dot"></div> AGENT: <span>CLASSIFIED</span></div>
+    <div class="fsb-sep"></div>
+    <div class="fsb-item">CASE: <span>MF-2026-0001</span></div>
+    <div class="fsb-sep"></div>
+    <div class="fsb-item">STATUS: <span>OPEN · ACTIVE</span></div>
+    <div class="fsb-sep"></div>
+    <div class="fsb-item">CLEARANCE: <span>LEVEL 5</span></div>
+    <div class="fsb-sep"></div>
+    <div class="fsb-ticker">
+      <div class="fsb-ticker-inner">⚠ ВНИМАНИЕ: ДАННЫЙ ФАЙЛ ЯВЛЯЕТСЯ СТРОГО СЕКРЕТНЫМ · НЕСАНКЦИОНИРОВАННЫЙ ДОСТУП КАРАЕТСЯ ПО ЗАКОНУ · MILLER FAMILY · DEL PERRO RP · СУБЪЕКТЫ ВООРУЖЕНЫ И ОПАСНЫ · НЕ ПРИБЛИЖАТЬСЯ БЕЗ ПОДДЕРЖКИ · ALL SUBJECTS ARE ARMED AND EXTREMELY DANGEROUS · DO NOT APPROACH WITHOUT BACKUP · ⚠</div>
+    </div>
+  </div>
+
+  <button id="sound-toggle" title="Включить/выключить звуки">
+    <span id="sound-toggle-icon">🔇</span>
+    <span id="sound-toggle-label">ЗВУК ВЫКЛ</span>
+    <div class="sound-bars">
+      <div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div>
+      <div class="sound-bar"></div><div class="sound-bar"></div>
+    </div>
+  </button>
+</BaseLayout>
+
+<style is:global>
+  .dos-font { font-family: 'Special Elite', cursive; }
+
+  .dos-tape {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    background: repeating-linear-gradient(-45deg,rgba(220,0,0,0.9) 0px,rgba(220,0,0,0.9) 20px,rgba(0,0,0,0.85) 20px,rgba(0,0,0,0.85) 40px);
+    height: 6px;
+    animation: tape-flicker 4s ease-in-out infinite;
+  }
+  @keyframes tape-flicker { 0%,100%{opacity:1} 50%{opacity:0.8} }
+
+  .dos-header { text-align: center; padding: 60px 20px 30px; border-bottom: 1px solid rgba(255,42,42,0.15); position: relative; }
+  .dos-header-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(180,0,0,0.15); border: 1px solid rgba(255,42,42,0.3); border-radius: 4px; padding: 6px 18px; margin-bottom: 20px; font-size: 11px; font-weight: 700; letter-spacing: 4px; color: rgba(255,42,42,0.8); animation: badge-pulse 2s ease-in-out infinite; }
+  @keyframes badge-pulse { 0%,100%{box-shadow:0 0 8px rgba(255,0,0,0.2)} 50%{box-shadow:0 0 20px rgba(255,0,0,0.5)} }
+  .dos-case-id { position: absolute; right: 30px; top: 60px; font-family: 'Special Elite', cursive; font-size: 12px; color: rgba(255,255,255,0.1); letter-spacing: 2px; line-height: 1.8; text-align: right; }
+
+  .dos-grid { max-width: 1200px; margin: 0 auto; padding: 40px 20px 60px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; gap: 28px; }
+  .dos-card-boss    { grid-column: 1 / -1; grid-row: 1; }
+  .dos-card-adam    { grid-column: 1; grid-row: 2; }
+  .dos-card-roy     { grid-column: 2; grid-row: 2; }
+  .dos-card-unknown { grid-column: 3; grid-row: 2; }
+  .dos-card-squad69 { grid-column: 1 / -1; grid-row: 3; }
+
+  .dos-card-squad69 { background: #020b05 !important; border-color: rgba(0,255,100,0.12) !important; box-shadow: 0 0 0 1px rgba(0,255,100,0.06),0 0 60px rgba(0,255,100,0.08),0 30px 80px rgba(0,0,0,0.9) !important; overflow: visible !important; }
+  .dos-card-squad69:hover { box-shadow: 0 0 0 1px rgba(0,255,100,0.15),0 0 80px rgba(0,255,100,0.14),0 30px 80px rgba(0,0,0,0.9) !important; transform: none !important; }
+
+  .sq-scan { position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+  .sq-scan::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,rgba(0,255,100,0.15),rgba(0,255,100,0.28),rgba(0,255,100,0.15),transparent); will-change:transform; animation:sqSweep 8s linear infinite; }
+  @keyframes sqSweep { 0%{transform:translateY(-2px)} 100%{transform:translateY(100vh)} }
+  .sq-grid-bg { position:absolute; inset:0; z-index:0; pointer-events:none; background-image:linear-gradient(rgba(0,255,100,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,100,0.025) 1px,transparent 1px); background-size:32px 32px; }
+
+  .sq-corner { position:absolute; width:18px; height:18px; z-index:3; pointer-events:none; }
+  .sq-corner::before,.sq-corner::after { content:''; position:absolute; background:rgba(0,255,100,0.5); }
+  .sq-corner::before { width:100%; height:2px; top:0; left:0; }
+  .sq-corner::after  { width:2px; height:100%; top:0; left:0; }
+  .sq-corner.tl{top:0;left:0} .sq-corner.tr{top:0;right:0;transform:scaleX(-1)} .sq-corner.bl{bottom:0;left:0;transform:scaleY(-1)} .sq-corner.br{bottom:0;right:0;transform:scale(-1)}
+
+  .sq-titlebar { position:relative; z-index:3; display:flex; align-items:center; gap:10px; padding:10px 20px; background:rgba(0,0,0,0.6); border-bottom:1px solid rgba(0,255,100,0.08); font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; }
+  .sq-tb-dots { display:flex; gap:5px; }
+  .sq-tb-dot { width:9px; height:9px; border-radius:50%; }
+  .sq-tb-dot:nth-child(1){background:rgba(255,95,87,0.7)} .sq-tb-dot:nth-child(2){background:rgba(255,188,46,0.7)} .sq-tb-dot:nth-child(3){background:rgba(39,201,63,0.7)}
+  .sq-tb-title { color:rgba(0,255,100,0.5); }
+  .sq-tb-right { margin-left:auto; color:rgba(255,255,255,0.18); }
+  .sq-tb-live { display:flex; align-items:center; gap:5px; color:rgba(0,255,100,0.7); font-size:9px; }
+  .sq-tb-live::before { content:''; width:6px; height:6px; border-radius:50%; background:#00ff64; animation:sqLive 1.4s ease-in-out infinite; box-shadow:0 0 6px #00ff64; }
+  @keyframes sqLive { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .sq-marquee-wrap { position:relative; z-index:3; overflow:hidden; height:24px; background:rgba(0,255,100,0.04); border-bottom:1px solid rgba(0,255,100,0.06); }
+  .sq-marquee { display:inline-block; white-space:nowrap; padding:5px 0; font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:rgba(0,255,100,0.4); animation:sqMarquee 30s linear infinite; }
+  @keyframes sqMarquee { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+  .sq-hero { position:relative; z-index:3; display:grid; grid-template-columns:auto 1fr auto; gap:0; align-items:stretch; border-bottom:1px solid rgba(0,255,100,0.07); }
+  .sq-num-block { padding:28px 32px; display:flex; align-items:center; justify-content:center; border-right:1px solid rgba(0,255,100,0.07); background:rgba(0,255,100,0.03); position:relative; overflow:hidden; }
+  .sq-num-block::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,rgba(0,255,100,0.02) 0,rgba(0,255,100,0.02) 1px,transparent 1px,transparent 6px); }
+  .sq-big-num { font-size:clamp(60px,10vw,110px); font-weight:900; line-height:1; color:transparent; -webkit-text-stroke:2px rgba(0,255,100,0.6); position:relative; text-shadow:0 0 40px rgba(0,255,100,0.2); animation:sqGlitch 7s ease-in-out infinite; font-family:'Montserrat',sans-serif; }
+  .sq-big-num::before,.sq-big-num::after { content:'69'; position:absolute; top:0; left:0; width:100%; overflow:hidden; -webkit-text-stroke:0; }
+  .sq-big-num::before { color:rgba(0,255,100,0.15); animation:sqGlitchA 7s ease-in-out infinite; clip-path:inset(0 0 60% 0); }
+  .sq-big-num::after  { color:rgba(0,200,255,0.08); animation:sqGlitchB 7s ease-in-out infinite; clip-path:inset(60% 0 0 0); }
+  @keyframes sqGlitch { 0%,80%,100%{filter:none;transform:none} 81%{transform:translateX(-3px);filter:hue-rotate(30deg)} 82%{transform:translateX(3px)} 83%{transform:none;filter:none} 90%{transform:translateX(-1px) skewX(1deg)} 91%{transform:none} }
+  @keyframes sqGlitchA { 0%,80%,100%{transform:none} 81%{transform:translateX(6px)} 82%{transform:translateX(-6px)} 83%{transform:none} }
+  @keyframes sqGlitchB { 0%,80%,100%{transform:none} 81%{transform:translateX(-4px)} 82%{transform:translateX(4px)} 83%{transform:none} }
+
+  .sq-hero-info { padding:22px 24px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+  .sq-hero-eyebrow { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:4px; color:rgba(0,255,100,0.5); }
+  .sq-hero-title { font-size:clamp(22px,4vw,40px); font-weight:900; letter-spacing:5px; color:#fff; text-transform:uppercase; line-height:1; }
+  .sq-hero-title span { color:rgba(0,255,100,0.7); }
+  .sq-hero-sub { font-family:'Share Tech Mono',monospace; font-size:10px; color:rgba(255,255,255,0.25); letter-spacing:2px; line-height:1.7; }
+  .sq-hero-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+  .sq-tag { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; padding:3px 8px; border:1px solid; border-radius:2px; }
+  .sq-tag.green { color:rgba(0,255,100,0.7); border-color:rgba(0,255,100,0.25); background:rgba(0,255,100,0.05); }
+  .sq-tag.yellow{ color:rgba(255,200,0,0.7); border-color:rgba(255,200,0,0.2); background:rgba(255,200,0,0.04); }
+  .sq-tag.red   { color:rgba(255,60,60,0.7); border-color:rgba(255,60,60,0.2); background:rgba(255,60,60,0.04); }
+
+  .sq-threat-block { padding:22px 24px; border-left:1px solid rgba(0,255,100,0.07); display:flex; flex-direction:column; justify-content:center; gap:10px; min-width:160px; }
+  .sq-threat-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:rgba(255,255,255,0.25); text-align:center; }
+  .sq-threat-bars { display:flex; flex-direction:column; gap:4px; }
+  .sq-threat-bar-row { display:flex; align-items:center; gap:6px; }
+  .sq-threat-bar-label { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px; color:rgba(255,255,255,0.2); width:36px; }
+  .sq-threat-bar-track { flex:1; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+  .sq-threat-bar-fill { height:100%; border-radius:2px; animation:sqBarIn 1.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+  @keyframes sqBarIn { from{width:0} }
+  .sq-threat-val { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(255,255,255,0.3); width:24px; text-align:right; }
+  @media(max-width:760px){ .sq-hero{grid-template-columns:1fr} .sq-num-block{padding:20px} .sq-threat-block{border-left:none;border-top:1px solid rgba(0,255,100,0.07)} }
+
+  .sq-content { position:relative; z-index:3; display:grid; grid-template-columns:1fr 1fr; gap:0; }
+  @media(max-width:800px){ .sq-content{grid-template-columns:1fr} }
+  .sq-panel { padding:20px 22px; border-right:1px solid rgba(0,255,100,0.06); }
+  .sq-panel:last-child { border-right:none; }
+  .sq-section-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:rgba(0,255,100,0.4); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .sq-section-label::after { content:''; flex:1; height:1px; background:rgba(0,255,100,0.1); }
+
+  .sq-members { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+  @media(max-width:560px){ .sq-members{grid-template-columns:repeat(2,1fr)} }
+  .sq-member { position:relative; overflow:hidden; padding:10px 8px 9px; background:rgba(0,0,0,0.4); border:1px solid rgba(0,255,100,0.08); transition:border-color 0.2s,background 0.2s,box-shadow 0.2s; cursor:default; }
+  .sq-member:hover { border-color:rgba(0,255,100,0.3); background:rgba(0,255,100,0.04); box-shadow:0 0 16px rgba(0,255,100,0.08),inset 0 0 20px rgba(0,255,100,0.03); }
+  .sq-member::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:rgba(0,255,100,0.5); opacity:0; transition:opacity 0.2s; }
+  .sq-member:hover::before { opacity:1; }
+  .sq-member-id { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:2px; color:rgba(0,255,100,0.35); margin-bottom:5px; }
+  .sq-member-name { font-size:10px; font-weight:800; letter-spacing:1px; color:#fff; text-transform:uppercase; line-height:1.3; margin-bottom:2px; }
+  .sq-member-sub { font-family:'Share Tech Mono',monospace; font-size:8px; color:rgba(255,255,255,0.22); letter-spacing:1px; }
+  .sq-member-redact { display:block; margin-top:5px; height:5px; border-radius:1px; background:rgba(255,255,255,0.06); }
+  .sq-member-clr { position:absolute; top:8px; right:8px; width:6px; height:6px; border-radius:50%; background:rgba(0,255,100,0.6); box-shadow:0 0 6px rgba(0,255,100,0.5); animation:sqLive 2s ease-in-out infinite; }
+
+  .sq-intel-lines { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+  .sq-intel-line { display:flex; gap:10px; align-items:baseline; font-family:'Share Tech Mono',monospace; font-size:10px; line-height:1.6; }
+  .sq-il-prompt { color:rgba(0,255,100,0.4); flex-shrink:0; }
+  .sq-il-text { color:rgba(255,255,255,0.35); }
+  .sq-il-text .g { color:rgba(0,255,100,0.65); }
+  .sq-il-text .y { color:rgba(255,200,0,0.6); }
+  .sq-il-text .rx { color:transparent; background:rgba(255,255,255,0.09); border-radius:1px; padding:0 2px; user-select:none; }
+
+  .sq-charges { list-style:none; display:flex; flex-direction:column; gap:5px; }
+  .sq-charge { display:flex; gap:8px; align-items:flex-start; font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:0.5px; color:rgba(255,255,255,0.3); line-height:1.6; }
+  .sq-charge::before { content:'▸'; color:rgba(0,255,100,0.4); flex-shrink:0; margin-top:1px; }
+  .sq-charge.dim { color:rgba(255,255,255,0.12); }
+
+  .sq-footer { position:relative; z-index:3; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:10px 20px; background:rgba(0,0,0,0.5); border-top:1px solid rgba(0,255,100,0.07); }
+  .sq-footer-code { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:rgba(0,255,100,0.2); }
+  .sq-footer-warn { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:2px; color:rgba(255,200,0,0.25); }
+  .sq-footer-cursor { display:inline-block; width:7px; height:12px; margin-left:4px; background:rgba(0,255,100,0.5); vertical-align:middle; animation:sqLive 1s step-end infinite; }
+
+  .dos-card { position:relative; border-radius:4px; overflow:hidden; background:rgba(8,2,2,0.92); border:1px solid rgba(255,255,255,0.07); box-shadow:0 0 40px rgba(0,0,0,0.8),inset 0 0 60px rgba(0,0,0,0.5); transition:transform 0.3s ease,box-shadow 0.3s ease; }
+  .dos-card:hover { transform:translateY(-4px); box-shadow:0 0 60px rgba(180,0,0,0.25),0 20px 60px rgba(0,0,0,0.8); }
+  .dos-card::before { content:''; position:absolute; inset:0; z-index:0; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); opacity:0.4; }
+  .dos-card::after { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.08) 3px,rgba(0,0,0,0.08) 4px); }
+
+  .dos-card-stripe { position:relative; z-index:2; padding:10px 16px; font-size:9px; letter-spacing:4px; font-weight:800; text-transform:uppercase; display:flex; justify-content:space-between; align-items:center; background:rgba(180,0,0,0.12); border-bottom:1px solid rgba(255,42,42,0.12); color:rgba(255,255,255,0.2); }
+  .dos-card-stripe .dos-blink { display:inline-flex; align-items:center; gap:5px; font-weight:700; font-size:9px; letter-spacing:3px; }
+  .dos-blink-dot { width:6px; height:6px; border-radius:50%; background:#ff2a2a; animation:blink 1.2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+  .dos-card-body { position:relative; z-index:2; padding:20px; }
+  .dos-top { display:flex; gap:16px; margin-bottom:18px; }
+  .dos-photo-wrap { position:relative; flex-shrink:0; width:100px; height:120px; }
+  .dos-photo { width:100%; height:100%; object-fit:cover; object-position:top; filter:grayscale(1) contrast(1.1) brightness(0.85) sepia(0.3); border:1px solid rgba(255,255,255,0.1); display:block; }
+  .dos-photo-overlay { position:absolute; inset:0; background:linear-gradient(135deg,rgba(180,0,0,0.15) 0%,transparent 60%); mix-blend-mode:multiply; }
+  .dos-photo-id { position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.75); padding:3px 5px; font-family:'Special Elite',cursive; font-size:9px; color:rgba(255,255,255,0.5); text-align:center; letter-spacing:1px; }
+
+  .dos-info { flex:1; min-width:0; }
+  .dos-name { font-size:20px; font-weight:900; letter-spacing:2px; color:#fff; margin-bottom:2px; line-height:1.1; }
+  .dos-alias { font-family:'Special Elite',cursive; font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:10px; letter-spacing:1px; }
+  .dos-status { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:3px; font-size:9px; font-weight:800; letter-spacing:3px; margin-bottom:10px; }
+  .dos-status.active { background:rgba(180,0,0,0.25); color:#ff4444; border:1px solid rgba(255,0,0,0.3); }
+  .dos-status.wanted { background:rgba(200,100,0,0.25); color:#ff9800; border:1px solid rgba(255,150,0,0.3); }
+  .dos-rank { font-size:10px; font-weight:700; letter-spacing:3px; color:rgba(255,215,0,0.6); text-transform:uppercase; }
+
+  .dos-danger-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding:8px 10px; border-radius:3px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); }
+  .dos-danger-label { font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.2); font-weight:700; flex-shrink:0; }
+  .dos-skulls { display:flex; gap:4px; }
+  .dos-skull { font-size:14px; color:rgba(255,255,255,0.15); transition:all 0.2s; }
+  .dos-skull.active { color:#ff2a2a; filter:drop-shadow(0 0 4px rgba(255,42,42,0.7)); opacity:1; animation:skull-pulse 2s ease-in-out infinite; }
+  @keyframes skull-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+  .dos-danger-text { margin-left:auto; font-size:9px; letter-spacing:2px; font-weight:800; }
+
+  .dos-divider { height:1px; background:rgba(255,255,255,0.05); margin:14px 0; position:relative; }
+  .dos-divider::before { content:'EVIDENCE FILE'; position:absolute; left:50%; transform:translateX(-50%) translateY(-50%); font-size:8px; letter-spacing:4px; color:rgba(255,255,255,0.1); background:rgba(8,2,2,0.92); padding:0 8px; font-weight:700; }
+
+  .dos-section-title { font-size:8px; letter-spacing:4px; font-weight:800; color:rgba(255,255,255,0.15); text-transform:uppercase; margin-bottom:8px; }
+  .dos-charges { list-style:none; margin-bottom:14px; }
+  .dos-charge { display:flex; align-items:flex-start; gap:8px; font-size:11px; color:rgba(255,255,255,0.45); padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-family:'Special Elite',cursive; line-height:1.3; }
+  .dos-charge::before { content:'▸'; color:rgba(255,42,42,0.5); flex-shrink:0; margin-top:1px; }
+
+  .dos-notes { background:rgba(255,255,0,0.02); border:1px solid rgba(255,255,0,0.05); border-radius:2px; padding:10px 12px; font-family:'Special Elite',cursive; font-size:11px; color:rgba(255,255,180,0.35); line-height:1.7; }
+  .dos-stats-row { display:flex; gap:6px; margin-top:14px; }
+  .dos-stat-box { flex:1; padding:8px 10px; text-align:center; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.05); border-radius:3px; }
+  .dos-stat-box-val { font-size:18px; font-weight:900; color:#fff; line-height:1; }
+  .dos-stat-box-lbl { font-size:8px; letter-spacing:2px; color:rgba(255,255,255,0.2); font-weight:700; margin-top:3px; }
+
+  .dos-stamp { position:absolute; z-index:5; font-family:'Special Elite',cursive; font-weight:700; border:3px solid; border-radius:4px; padding:4px 10px; letter-spacing:4px; transform-origin:center; pointer-events:none; }
+  .dos-stamp-red { top:22px; right:16px; font-size:18px; color:rgba(255,0,0,0.55); border-color:rgba(255,0,0,0.4); transform:rotate(-12deg); text-shadow:0 0 8px rgba(255,0,0,0.4); }
+  .dos-stamp-top-secret { top:55px; right:10px; font-size:11px; color:rgba(255,150,0,0.45); border-color:rgba(255,150,0,0.3); transform:rotate(7deg); }
+  .dos-stamp-active-warrant { bottom:50px; left:12px; font-size:13px; color:rgba(255,0,0,0.35); border-color:rgba(255,0,0,0.25); transform:rotate(-5deg); }
+
+  .dos-barcode { margin-top:14px; height:28px; background:repeating-linear-gradient(90deg,rgba(255,255,255,0.12) 0px,rgba(255,255,255,0.12) 1px,transparent 1px,transparent 3px,rgba(255,255,255,0.06) 3px,rgba(255,255,255,0.06) 4px,transparent 4px,transparent 7px,rgba(255,255,255,0.10) 7px,rgba(255,255,255,0.10) 9px,transparent 9px,transparent 11px); border-radius:2px; }
+  .dos-barcode-label { font-family:'Special Elite',cursive; font-size:8px; color:rgba(255,255,255,0.1); text-align:center; letter-spacing:5px; margin-top:3px; }
+
+  .dos-section-header { max-width:1200px; margin:0 auto; padding:0 20px 16px; display:flex; align-items:center; gap:16px; }
+  .dos-section-line { flex:1; height:1px; background:rgba(255,42,42,0.12); }
+  .dos-section-label { font-size:9px; letter-spacing:5px; color:rgba(255,42,42,0.35); font-weight:800; text-transform:uppercase; }
+
+  .dos-footer-note { max-width:1200px; margin:0 auto; padding:20px; font-family:'Special Elite',cursive; font-size:11px; color:rgba(255,255,255,0.1); line-height:1.8; text-align:center; }
+  .dos-footer-note b { color:rgba(255,42,42,0.3); }
+
+  .dos-card:hover .dos-name { animation:glitch-name 0.4s ease; }
+  @keyframes glitch-name { 0%{transform:none} 20%{transform:translateX(-2px);color:#ff4444} 40%{transform:translateX(2px);color:#fff} 60%{transform:translateX(-1px)} 80%{transform:translateX(1px)} 100%{transform:none} }
+
+  /* BOSS CARD */
+  .dos-card-boss { grid-column:1/-1; background:radial-gradient(ellipse at 20% 30%,rgba(160,0,0,0.22) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(100,0,0,0.16) 0%,transparent 50%),#060000; border:1px solid rgba(255,42,42,0.35) !important; box-shadow:0 0 0 1px rgba(255,42,42,0.08),0 0 60px rgba(200,0,0,0.28),0 30px 80px rgba(0,0,0,0.85); overflow:hidden !important; }
+  .dos-card-boss::before { content:''; position:absolute; inset:-2px; z-index:0; pointer-events:none; border-radius:inherit; box-shadow:0 0 80px rgba(220,0,0,0.4),0 0 160px rgba(140,0,0,0.2); opacity:0.6; animation:boss-pulse 3.2s ease-in-out infinite; }
+  @keyframes boss-pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  .boss-noise { position:absolute; inset:0; z-index:0; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); opacity:0.5; }
+  .boss-scan { position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .boss-scan::after { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,transparent,rgba(255,42,42,0.18),rgba(255,60,60,0.22),rgba(255,42,42,0.18),transparent); will-change:transform; animation:bossSweep 9s linear infinite; }
+  @keyframes bossSweep { 0%{transform:translateY(-3px)} 100%{transform:translateY(100vh)} }
+
+  .boss-corner { position:absolute; width:28px; height:28px; z-index:4; pointer-events:none; }
+  .boss-corner::before,.boss-corner::after { content:''; position:absolute; background:rgba(255,42,42,0.85); }
+  .boss-corner::before { width:100%; height:2px; top:0; left:0; }
+  .boss-corner::after  { width:2px; height:100%; top:0; left:0; }
+  .boss-corner.tl{top:0;left:0} .boss-corner.tr{top:0;right:0;transform:scaleX(-1)} .boss-corner.bl{bottom:0;left:0;transform:scaleY(-1)} .boss-corner.br{bottom:0;right:0;transform:scale(-1)}
+
+  .dos-marquee-wrap { overflow:hidden; position:relative; z-index:3; background:rgba(200,0,0,0.18); border-bottom:1px solid rgba(255,42,42,0.2); padding:8px 0; }
+  .dos-marquee { display:inline-block; white-space:nowrap; animation:marquee-scroll 18s linear infinite; font-size:9px; font-weight:800; letter-spacing:4px; color:rgba(255,42,42,0.9); text-transform:uppercase; }
+  @keyframes marquee-scroll { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+  .dos-card-boss .dos-card-stripe { background:rgba(160,0,0,0.22); border-bottom:1px solid rgba(255,42,42,0.2); color:rgba(255,255,255,0.4); position:relative; z-index:3; }
+
+  .boss-photo-hero { position:relative; z-index:3; height:clamp(300px,45vw,480px); overflow:hidden; border-bottom:1px solid rgba(255,42,42,0.2); }
+  .dos-boss-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 20%; filter:grayscale(0.5) contrast(1.25) brightness(0.78) sepia(0.35); transform:scale(1.04); transition:filter 0.8s,transform 0.8s; }
+  .dos-card-boss:hover .dos-boss-photo { filter:grayscale(0.15) contrast(1.1) brightness(0.88) sepia(0.1); transform:scale(1.0); }
+  .boss-photo-scanlines { position:absolute; inset:0; z-index:1; pointer-events:none; background:repeating-linear-gradient(0deg,rgba(0,0,0,0.18) 0px,rgba(0,0,0,0.18) 1px,transparent 1px,transparent 3px); }
+  .dos-boss-photo-overlay { position:absolute; inset:0; z-index:2; background:linear-gradient(180deg,rgba(8,0,0,0.55) 0%,transparent 35%,transparent 55%,rgba(6,0,0,0.96) 100%),linear-gradient(90deg,rgba(6,0,0,0.65) 0%,transparent 30%,transparent 70%,rgba(6,0,0,0.5) 100%),radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(100,0,0,0.22) 100%); }
+
+  .boss-photo-name { position:absolute; bottom:20px; left:24px; z-index:5; font-size:clamp(64px,13vw,140px); font-weight:900; line-height:0.9; letter-spacing:10px; background:linear-gradient(175deg,#3a0000 0%,#6b0000 25%,#990000 50%,#cc1a1a 78%,#8b0000 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 18px rgba(0,0,0,0.95)) drop-shadow(0 0 24px rgba(120,0,0,0.45)); animation:bossNameGlitch 8s ease-in-out infinite; will-change:transform; }
+  .boss-photo-name::before,.boss-photo-name::after { content:'EDDIE'; position:absolute; top:0; left:0; background:none; -webkit-text-fill-color:initial; font-size:inherit; letter-spacing:inherit; font-weight:inherit; line-height:inherit; }
+  .boss-photo-name::before { color:rgba(120,0,0,0.3); animation:bossGlA 8s ease-in-out infinite; clip-path:inset(0 0 55% 0); }
+  .boss-photo-name::after  { color:rgba(60,0,0,0.2); animation:bossGlB 8s ease-in-out infinite; clip-path:inset(60% 0 0 0); }
+  @keyframes bossNameGlitch { 0%,82%,100%{filter:none;transform:none} 83%{transform:translateX(-4px) skewX(3deg);filter:hue-rotate(25deg) brightness(1.3)} 84%{transform:translateX(4px)} 85%{transform:none;filter:none} 92%{transform:translateX(-2px)} 93%{transform:none} }
+  @keyframes bossGlA { 0%,82%,100%{transform:none} 83%{transform:translateX(8px)} 84%{transform:translateX(-8px)} 85%{transform:none} }
+  @keyframes bossGlB { 0%,82%,100%{transform:none} 83%{transform:translateX(-6px)} 84%{transform:translateX(6px)} 85%{transform:none} }
+
+  .boss-photo-badge { position:absolute; bottom:32px; right:24px; z-index:5; display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
+  .boss-photo-id-tag { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:3px; color:rgba(255,255,255,0.35); background:rgba(0,0,0,0.75); padding:3px 10px; border-left:2px solid rgba(255,42,42,0.6); }
+  .boss-most-wanted { font-family:'Special Elite',cursive; font-size:14px; letter-spacing:5px; font-weight:700; color:rgba(255,42,42,0.9); border:2px solid rgba(255,42,42,0.6); padding:4px 14px; background:rgba(0,0,0,0.7); transform:rotate(-2deg); text-shadow:0 0 12px rgba(255,42,42,0.6); animation:stamp-flicker 3.5s ease-in-out infinite; }
+
+  .boss-casebar { position:relative; z-index:3; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:0; padding:0 22px; height:48px; background:rgba(6,0,0,0.92); border-bottom:1px solid rgba(100,0,0,0.35); }
+  .boss-casebar::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(180,0,0,0.5) 20%,rgba(220,0,0,0.7) 50%,rgba(180,0,0,0.5) 80%,transparent); }
+  .boss-casebar-left,.boss-casebar-right { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:rgba(160,0,0,0.6); text-transform:uppercase; white-space:nowrap; }
+  .boss-casebar-right { text-align:right; }
+  .boss-casebar-center { display:flex; align-items:center; justify-content:center; gap:10px; }
+  .boss-casebar-line { height:1px; width:60px; background:linear-gradient(90deg,transparent,rgba(160,0,0,0.5)); }
+  .boss-casebar-line.r { background:linear-gradient(270deg,transparent,rgba(160,0,0,0.5)); }
+  .boss-casebar-icon { font-family:'Special Elite',cursive; font-size:13px; font-weight:700; color:rgba(180,0,0,0.65); letter-spacing:3px; animation:danger-flicker 4s ease-in-out infinite; }
+
+  .boss-data-strip { position:relative; z-index:3; display:flex; align-items:stretch; border-bottom:1px solid rgba(255,42,42,0.1); background:rgba(20,0,0,0.6); }
+  .boss-data-item { flex:1; padding:14px 12px; text-align:center; border-right:1px solid rgba(255,42,42,0.08); position:relative; }
+  .boss-data-item:last-child { border-right:none; }
+  .boss-data-item::after { content:''; position:absolute; bottom:0; left:10%; right:10%; height:1px; background:rgba(255,42,42,0.25); }
+  .boss-data-val { font-size:clamp(20px,3vw,28px); font-weight:900; color:#fff; line-height:1; display:block; text-shadow:0 0 12px rgba(255,42,42,0.5); }
+  .boss-data-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:2px; color:rgba(255,255,255,0.2); margin-top:4px; display:block; text-transform:uppercase; }
+  @media(max-width:600px){ .boss-data-strip{flex-wrap:wrap} .boss-data-item{min-width:50%} }
+
+  .boss-skull-row { display:flex; align-items:center; gap:10px; padding:10px 14px; background:rgba(180,0,0,0.06); border:1px solid rgba(255,42,42,0.1); border-radius:2px; width:fit-content; }
+  .boss-skull-row-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:3px; color:rgba(255,255,255,0.2); }
+  .dos-boss-skulls { display:flex; gap:5px; }
+  .dos-boss-skull { font-size:22px; color:#ff2a2a; filter:drop-shadow(0 0 10px rgba(255,0,0,1)); animation:boss-skull 1.8s ease-in-out infinite; }
+  .dos-boss-skull:nth-child(2){animation-delay:0.15s} .dos-boss-skull:nth-child(3){animation-delay:0.30s} .dos-boss-skull:nth-child(4){animation-delay:0.45s} .dos-boss-skull:nth-child(5){animation-delay:0.60s}
+  @keyframes boss-skull { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.2) translateY(-2px);opacity:0.65} }
+
+  .dos-boss-layout { position:relative; z-index:3; display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; }
+  @media(max-width:860px){ .dos-boss-layout{grid-template-columns:1fr 1fr} }
+  @media(max-width:560px){ .dos-boss-layout{grid-template-columns:1fr} }
+  .boss-panel { padding:22px 24px; border-right:1px solid rgba(255,42,42,0.07); }
+  .boss-panel:last-child { border-right:none; }
+  .boss-panel-label { font-family:'Share Tech Mono',monospace; font-size:8px; letter-spacing:4px; color:rgba(255,42,42,0.5); text-transform:uppercase; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .boss-panel-label::after { content:''; flex:1; height:1px; background:rgba(255,42,42,0.14); }
+
+  .dos-boss-charges { list-style:none; }
+  .dos-boss-charge { display:flex; align-items:flex-start; gap:10px; font-family:'Special Elite',cursive; font-size:11px; color:rgba(255,255,255,0.5); padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.03); line-height:1.55; }
+  .dos-boss-charge::before { content:'▸'; color:#ff2a2a; flex-shrink:0; margin-top:2px; filter:drop-shadow(0 0 6px rgba(255,42,42,0.8)); }
+  .dos-boss-notes { background:rgba(255,220,0,0.015); border:1px solid rgba(255,220,0,0.05); border-left:3px solid rgba(255,42,42,0.55); border-radius:2px; padding:13px 15px; margin-bottom:14px; font-family:'Special Elite',cursive; font-size:11px; color:rgba(255,240,180,0.4); line-height:1.9; }
+  .dos-boss-alias { font-family:'Special Elite',cursive; font-size:12px; letter-spacing:2px; color:rgba(255,255,255,0.3); }
+  .dos-boss-mini-stats { display:flex; flex-direction:column; gap:5px; }
+  .dos-boss-mini-stat { display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); border-radius:2px; font-size:10px; }
+  .dos-boss-mini-stat-key { color:rgba(255,255,255,0.25); letter-spacing:1px; font-weight:600; }
+  .dos-boss-mini-stat-val { color:#fff; font-weight:900; letter-spacing:1px; }
+
+  .boss-threat-bars { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+  .boss-bar-row { display:flex; align-items:center; gap:8px; }
+  .boss-bar-lbl { font-family:'Share Tech Mono',monospace; font-size:7px; letter-spacing:1px; color:rgba(255,255,255,0.22); width:46px; }
+  .boss-bar-track { flex:1; height:6px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+  .boss-bar-fill { height:100%; border-radius:2px; animation:sqBarIn 2s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .boss-bar-val { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(255,255,255,0.3); width:28px; text-align:right; }
+
+  .dos-boss-status-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:6px; }
+  .dos-boss-status { display:inline-flex; align-items:center; gap:7px; padding:7px 18px; border-radius:2px; background:rgba(180,0,0,0.32); border:1px solid rgba(255,42,42,0.6); font-family:'Share Tech Mono',monospace; font-size:10px; font-weight:800; letter-spacing:3px; color:#ff4040; box-shadow:0 0 20px rgba(200,0,0,0.35),inset 0 0 12px rgba(180,0,0,0.15); }
+  .dos-boss-status::before { content:''; width:7px; height:7px; border-radius:50%; background:#ff2020; box-shadow:0 0 10px #ff2020,0 0 20px rgba(255,0,0,0.5); animation:sqLive 1.2s ease-in-out infinite; }
+  .dos-boss-rank-badge { display:inline-flex; align-items:center; gap:6px; padding:7px 16px; border-radius:2px; background:rgba(255,215,0,0.07); border:1px solid rgba(255,215,0,0.25); font-family:'Share Tech Mono',monospace; font-size:10px; font-weight:800; letter-spacing:2px; color:rgba(255,215,0,0.8); }
+  .dos-boss-threat { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:2px; background:rgba(255,80,0,0.08); border:1px solid rgba(255,80,0,0.2); font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:rgba(255,130,0,0.85); }
+  .dos-boss-danger-label { font-family:'Share Tech Mono',monospace; font-size:12px; font-weight:900; letter-spacing:3px; color:#ff2a2a; text-shadow:0 0 14px rgba(255,42,42,0.8),0 0 30px rgba(255,0,0,0.4); animation:danger-flicker 2.5s ease-in-out infinite; }
+  @keyframes danger-flicker { 0%,93%,100%{opacity:1} 94%,96%{opacity:0.25} 95%,97%{opacity:1} }
+
+  .dos-boss-barcode { height:30px; border-radius:2px; margin-top:6px; background:repeating-linear-gradient(90deg,rgba(255,42,42,0.25) 0px,rgba(255,42,42,0.25) 1px,transparent 1px,transparent 3px,rgba(255,42,42,0.12) 3px,rgba(255,42,42,0.12) 4px,transparent 4px,transparent 7px,rgba(255,42,42,0.18) 7px,rgba(255,42,42,0.18) 9px,transparent 9px,transparent 11px); }
+  .dos-boss-barcode-label { font-family:'Special Elite',cursive; font-size:8px; color:rgba(255,42,42,0.25); text-align:center; letter-spacing:5px; margin-top:4px; }
+
+  .dos-boss-stamp { position:absolute; z-index:5; font-family:'Special Elite',cursive; font-weight:700; border:3px solid; border-radius:4px; padding:5px 12px; letter-spacing:4px; pointer-events:none; }
+  .dos-boss-stamp-1 { top:20px; right:18px; font-size:24px; color:rgba(255,0,0,0.65); border-color:rgba(255,0,0,0.5); transform:rotate(-12deg); text-shadow:0 0 14px rgba(255,0,0,0.6); animation:stamp-flicker 3.8s ease-in-out infinite; }
+  .dos-boss-stamp-2 { top:74px; right:14px; font-size:11px; color:rgba(255,150,0,0.55); border-color:rgba(255,150,0,0.38); transform:rotate(7deg); }
+  .dos-boss-stamp-3 { bottom:36px; left:12px; font-size:13px; color:rgba(255,0,0,0.42); border-color:rgba(255,0,0,0.28); transform:rotate(-5deg); }
+  @keyframes stamp-flicker { 0%,89%,100%{opacity:1} 90%,92%,94%{opacity:0.3} 91%,93%{opacity:1} }
+
+  /* Overlays */
+  #crt-overlay { position:fixed; inset:0; z-index:9000; pointer-events:none; animation:crt-flicker 6s ease-in-out infinite; }
+  #crt-overlay::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px); pointer-events:none; }
+  #crt-overlay::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,0.55) 100%); pointer-events:none; }
+  @keyframes crt-flicker { 0%,96%,100%{opacity:1} 97%{opacity:0.92} 98%{opacity:1} 99%{opacity:0.95} }
+
+  #red-vignette { position:fixed; inset:0; z-index:8999; pointer-events:none; background:radial-gradient(ellipse at center,transparent 40%,rgba(120,0,0,0.18) 100%); animation:red-pulse 4s ease-in-out infinite; }
+  @keyframes red-pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
+  #classified-watermark { position:fixed; inset:0; z-index:8998; pointer-events:none; overflow:hidden; }
+  #classified-watermark::before { content:'CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET · CLASSIFIED · TOP SECRET'; position:absolute; top:-20%; left:-10%; width:140%; font-family:'Special Elite',cursive; font-size:22px; font-weight:700; letter-spacing:8px; color:rgba(180,0,0,0.045); line-height:3.2; word-spacing:24px; transform:rotate(-35deg); transform-origin:center; white-space:normal; word-break:break-all; pointer-events:none; }
+
+  #surveillance-cam { position:fixed; top:72px; right:20px; z-index:9100; pointer-events:none; font-family:'Special Elite',cursive; }
+  .cam-frame { background:rgba(0,0,0,0.75); border:1px solid rgba(255,42,42,0.25); border-radius:4px; padding:8px 12px; min-width:170px; backdrop-filter:blur(6px); }
+  .cam-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:5px; }
+  .cam-rec { display:flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:2px; color:#ff2a2a; }
+  .cam-rec-dot { width:7px; height:7px; border-radius:50%; background:#ff2a2a; box-shadow:0 0 6px rgba(255,42,42,0.8); animation:rec-blink 1s ease-in-out infinite; }
+  @keyframes rec-blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .cam-label { font-size:8px; letter-spacing:2px; color:rgba(255,255,255,0.25); }
+  .cam-time { font-size:13px; font-weight:700; letter-spacing:2px; color:rgba(255,255,255,0.7); margin-bottom:3px; font-family:'Montserrat',monospace; }
+  .cam-date { font-size:9px; letter-spacing:2px; color:rgba(255,255,255,0.2); }
+  .cam-divider { height:1px; background:rgba(255,42,42,0.12); margin:6px 0; }
+  .cam-info { font-size:8px; letter-spacing:1px; color:rgba(255,255,255,0.15); line-height:1.8; }
+  .cam-info span { color:rgba(255,42,42,0.4); }
+  .cam-corner { position:absolute; width:8px; height:8px; border-color:rgba(255,42,42,0.5); border-style:solid; }
+  .cam-corner-tl{top:0;left:0;border-width:1px 0 0 1px} .cam-corner-tr{top:0;right:0;border-width:1px 1px 0 0} .cam-corner-bl{bottom:0;left:0;border-width:0 0 1px 1px} .cam-corner-br{bottom:0;right:0;border-width:0 1px 1px 0}
+
+  #fbi-statusbar { position:fixed; bottom:0; left:0; right:0; z-index:9100; background:rgba(0,0,0,0.88); border-top:1px solid rgba(255,42,42,0.15); backdrop-filter:blur(8px); display:flex; align-items:center; padding:0 20px; height:28px; gap:20px; font-family:'Special Elite',cursive; font-size:9px; letter-spacing:2px; pointer-events:none; }
+  .fsb-item { display:flex; align-items:center; gap:6px; color:rgba(255,255,255,0.2); flex-shrink:0; }
+  .fsb-item span { color:rgba(255,42,42,0.5); }
+  .fsb-dot { width:4px; height:4px; border-radius:50%; background:rgba(255,42,42,0.4); flex-shrink:0; }
+  .fsb-sep { width:1px; height:14px; background:rgba(255,255,255,0.06); flex-shrink:0; }
+  .fsb-ticker { flex:1; overflow:hidden; position:relative; height:100%; display:flex; align-items:center; }
+  .fsb-ticker-inner { white-space:nowrap; animation:fsb-scroll 30s linear infinite; color:rgba(255,42,42,0.25); font-size:8px; letter-spacing:3px; }
+  @keyframes fsb-scroll { from{transform:translateX(100%)} to{transform:translateX(-100%)} }
+  .page-footer { padding-bottom:40px !important; }
+
+  #sound-toggle { position:fixed; bottom:36px; right:20px; z-index:9200; display:flex; align-items:center; gap:7px; padding:7px 14px; background:rgba(0,0,0,0.85); border:1px solid rgba(255,42,42,0.2); border-radius:4px; cursor:pointer; font-family:'Montserrat',sans-serif; font-size:9px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.3); backdrop-filter:blur(8px); transition:border-color 0.2s,color 0.2s,box-shadow 0.2s; pointer-events:all; }
+  #sound-toggle:hover { border-color:rgba(255,42,42,0.5); color:rgba(255,255,255,0.6); }
+  #sound-toggle.active { border-color:rgba(255,42,42,0.6); color:rgba(255,42,42,0.9); box-shadow:0 0 12px rgba(255,42,42,0.15); }
+  #sound-toggle-icon { font-size:12px; }
+  .sound-bars { display:flex; align-items:flex-end; gap:2px; height:12px; opacity:0; transition:opacity 0.3s; }
+  #sound-toggle.active .sound-bars { opacity:1; }
+  .sound-bar { width:2px; background:rgba(255,42,42,0.7); border-radius:1px; animation:bar-dance 0.8s ease-in-out infinite alternate; }
+  .sound-bar:nth-child(1){height:4px;animation-delay:0s;animation-duration:0.6s} .sound-bar:nth-child(2){height:8px;animation-delay:0.1s;animation-duration:0.8s} .sound-bar:nth-child(3){height:12px;animation-delay:0.2s;animation-duration:0.5s} .sound-bar:nth-child(4){height:6px;animation-delay:0.15s;animation-duration:0.9s} .sound-bar:nth-child(5){height:10px;animation-delay:0.05s;animation-duration:0.7s}
+  @keyframes bar-dance { from{transform:scaleY(0.3)} to{transform:scaleY(1)} }
+
+  @media(max-width:860px){ .dos-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto} .dos-card-boss{grid-column:1/-1;grid-row:1} .dos-card-adam{grid-column:1;grid-row:2} .dos-card-roy{grid-column:2;grid-row:2} .dos-card-unknown{grid-column:1/-1;grid-row:3;max-width:100%} }
+  @media(max-width:560px){ .dos-grid{grid-template-columns:1fr} .dos-card-adam,.dos-card-roy,.dos-card-boss,.dos-card-unknown{grid-column:1;grid-row:auto;max-width:100%} .dos-stamp-red{font-size:14px} }
+  @media(max-width:600px){ #surveillance-cam{display:none} #fbi-statusbar .fsb-sep,#fbi-statusbar .fsb-item:not(:first-child):not(:last-child){display:none} }
+</style>
+
+<script type="module" is:inline>
+  import { requireAuth }        from "/js/auth-guard.js";
+  import { initPageLoader }     from "/js/page-loader.js";
+  import { initPageTransition } from "/js/page-transition.js";
+  import { initEasterEgg }      from "/js/easter-egg.js";
+
+  requireAuth().then(user => {
+    if (!user) return;
+    initPageTransition();
+    initEasterEgg();
+    initPageLoader({
+      password: "MF·CLASSIFIED·DOSSIER·2026",
+      label: "РАСШИФРОВКА СЕКРЕТНЫХ ФАЙЛОВ",
+      onComplete: () => {},
+    });
+  });
+</script>
+
+<script is:inline>
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let C = null, soundEnabled = false, ambientGain = null, ambientNodes = [], intervals = [];
+
+function ctx() {
+  if (!C) C = new AudioCtx();
+  if (C.state === 'suspended') C.resume();
+  return C;
+}
+function noiseBuffer(sec = 2) {
+  const c = ctx(), len = Math.floor(c.sampleRate * sec);
+  const buf = c.createBuffer(1, len, c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+function createReverb(dur = 3, decay = 2.5) {
+  const c = ctx(), len = Math.floor(c.sampleRate * dur);
+  const buf = c.createBuffer(2, len, c.sampleRate);
+  for (let ch = 0; ch < 2; ch++) { const d = buf.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay); }
+  const conv = c.createConvolver(); conv.buffer = buf; return conv;
+}
+function startAmbient() {
+  const c = ctx();
+  ambientGain = c.createGain();
+  ambientGain.gain.setValueAtTime(0, c.currentTime);
+  ambientGain.gain.linearRampToValueAtTime(1, c.currentTime + 5);
+  ambientGain.connect(c.destination);
+  [36, 36.4, 72.2].forEach((freq, i) => {
+    const osc = c.createOscillator(); osc.type = i < 2 ? 'sawtooth' : 'sine'; osc.frequency.value = freq;
+    const lfo = c.createOscillator(); lfo.frequency.value = 0.04 + i * 0.02;
+    const lfoG = c.createGain(); lfoG.gain.value = 0.5;
+    lfo.connect(lfoG); lfoG.connect(osc.frequency); lfo.start();
+    const lpf = c.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 150;
+    const g = c.createGain(); g.gain.value = i < 2 ? 0.055 : 0.03;
+    osc.connect(lpf); lpf.connect(g); g.connect(ambientGain); osc.start();
+    ambientNodes.push(osc, lfo);
+  });
+  const midOsc = c.createOscillator(); midOsc.type = 'sawtooth'; midOsc.frequency.value = 110;
+  const midLpf = c.createBiquadFilter(); midLpf.type = 'lowpass'; midLpf.frequency.value = 300;
+  const midLfo = c.createOscillator(); midLfo.frequency.value = 0.08;
+  const midLfoG = c.createGain(); midLfoG.gain.value = 2;
+  midLfo.connect(midLfoG); midLfoG.connect(midOsc.frequency);
+  const midG = c.createGain(); midG.gain.value = 0.018;
+  midOsc.connect(midLpf); midLpf.connect(midG); midG.connect(ambientGain); midOsc.start(); midLfo.start();
+  ambientNodes.push(midOsc, midLfo);
+  const noiseSrc = c.createBufferSource(); noiseSrc.buffer = noiseBuffer(4); noiseSrc.loop = true;
+  const noiseLpf = c.createBiquadFilter(); noiseLpf.type = 'lowpass'; noiseLpf.frequency.value = 120;
+  const noiseG = c.createGain(); noiseG.gain.value = 0.012;
+  noiseSrc.connect(noiseLpf); noiseLpf.connect(noiseG); noiseG.connect(ambientGain); noiseSrc.start();
+  ambientNodes.push(noiseSrc);
+  function scheduleThrob() { if (!soundEnabled) return; const t = setTimeout(() => { playDeepThud(); scheduleThrob(); }, 7000 + Math.random() * 10000); intervals.push(t); }
+  setTimeout(scheduleThrob, 4000);
+}
+function stopAmbient() {
+  if (!ambientGain) return;
+  ambientGain.gain.linearRampToValueAtTime(0, ctx().currentTime + 2.5);
+  setTimeout(() => { ambientNodes.forEach(n => { try { n.stop(); } catch(e){} }); ambientNodes = []; }, 2600);
+}
+function playSiren() {
+  if (!soundEnabled) return;
+  const c = ctx();
+  const rev = createReverb(4, 2); const revG = c.createGain(); revG.gain.value = 0.5; rev.connect(revG); revG.connect(c.destination);
+  const master = c.createGain(); master.gain.value = 0.11; master.connect(c.destination); master.connect(rev);
+  const lpf = c.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 1100; lpf.connect(master);
+  [0, 1.5, -1.5].forEach(detune => {
+    const osc = c.createOscillator(); osc.type = 'sawtooth'; osc.detune.value = detune;
+    const T = c.currentTime;
+    osc.frequency.setValueAtTime(180, T); osc.frequency.linearRampToValueAtTime(220, T+0.5); osc.frequency.linearRampToValueAtTime(780, T+3.5); osc.frequency.linearRampToValueAtTime(780, T+4.5); osc.frequency.linearRampToValueAtTime(180, T+6.5); osc.frequency.linearRampToValueAtTime(160, T+7.0);
+    const env = c.createGain(); env.gain.setValueAtTime(0, T); env.gain.linearRampToValueAtTime(1, T+0.3); env.gain.setValueAtTime(1, T+6.5); env.gain.linearRampToValueAtTime(0, T+7.0);
+    osc.connect(env); env.connect(lpf); osc.start(T); osc.stop(T+7.1);
+  });
+}
+function playDeepThud() {
+  if (!soundEnabled) return;
+  const c = ctx();
+  const rev = createReverb(2.5, 3); const revG = c.createGain(); revG.gain.value = 0.6; rev.connect(revG); revG.connect(c.destination);
+  const osc = c.createOscillator(); osc.type = 'sine'; osc.frequency.setValueAtTime(55, c.currentTime); osc.frequency.exponentialRampToValueAtTime(20, c.currentTime + 0.5);
+  const gain = c.createGain(); gain.gain.setValueAtTime(0.45, c.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
+  osc.connect(gain); gain.connect(c.destination); gain.connect(rev); osc.start(); osc.stop(c.currentTime + 0.5);
+  const nBuf = c.createBufferSource(); nBuf.buffer = noiseBuffer(0.06);
+  const nLpf = c.createBiquadFilter(); nLpf.type = 'lowpass'; nLpf.frequency.value = 300;
+  const nG = c.createGain(); nG.gain.setValueAtTime(0.18, c.currentTime); nG.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.06);
+  nBuf.connect(nLpf); nLpf.connect(nG); nG.connect(c.destination); nBuf.start();
+}
+function playBuildUp() {
+  const c = ctx();
+  const rev = createReverb(3, 2); const revG = c.createGain(); revG.gain.value = 0.4; rev.connect(revG); revG.connect(c.destination);
+  const osc = c.createOscillator(); osc.type = 'sawtooth'; osc.frequency.setValueAtTime(40, c.currentTime); osc.frequency.linearRampToValueAtTime(160, c.currentTime + 1.8);
+  const lpf = c.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 500;
+  const gain = c.createGain(); gain.gain.setValueAtTime(0, c.currentTime); gain.gain.linearRampToValueAtTime(0.22, c.currentTime + 1.4); gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 2.0);
+  osc.connect(lpf); lpf.connect(gain); gain.connect(c.destination); gain.connect(rev); osc.start(); osc.stop(c.currentTime + 2.0);
+  setTimeout(playDeepThud, 1800);
+}
+function playMetalClank() {
+  if (!soundEnabled) return;
+  const c = ctx();
+  [180, 290, 430].forEach((freq, i) => {
+    const osc = c.createOscillator(); osc.type = 'sine'; osc.frequency.value = freq;
+    const gain = c.createGain(); const vol = 0.04 / (i + 1);
+    gain.gain.setValueAtTime(vol, c.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.35 - i * 0.05);
+    osc.connect(gain); gain.connect(c.destination); osc.start(); osc.stop(c.currentTime + 0.35);
+  });
+  const nBuf = c.createBufferSource(); nBuf.buffer = noiseBuffer(0.04);
+  const hpf = c.createBiquadFilter(); hpf.type = 'highpass'; hpf.frequency.value = 1800;
+  const nG = c.createGain(); nG.gain.setValueAtTime(0.09, c.currentTime); nG.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.04);
+  nBuf.connect(hpf); hpf.connect(nG); nG.connect(c.destination); nBuf.start();
+}
+function playCameraBeep() {
+  if (!soundEnabled) return;
+  const c = ctx();
+  [0, 0.12].forEach((delay, i) => {
+    setTimeout(() => {
+      const osc = c.createOscillator(); osc.type = 'sine'; osc.frequency.value = i === 0 ? 440 : 380;
+      const g = c.createGain(); g.gain.setValueAtTime(0.03, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+      osc.connect(g); g.connect(c.destination); osc.start(); osc.stop(c.currentTime + 0.1);
+    }, delay * 1000);
+  });
+}
+
+const toggleBtn = document.getElementById('sound-toggle');
+const toggleIcon = document.getElementById('sound-toggle-icon');
+const toggleLabel = document.getElementById('sound-toggle-label');
+toggleBtn.addEventListener('click', () => {
+  soundEnabled = !soundEnabled;
+  if (soundEnabled) {
+    toggleBtn.classList.add('active'); toggleIcon.textContent = '🔊'; toggleLabel.textContent = 'ЗВУК ВКЛ';
+    startAmbient(); playBuildUp(); setTimeout(playSiren, 2500);
+    intervals.push(setInterval(playCameraBeep, 5000)); intervals.push(setInterval(playSiren, 45000)); setTimeout(playCameraBeep, 800);
+  } else {
+    toggleBtn.classList.remove('active'); toggleIcon.textContent = '🔇'; toggleLabel.textContent = 'ЗВУК ВЫКЛ';
+    stopAmbient(); intervals.forEach(id => clearInterval(id)); intervals = [];
+  }
+});
+
+document.querySelectorAll('.dos-card').forEach(card => {
+  let last = 0;
+  card.addEventListener('mouseenter', () => { const now = Date.now(); if (now - last < 250) return; last = now; playMetalClank(); });
+});
+
+function updateCamTime() {
+  const now = new Date(), pad = n => String(n).padStart(2, '0');
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  document.getElementById('camTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  document.getElementById('camDate').textContent = `${pad(now.getDate())} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+updateCamTime();
+setInterval(updateCamTime, 1000);
+</script>

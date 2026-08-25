@@ -13,103 +13,135 @@
   <link rel="stylesheet" href="css/page.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
-    /* ── MAP ── */
-    .map-layout {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+    .map-page-wrap { max-width: 1280px; margin: 0 auto; }
 
-    /* SVG карта */
-    .map-svg-wrap {
-      position: relative;
-      background: rgba(0,0,0,0.5);
+    /* Faction overview bar */
+    .map-faction-bar { display: flex; gap: 10px; margin-bottom: 22px; flex-wrap: wrap; }
+    .map-faction-chip {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 30px;
       border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
+      background: rgba(0,0,0,0.4);
+      font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .map-faction-chip .fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fc); box-shadow: 0 0 7px var(--fc); flex-shrink: 0; }
+    .map-faction-chip .fc-count { font-size: 17px; font-weight: 900; color: var(--fc); line-height: 1; }
+
+    /* Main layout */
+    .map-layout { display: grid; grid-template-columns: 1fr 310px; gap: 20px; }
+
+    /* Hex map container */
+    .map-hex-wrap {
+      position: relative;
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
       overflow: hidden;
-      padding: 4px;
     }
-    #mapSvg {
-      width: 100%;
-      height: auto;
-      display: block;
+    .map-hex-wrap::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,42,42,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,42,42,0.025) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none; z-index: 0;
     }
+    .map-hex-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.35) 100%);
+      pointer-events: none; z-index: 1;
+    }
+    #mapSvg { width: 100%; height: auto; display: block; position: relative; z-index: 2; }
 
-    .map-district {
-      cursor: pointer;
-      transition: filter 0.2s, opacity 0.2s;
+    /* Corner decorations */
+    .map-corner { position: absolute; font-size: 9px; font-weight: 800; letter-spacing: 2px; color: rgba(255,42,42,0.3); text-transform: uppercase; z-index: 3; }
+    .map-corner.tl { top: 12px; left: 14px; }
+    .map-corner.tr { top: 12px; right: 14px; }
+    .map-corner.bl { bottom: 12px; left: 14px; }
+    .map-corner.br { bottom: 12px; right: 14px; }
+    .map-corner-x {
+      position: absolute; width: 18px; height: 18px; z-index: 3;
     }
-    .map-district:hover { filter: brightness(1.4); }
-    .map-district.active { filter: brightness(1.6); stroke-width: 3px !important; }
+    .map-corner-x::before, .map-corner-x::after { content: ''; position: absolute; background: rgba(255,42,42,0.22); }
+    .map-corner-x::before { width: 1px; height: 18px; left: 50%; top: 0; }
+    .map-corner-x::after  { width: 18px; height: 1px; top: 50%; left: 0; }
+    .map-corner-x.tl { top: 10px; left: 10px; }
+    .map-corner-x.tr { top: 10px; right: 10px; }
+    .map-corner-x.bl { bottom: 10px; left: 10px; }
+    .map-corner-x.br { bottom: 10px; right: 10px; }
 
-    .map-district-label {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 9px;
-      font-weight: 700;
-      fill: rgba(255,255,255,0.85);
-      text-anchor: middle;
-      dominant-baseline: middle;
-      pointer-events: none;
-      letter-spacing: 0.5px;
-    }
-    .map-district-troops {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 13px;
-      font-weight: 900;
-      fill: #fff;
-      text-anchor: middle;
-      dominant-baseline: middle;
-      pointer-events: none;
-    }
+    /* Hex SVG elements */
+    .hex-group { cursor: pointer; }
+    .hex-group .hex-fill { transition: filter 0.22s; }
+    .hex-group:hover .hex-fill { filter: brightness(1.6) saturate(1.4); }
+    .hex-group.active .hex-fill { filter: brightness(1.9) saturate(1.6); }
+    .hex-group.active .hex-border { stroke-width: 3 !important; }
+    .hex-label { font-family: 'Montserrat', sans-serif; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
 
-    /* Сайдбар */
+    /* HQ pulse */
+    @keyframes hqPulse  { 0%,100%{opacity:.15;r:8}  50%{opacity:.55;r:15} }
+    @keyframes hqPulse2 { 0%,100%{opacity:0;r:16}   50%{opacity:.25;r:24} }
+    .hq-p1 { animation: hqPulse  2.2s ease-in-out infinite; }
+    .hq-p2 { animation: hqPulse2 2.2s ease-in-out infinite 0.7s; }
+
+    /* Sidebar */
     .map-sidebar { display: flex; flex-direction: column; gap: 14px; }
 
     .map-info-panel {
-      padding: 20px;
-      background: rgba(0,0,0,0.55);
+      padding: 22px;
+      background: rgba(0,0,0,0.6);
       border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 12px;
-      min-height: 160px;
+      border-radius: 14px;
+      min-height: 210px;
+      position: relative;
+      overflow: hidden;
     }
-    .mip-title { font-size: 11px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.3); text-transform: uppercase; margin-bottom: 14px; }
-    .mip-name  { font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #fff; margin-bottom: 6px; }
-    .mip-owner { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; }
-    .mip-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-    .mip-stat  { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px; text-align: center; }
-    .mip-stat-val { font-size: 18px; font-weight: 900; color: #fff; display: block; }
-    .mip-stat-key { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
-    .mip-desc { font-size: 12px; color: rgba(255,255,255,0.35); line-height: 1.6; margin-top: 10px; }
+    .map-info-panel::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--pa,rgba(255,255,255,0.08)); transition:background .3s; }
 
-    .map-legend {
-      padding: 16px 20px;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 12px;
-    }
-    .ml-title { font-size: 9px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.25); text-transform: uppercase; margin-bottom: 12px; }
-    .ml-item  { display: flex; align-items: center; gap: 10px; font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
-    .ml-dot   { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .mip-eyebrow { font-size: 9px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.25); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .mip-eyebrow::before { content:''; display:block; width:14px; height:1px; background:rgba(255,255,255,0.2); }
+    .mip-name  { font-size: 21px; font-weight: 900; letter-spacing: 1px; color: #fff; margin-bottom: 4px; line-height: 1.1; }
+    .mip-fac   { font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 7px; }
+    .mip-fdot  { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .mip-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .mip-stat  { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 12px 10px; text-align: center; }
+    .mip-stat-v { font-size: 22px; font-weight: 900; display: block; line-height: 1; margin-bottom: 4px; }
+    .mip-stat-k { font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 1.5px; text-transform: uppercase; }
+    .mip-hq    { display: flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #ff4444; background: rgba(255,42,42,0.09); border: 1px solid rgba(255,42,42,0.22); border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; }
+    .mip-desc  { font-size: 11.5px; color: rgba(255,255,255,0.3); line-height: 1.65; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
+    .mip-ph    { color: rgba(255,255,255,0.18); font-size: 12px; text-align: center; padding: 28px 0; }
+    .mip-ph i  { display: block; font-size: 30px; margin-bottom: 12px; opacity: .35; }
 
-    .map-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 10px;
+    /* Global stats */
+    .map-gs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .map-gs-card {
+      padding: 14px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; text-align: center; position: relative; overflow: hidden;
     }
-    .map-stat-card {
-      padding: 14px;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      text-align: center;
-    }
-    .map-stat-card .val { font-size: 24px; font-weight: 900; color: #fff; display: block; }
-    .map-stat-card .lbl { font-size: 9px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+    .map-gs-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--gc,rgba(255,255,255,0.1)); }
+    .gs-val { font-size: 26px; font-weight: 900; color: var(--gc, #fff); display: block; line-height: 1; }
+    .gs-lbl { font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 5px; }
 
-    @media (max-width: 900px) {
+    /* Control bar */
+    .map-ctrl { padding: 14px 18px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; }
+    .mc-title  { font-size: 8px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.2); text-transform: uppercase; margin-bottom: 10px; }
+    .mc-bar    { height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+    .mc-fill   { height: 100%; background: linear-gradient(90deg, #8a0000, #ff2a2a); border-radius: 3px; transition: width 1.2s ease; }
+    .mc-meta   { display: flex; justify-content: space-between; font-size: 10px; }
+    .mc-meta .a { color: #ff4444; font-weight: 700; }
+    .mc-meta .b { color: rgba(255,255,255,0.28); }
+
+    /* Legend */
+    .map-leg { padding: 14px 18px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; }
+    .ml-title { font-size: 8px; font-weight: 800; letter-spacing: 3px; color: rgba(255,255,255,0.2); text-transform: uppercase; margin-bottom: 10px; }
+    .ml-item  { display: flex; align-items: center; gap: 10px; font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 7px; }
+    .ml-hex   { width: 14px; height: 14px; flex-shrink: 0; background: var(--fc); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); box-shadow: 0 0 5px var(--fc); }
+
+    @media (max-width: 960px) {
       .map-layout { grid-template-columns: 1fr; }
+      .map-faction-bar { gap: 6px; }
     }
   </style>
   <link rel="stylesheet" href="css/lite.css"/>
@@ -118,7 +150,6 @@
 <div class="bg-overlay"></div>
 <div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
-<!-- Loader -->
 <div id="pageLoaderOverlay">
   <div class="loader-terminal">
     <div class="loader-titlebar">
@@ -161,28 +192,67 @@
     <h1 class="page-section-title">Карта Los Santos</h1>
     <p class="page-section-sub">Контроль территорий · Miller Family</p>
 
-    <div class="map-layout">
-      <!-- SVG карта -->
-      <div class="map-svg-wrap">
-        <svg id="mapSvg" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"></svg>
-      </div>
+    <div class="map-page-wrap">
+      <div class="map-faction-bar" id="factionBar"></div>
 
-      <!-- Сайдбар -->
-      <div class="map-sidebar">
-        <div class="map-info-panel" id="mapInfoPanel">
-          <div class="mip-title">ИНФОРМАЦИЯ О РАЙОНЕ</div>
-          <div style="color:rgba(255,255,255,0.25);font-size:12px;margin-top:20px">Кликни на район для просмотра информации</div>
+      <div class="map-layout">
+        <!-- Hex map -->
+        <div class="map-hex-wrap">
+          <span class="map-corner tl">LOS SANTOS</span>
+          <span class="map-corner tr">TACTICAL</span>
+          <span class="map-corner bl">MF · 2026</span>
+          <span class="map-corner br">CLASSIFIED</span>
+          <div class="map-corner-x tl"></div>
+          <div class="map-corner-x tr"></div>
+          <div class="map-corner-x bl"></div>
+          <div class="map-corner-x br"></div>
+          <svg id="mapSvg" viewBox="0 0 590 380" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="fr" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="fp" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="fg" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="fb" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+          </svg>
         </div>
 
-        <div class="map-stats-grid" id="mapStatsGrid"></div>
+        <!-- Sidebar -->
+        <div class="map-sidebar">
+          <div class="map-info-panel" id="mapInfoPanel" style="--pa:rgba(255,255,255,0.08)">
+            <div class="mip-ph"><i class="fa-solid fa-map-location-dot"></i>Выбери район на карте</div>
+          </div>
 
-        <div class="map-legend">
-          <div class="ml-title">Фракции</div>
-          <div class="ml-item"><span class="ml-dot" style="background:#cc1111"></span>Miller Family</div>
-          <div class="ml-item"><span class="ml-dot" style="background:#7b2fbe"></span>Los Diablos</div>
-          <div class="ml-item"><span class="ml-dot" style="background:#c8960c"></span>Vagos</div>
-          <div class="ml-item"><span class="ml-dot" style="background:#1a4fa0"></span>Ballas</div>
-          <div class="ml-item"><span class="ml-dot" style="background:#1e1e1e;border:1px solid #333"></span>Нейтральные</div>
+          <div class="map-gs" id="mapGS"></div>
+
+          <div class="map-ctrl">
+            <div class="mc-title">Контроль Miller Family</div>
+            <div class="mc-bar"><div class="mc-fill" id="mcFill" style="width:0%"></div></div>
+            <div class="mc-meta">
+              <span class="a" id="mcA">—</span>
+              <span class="b" id="mcB">из 20 районов</span>
+            </div>
+          </div>
+
+          <div class="map-leg">
+            <div class="ml-title">Фракции</div>
+            <div class="ml-item"><span class="ml-hex" style="--fc:#cc1111"></span>Miller Family</div>
+            <div class="ml-item"><span class="ml-hex" style="--fc:#7b2fbe"></span>Los Diablos</div>
+            <div class="ml-item"><span class="ml-hex" style="--fc:#c8960c"></span>Vagos</div>
+            <div class="ml-item"><span class="ml-hex" style="--fc:#1a4fa0"></span>Ballas</div>
+            <div class="ml-item"><span class="ml-hex" style="--fc:#333"></span>Нейтральные</div>
+          </div>
         </div>
       </div>
     </div>
@@ -194,153 +264,271 @@
 </main>
 
 <script type="module">
-import { initPageLoader } from "./js/page-loader.js";
+import { requireAuth }       from "./js/auth-guard.js";
+import { initPageLoader }    from "./js/page-loader.js";
 import { initPageTransition } from "./js/page-transition.js";
-import { initEasterEgg }      from "./js/easter-egg.js";
+import { initEasterEgg }     from "./js/easter-egg.js";
 
-const FACTIONS = {
-  miller:  { name: 'MILLER FAMILY', color: '#8a0000', stroke: '#ff2a2a', light: '#ff4444' },
-  diablos: { name: 'LOS DIABLOS',   color: '#3d1070', stroke: '#b06fe8', light: '#b06fe8' },
-  vagos:   { name: 'VAGOS',         color: '#7a5800', stroke: '#f0c040', light: '#f0c040' },
-  ballas:  { name: 'BALLAS',        color: '#0d2558', stroke: '#5090f0', light: '#5090f0' },
-  neutral: { name: 'НЕЙТРАЛЬНЫЕ',   color: '#1a1a1a', stroke: '#444',    light: '#666'    },
+const F = {
+  miller:  { name:'MILLER FAMILY', col:'#6a0000', inn:'#3a0000', stk:'#ff2a2a', lit:'#ff4444', flt:'url(#fr)' },
+  diablos: { name:'LOS DIABLOS',   col:'#2d0a5a', inn:'#180430', stk:'#b06fe8', lit:'#c080f0', flt:'url(#fp)' },
+  vagos:   { name:'VAGOS',         col:'#5a3c00', inn:'#382400', stk:'#f0c040', lit:'#f0c040', flt:'url(#fg)' },
+  ballas:  { name:'BALLAS',        col:'#0a1e4a', inn:'#060e28', stk:'#5090f0', lit:'#5090f0', flt:'url(#fb)' },
+  neutral: { name:'НЕЙТРАЛЬНЫЕ',   col:'#1c1c1c', inn:'#111',    stk:'#444',    lit:'#666',    flt:null       },
 };
 
-const DISTRICTS = [
-  // row 0
-  { id:'paleto',    name:'Paleto Bay',     row:0, col:0, faction:'ballas',  troops:12, desc:'Северный портовый город. Стратегически важен для морских операций.' },
-  { id:'grapeseed', name:'Grapeseed',      row:0, col:1, faction:'neutral', troops:5,  desc:'Сельскохозяйственный район. Источник продовольствия и укрытий.' },
-  { id:'sandy',     name:'Sandy Shores',   row:0, col:2, faction:'vagos',   troops:9,  desc:'Пустынный район. Плохо охраняемая дорога для контрабанды.' },
-  { id:'alamo',     name:'Alamo Sea',      row:0, col:3, faction:'neutral', troops:4,  desc:'Водоём в пустыне. Используется для тайных встреч.' },
-  { id:'blaine',    name:'Blaine County',  row:0, col:4, faction:'diablos', troops:14, desc:'Крупный округ на севере. Штаб Los Diablos.' },
-  // row 1
-  { id:'zancudo',   name:'Ft. Zancudo',    row:1, col:0, faction:'neutral', troops:8,  desc:'Военная база. Нейтральная зона по соглашению всех фракций.' },
-  { id:'chumash',   name:'Chumash',        row:1, col:1, faction:'neutral', troops:3,  desc:'Тихий пляжный район. Мало стратегической ценности.' },
-  { id:'vinewood',  name:'Vinewood Hills', row:1, col:2, faction:'miller',  troops:11, desc:'Элитный район. Крупная недвижимость Miller Family.' },
-  { id:'rockford',  name:'Rockford Hills', row:1, col:3, faction:'miller',  troops:16, desc:'Богатый квартал. Бизнес и финансовые операции семьи.' },
-  { id:'harmony',   name:'Harmony',        row:1, col:4, faction:'vagos',   troops:7,  desc:'Пограничный район. Постоянные конфликты с Vagos.' },
-  // row 2
-  { id:'delperro',  name:'Del Perro',      row:2, col:0, faction:'miller',  troops:20, desc:'ШТАБ Miller Family. Главная база операций. Неприступна.' },
-  { id:'vespucci',  name:'Vespucci',       row:2, col:1, faction:'miller',  troops:13, desc:'Пляжный район под полным контролем семьи.' },
-  { id:'downtown',  name:'Downtown LS',    row:2, col:2, faction:'miller',  troops:18, desc:'Деловой центр города. Ключевой экономический узел.' },
-  { id:'eastls',    name:'East LS',        row:2, col:3, faction:'ballas',  troops:10, desc:'Восточные кварталы. Спорная территория.' },
-  { id:'lamesa',    name:'La Mesa',        row:2, col:4, faction:'neutral', troops:6,  desc:'Промышленный район. Нейтральная торговая зона.' },
-  // row 3
-  { id:'lsia',      name:'LSIA',           row:3, col:0, faction:'miller',  troops:9,  desc:'Международный аэропорт. Критически важен для логистики.' },
-  { id:'seoul',     name:'Little Seoul',   row:3, col:1, faction:'miller',  troops:8,  desc:'Деловой квартал. Ряд легальных бизнесов семьи.' },
-  { id:'strawberry',name:'Strawberry',     row:3, col:2, faction:'neutral', troops:5,  desc:'Жилой район. Вербовка новых участников.' },
-  { id:'davis',     name:'Davis',          row:3, col:3, faction:'vagos',   troops:11, desc:'Спорная зона. Постоянные столкновения с Vagos.' },
-  { id:'cypress',   name:'Cypress Flats',  row:3, col:4, faction:'diablos', troops:8,  desc:'Промзона у залива. Операционная база Los Diablos на юге.' },
+const D = [
+  { id:'paleto',     name:'Paleto Bay',     r:0,c:0, faction:'ballas',  t:12, desc:'Северный портовый город. Стратегически важен для морских операций.' },
+  { id:'grapeseed',  name:'Grapeseed',      r:0,c:1, faction:'neutral', t:5,  desc:'Сельскохозяйственный район. Источник продовольствия и укрытий.' },
+  { id:'sandy',      name:'Sandy Shores',   r:0,c:2, faction:'vagos',   t:9,  desc:'Пустынный район. Плохо охраняемая дорога для контрабанды.' },
+  { id:'alamo',      name:'Alamo Sea',      r:0,c:3, faction:'neutral', t:4,  desc:'Водоём в пустыне. Используется для тайных встреч.' },
+  { id:'blaine',     name:'Blaine County',  r:0,c:4, faction:'diablos', t:14, desc:'Крупный округ на севере. Штаб Los Diablos.' },
+  { id:'zancudo',    name:'Ft. Zancudo',    r:1,c:0, faction:'neutral', t:8,  desc:'Военная база. Нейтральная зона по соглашению всех фракций.' },
+  { id:'chumash',    name:'Chumash',        r:1,c:1, faction:'neutral', t:3,  desc:'Тихий пляжный район. Мало стратегической ценности.' },
+  { id:'vinewood',   name:'Vinewood Hills', r:1,c:2, faction:'miller',  t:11, desc:'Элитный район. Крупная недвижимость Miller Family.' },
+  { id:'rockford',   name:'Rockford Hills', r:1,c:3, faction:'miller',  t:16, desc:'Богатый квартал. Бизнес и финансовые операции семьи.' },
+  { id:'harmony',    name:'Harmony',        r:1,c:4, faction:'vagos',   t:7,  desc:'Пограничный район. Постоянные конфликты с Vagos.' },
+  { id:'delperro',   name:'Del Perro',      r:2,c:0, faction:'miller',  t:20, desc:'ШТАБ Miller Family. Главная база операций. Неприступна.', hq:true },
+  { id:'vespucci',   name:'Vespucci',       r:2,c:1, faction:'miller',  t:13, desc:'Пляжный район под полным контролем семьи.' },
+  { id:'downtown',   name:'Downtown LS',    r:2,c:2, faction:'miller',  t:18, desc:'Деловой центр города. Ключевой экономический узел.' },
+  { id:'eastls',     name:'East LS',        r:2,c:3, faction:'ballas',  t:10, desc:'Восточные кварталы. Спорная территория.' },
+  { id:'lamesa',     name:'La Mesa',        r:2,c:4, faction:'neutral', t:6,  desc:'Промышленный район. Нейтральная торговая зона.' },
+  { id:'lsia',       name:'LSIA',           r:3,c:0, faction:'miller',  t:9,  desc:'Международный аэропорт. Критически важен для логистики.' },
+  { id:'seoul',      name:'Little Seoul',   r:3,c:1, faction:'miller',  t:8,  desc:'Деловой квартал. Ряд легальных бизнесов семьи.' },
+  { id:'strawberry', name:'Strawberry',     r:3,c:2, faction:'neutral', t:5,  desc:'Жилой район. Вербовка новых участников.' },
+  { id:'davis',      name:'Davis',          r:3,c:3, faction:'vagos',   t:11, desc:'Спорная зона. Постоянные столкновения с Vagos.' },
+  { id:'cypress',    name:'Cypress Flats',  r:3,c:4, faction:'diablos', t:8,  desc:'Промзона у залива. Операционная база Los Diablos на юге.' },
 ];
 
-const COLS = 5, ROWS = 4;
-const W = 500, H = 400;
-const CW = W / COLS, CH = H / ROWS;
-const PAD = 3;
+// Flat-top hexagon layout
+const HR = 46; // hex circumradius
+const HS = HR * 1.5;         // horizontal step
+const VS = Math.sqrt(3)*HR;  // vertical step (~79.7)
+const ODD = VS / 2;          // odd-col vertical offset
+const MX = 50, MY = 50;      // margin
 
-initPageTransition();
-initEasterEgg();
-initPageLoader({
-  password: "MF·TACTICAL·MAP·2026",
-  label: "ЗАГРУЗКА ТАКТИЧЕСКОЙ КАРТЫ",
-  onComplete: renderMap,
+function hexPts(cx, cy, r) {
+  let s = '';
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI/180)*(60*i);
+    s += (cx + r*Math.cos(a)).toFixed(1)+','+(cy + r*Math.sin(a)).toFixed(1)+' ';
+  }
+  return s.trim();
+}
+
+function center(row, col) {
+  return { x: MX + col*HS, y: MY + row*VS + (col%2===1 ? ODD : 0) };
+}
+
+function ns(tag) { return document.createElementNS("http://www.w3.org/2000/svg", tag); }
+
+requireAuth().then(user => {
+  if (!user) return;
+  initPageTransition();
+  initEasterEgg();
+  initPageLoader({
+    password: "MF·TACTICAL·MAP·2026",
+    label: "ЗАГРУЗКА ТАКТИЧЕСКОЙ КАРТЫ",
+    onComplete: renderMap,
+  });
 });
+
+let activeG = null;
 
 function renderMap() {
   const svg = document.getElementById("mapSvg");
 
-  DISTRICTS.forEach(d => {
-    const f  = FACTIONS[d.faction];
-    const x  = d.col * CW + PAD;
-    const y  = d.row * CH + PAD;
-    const rw = CW - PAD * 2;
-    const rh = CH - PAD * 2;
-    const cx = x + rw / 2;
-    const cy = y + rh / 2;
+  // Miller connection lines
+  const lines = ns('g'); lines.setAttribute('opacity','0.2'); svg.appendChild(lines);
+  const mf = D.filter(d=>d.faction==='miller');
+  mf.forEach(a => mf.forEach(b => {
+    if(a.id >= b.id) return;
+    if(Math.abs(a.r-b.r)<=1 && Math.abs(a.c-b.c)<=1 && Math.abs(a.r-b.r)+Math.abs(a.c-b.c)<=2) {
+      const ca=center(a.r,a.c), cb=center(b.r,b.c);
+      const l=ns('line');
+      l.setAttribute('x1',ca.x); l.setAttribute('y1',ca.y);
+      l.setAttribute('x2',cb.x); l.setAttribute('y2',cb.y);
+      l.setAttribute('stroke','#ff2a2a'); l.setAttribute('stroke-width','1');
+      l.setAttribute('stroke-dasharray','4 3');
+      lines.appendChild(l);
+    }
+  }));
 
-    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.classList.add("map-district");
+  D.forEach((d, idx) => {
+    const f = F[d.faction];
+    const {x:cx, y:cy} = center(d.r, d.c);
 
-    // Прямоугольник
-    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect.setAttribute("x", x); rect.setAttribute("y", y);
-    rect.setAttribute("width", rw); rect.setAttribute("height", rh);
-    rect.setAttribute("rx", "6");
-    rect.setAttribute("fill", f.color);
-    rect.setAttribute("stroke", f.stroke);
-    rect.setAttribute("stroke-width", "1.5");
-    rect.setAttribute("stroke-opacity", "0.7");
-    g.appendChild(rect);
+    const g = ns('g'); g.classList.add('hex-group'); g.dataset.i = idx;
 
-    // Название
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("x", cx); label.setAttribute("y", cy - 10);
-    label.setAttribute("class", "map-district-label");
-    label.textContent = d.name.toUpperCase();
-    g.appendChild(label);
+    // Outer glow ring
+    if(d.faction !== 'neutral') {
+      const gr = ns('polygon');
+      gr.setAttribute('points', hexPts(cx, cy, HR+4));
+      gr.setAttribute('fill','none');
+      gr.setAttribute('stroke', f.stk);
+      gr.setAttribute('stroke-width','1.5');
+      gr.setAttribute('opacity','0.18');
+      if(f.flt) gr.setAttribute('filter', f.flt);
+      g.appendChild(gr);
+    }
 
-    // Войска
-    const troops = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    troops.setAttribute("x", cx); troops.setAttribute("y", cy + 12);
-    troops.setAttribute("class", "map-district-troops");
-    troops.setAttribute("fill", f.light);
-    troops.textContent = d.troops;
-    g.appendChild(troops);
+    // Main hex fill
+    const hex = ns('polygon');
+    hex.classList.add('hex-fill');
+    hex.setAttribute('points', hexPts(cx, cy, HR-1));
+    hex.setAttribute('fill', f.col);
+    if(f.flt) hex.setAttribute('filter', f.flt);
+    g.appendChild(hex);
 
-    g.addEventListener("click", () => showInfo(d));
+    // Inner darker hex
+    const inn = ns('polygon');
+    inn.setAttribute('points', hexPts(cx, cy, HR-7));
+    inn.setAttribute('fill', f.inn);
+    inn.setAttribute('opacity','0.65');
+    g.appendChild(inn);
+
+    // Border stroke
+    const brd = ns('polygon');
+    brd.classList.add('hex-border');
+    brd.setAttribute('points', hexPts(cx, cy, HR-1));
+    brd.setAttribute('fill','none');
+    brd.setAttribute('stroke', f.stk);
+    brd.setAttribute('stroke-width', d.faction==='neutral' ? '1' : '1.8');
+    brd.setAttribute('stroke-opacity', d.faction==='neutral' ? '0.3' : '0.85');
+    g.appendChild(brd);
+
+    // HQ pulse beacons
+    if(d.hq) {
+      const p2=ns('circle'); p2.classList.add('hq-p2');
+      p2.setAttribute('cx',cx); p2.setAttribute('cy',cy);
+      p2.setAttribute('r','16'); p2.setAttribute('fill','#ff2a2a');
+      g.appendChild(p2);
+      const p1=ns('circle'); p1.classList.add('hq-p1');
+      p1.setAttribute('cx',cx); p1.setAttribute('cy',cy);
+      p1.setAttribute('r','9'); p1.setAttribute('fill','#ff2a2a');
+      g.appendChild(p1);
+      const dot=ns('circle');
+      dot.setAttribute('cx',cx); dot.setAttribute('cy',cy);
+      dot.setAttribute('r','4'); dot.setAttribute('fill','#ff5555');
+      g.appendChild(dot);
+    }
+
+    // Troops count
+    const tv = ns('text'); tv.classList.add('hex-label');
+    tv.setAttribute('x', cx);
+    tv.setAttribute('y', d.hq ? cy-10 : cy-5);
+    tv.setAttribute('font-size','15'); tv.setAttribute('font-weight','900');
+    tv.setAttribute('fill', f.lit);
+    if(f.flt) tv.setAttribute('filter', f.flt);
+    tv.textContent = d.t;
+    g.appendChild(tv);
+
+    // District name — split if long
+    const words = d.name.split(' ');
+    const baseY = d.hq ? cy+10 : cy+12;
+    if(words.length > 1 && d.name.length > 9) {
+      const mid = Math.ceil(words.length/2);
+      [[words.slice(0,mid).join(' '), 0],[words.slice(mid).join(' '), 9]].forEach(([txt,dy])=>{
+        const t=ns('text'); t.classList.add('hex-label');
+        t.setAttribute('x',cx); t.setAttribute('y',baseY+dy);
+        t.setAttribute('font-size','7'); t.setAttribute('font-weight','800');
+        t.setAttribute('fill','rgba(255,255,255,0.85)');
+        t.setAttribute('letter-spacing','0.6');
+        t.textContent = txt.toUpperCase();
+        g.appendChild(t);
+      });
+    } else {
+      const t=ns('text'); t.classList.add('hex-label');
+      t.setAttribute('x',cx); t.setAttribute('y',baseY);
+      t.setAttribute('font-size','7'); t.setAttribute('font-weight','800');
+      t.setAttribute('fill','rgba(255,255,255,0.85)');
+      t.setAttribute('letter-spacing','0.6');
+      t.textContent = d.name.toUpperCase();
+      g.appendChild(t);
+    }
+
+    // HQ label
+    if(d.hq) {
+      const hqt=ns('text'); hqt.classList.add('hex-label');
+      hqt.setAttribute('x',cx); hqt.setAttribute('y',cy+24);
+      hqt.setAttribute('font-size','7.5'); hqt.setAttribute('font-weight','900');
+      hqt.setAttribute('fill','#ff4444'); hqt.setAttribute('letter-spacing','1');
+      hqt.textContent = '★ HQ';
+      g.appendChild(hqt);
+    }
+
+    g.addEventListener('click', () => showInfo(d, g));
     svg.appendChild(g);
   });
 
   renderStats();
+  renderFactionBar();
 }
 
-function showInfo(d) {
-  const f = FACTIONS[d.faction];
-  const panel = document.getElementById("mapInfoPanel");
+function showInfo(d, g) {
+  const f = F[d.faction];
+  if(activeG) activeG.classList.remove('active');
+  g.classList.add('active'); activeG = g;
 
-  // Снимаем active со всех
-  document.querySelectorAll(".map-district").forEach(g => g.classList.remove("active"));
-  // Находим текущий
-  const all = document.querySelectorAll(".map-district");
-  const idx = DISTRICTS.indexOf(d);
-  if (all[idx]) all[idx].classList.add("active");
+  const panel = document.getElementById('mapInfoPanel');
+  panel.style.setProperty('--pa', f.stk);
+  const ctrl = d.faction === 'miller';
 
   panel.innerHTML = `
-    <div class="mip-title">РАЙОН</div>
+    <div class="mip-eyebrow">РАЙОН</div>
     <div class="mip-name">${d.name.toUpperCase()}</div>
-    <div class="mip-owner" style="color:${f.light}">${f.name}</div>
+    <div class="mip-fac" style="color:${f.lit}">
+      <span class="mip-fdot" style="background:${f.lit};box-shadow:0 0 7px ${f.lit}"></span>
+      ${f.name}
+    </div>
     <div class="mip-stats">
       <div class="mip-stat">
-        <span class="mip-stat-val" style="color:${f.light}">${d.troops}</span>
-        <span class="mip-stat-key">Войска</span>
+        <span class="mip-stat-v" style="color:${f.lit}">${d.t}</span>
+        <span class="mip-stat-k">Войска</span>
       </div>
       <div class="mip-stat">
-        <span class="mip-stat-val">${d.faction === 'miller' ? '✓' : '✗'}</span>
-        <span class="mip-stat-key">Под контролем</span>
+        <span class="mip-stat-v" style="color:${ctrl?'#44ff88':'#ff4444'};font-size:18px">${ctrl?'✓':'✗'}</span>
+        <span class="mip-stat-k">Наш контроль</span>
       </div>
     </div>
+    ${d.hq ? '<div class="mip-hq"><i class="fa-solid fa-star"></i> Главный штаб Miller Family</div>' : ''}
     <div class="mip-desc">${d.desc}</div>
   `;
 }
 
 function renderStats() {
-  const grid = document.getElementById("mapStatsGrid");
-  const miller  = DISTRICTS.filter(d => d.faction === 'miller').length;
-  const total   = DISTRICTS.length;
-  const troops  = DISTRICTS.filter(d => d.faction === 'miller').reduce((s,d) => s + d.troops, 0);
-  const control = Math.round((miller / total) * 100);
+  const mc = D.filter(d=>d.faction==='miller').length;
+  const tot = D.length;
+  const mt = D.filter(d=>d.faction==='miller').reduce((s,d)=>s+d.t,0);
+  const pct = Math.round(mc/tot*100);
 
-  grid.innerHTML = [
-    { val: miller,  lbl: 'Районов',    color: '#ff4444' },
-    { val: control+'%', lbl: 'Контроль', color: '#ff4444' },
-    { val: troops,  lbl: 'Войска',     color: '#fff' },
-    { val: total - miller, lbl: 'Спорных', color: '#888' },
-  ].map(s => `
-    <div class="map-stat-card">
-      <span class="val" style="color:${s.color}">${s.val}</span>
-      <span class="lbl">${s.lbl}</span>
+  document.getElementById('mapGS').innerHTML = [
+    {v:mc,     l:'Районов',   c:'#ff4444'},
+    {v:pct+'%',l:'Контроль',  c:'#ff4444'},
+    {v:mt,     l:'Войска MF', c:'#fff'   },
+    {v:tot-mc, l:'Спорных',   c:'#888'   },
+  ].map(s=>`<div class="map-gs-card" style="--gc:${s.c}">
+    <span class="gs-val">${s.v}</span>
+    <span class="gs-lbl">${s.l}</span>
+  </div>`).join('');
+
+  document.getElementById('mcFill').style.width = pct+'%';
+  document.getElementById('mcA').textContent = pct+'% контроля';
+  document.getElementById('mcB').textContent = mc+' из '+tot+' районов';
+}
+
+function renderFactionBar() {
+  const cnt = {};
+  D.forEach(d => { cnt[d.faction]=(cnt[d.faction]||0)+1; });
+  const order = ['miller','diablos','vagos','ballas','neutral'];
+  const colors = { miller:'#ff4444', diablos:'#b06fe8', vagos:'#f0c040', ballas:'#5090f0', neutral:'#555' };
+  document.getElementById('factionBar').innerHTML = order.map(fid => `
+    <div class="map-faction-chip" style="--fc:${colors[fid]}">
+      <span class="fc-dot"></span>
+      <span>${F[fid].name}</span>
+      <span class="fc-count">${cnt[fid]||0}</span>
     </div>
-  `).join("");
+  `).join('');
 }
 </script>
 <script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>

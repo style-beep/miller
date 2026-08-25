@@ -455,11 +455,23 @@ initUserBar();
 
 import { HALL_OF_FAME } from "./js/config/events.js";
 
-// ── Личный кабинет (без ?id=) ───────────────────────────────
+// ── Личный кабинет / публичный профиль по Discord ID ─────────
 const urlId = new URLSearchParams(location.search).get("id");
-if (!urlId) {
-  const { user } = await fetch("/api/auth/me").then(r => r.json()).catch(() => ({ user: null }));
-  if (!user) { location.href = "/auth.html"; throw new Error("redirect"); }
+const STATIC_IDS = ["eddie", "adam", "roy"];
+const isStaticProfile = urlId && STATIC_IDS.includes(urlId);
+
+if (!urlId || !isStaticProfile) {
+  let user, isOwn;
+  if (!urlId) {
+    isOwn = true;
+    ({ user } = await fetch("/api/auth/me").then(r => r.json()).catch(() => ({ user: null })));
+    if (!user) { location.href = "/auth.html"; throw new Error("redirect"); }
+  } else {
+    isOwn = false;
+    const res = await fetch(`/api/users/${encodeURIComponent(urlId)}`).catch(() => null);
+    if (!res || !res.ok) { location.href = "/404.html"; throw new Error("not found"); }
+    ({ user } = await res.json());
+  }
 
   // Defaults
   const st = user.stats || {};
@@ -480,6 +492,19 @@ if (!urlId) {
     { key:"hours",      icon:"fa-clock",           label:"Часов",      color:"#e67e22", bg:"rgba(230,126,34,0.1)"  },
     { key:"arrests",    icon:"fa-handcuffs",       label:"Арестов",    color:"#888",    bg:"rgba(136,136,136,0.1)" },
   ];
+
+  const TITLES = {
+    "Создатель":    { icon:"👑", color:"#ffd700", bg:"rgba(255,215,0,0.12)",  border:"rgba(255,215,0,0.35)"  },
+    "Легенда":      { icon:"⭐", color:"#ff9800", bg:"rgba(255,152,0,0.12)",  border:"rgba(255,152,0,0.35)"  },
+    "Директор":     { icon:"🛡️", color:"#4a9eff", bg:"rgba(74,158,255,0.12)", border:"rgba(74,158,255,0.35)" },
+    "Заместитель":  { icon:"⚡", color:"#9b59b6", bg:"rgba(155,89,182,0.12)", border:"rgba(155,89,182,0.35)" },
+    "Босс":         { icon:"🔱", color:"#ff2a2a", bg:"rgba(255,42,42,0.12)",  border:"rgba(255,42,42,0.35)"  },
+    "Ветеран":      { icon:"🎖️", color:"#c9a227", bg:"rgba(201,162,39,0.12)", border:"rgba(201,162,39,0.35)" },
+    "Элита":        { icon:"💎", color:"#43b581", bg:"rgba(67,181,129,0.12)", border:"rgba(67,181,129,0.35)" },
+    "Офицер":       { icon:"🎯", color:"#e74c3c", bg:"rgba(231,76,60,0.12)",  border:"rgba(231,76,60,0.35)"  },
+    "Страж":        { icon:"🛡️", color:"#888",    bg:"rgba(136,136,136,0.1)", border:"rgba(136,136,136,0.3)" },
+    "Новобранец":   { icon:"🪖", color:"#aaa",    bg:"rgba(180,180,180,0.08)",border:"rgba(180,180,180,0.2)" },
+  };
 
   const RARITIES = {
     COMMON:    { color:"#9e9e9e", shine:"#9e9e9e" },
@@ -575,9 +600,20 @@ if (!urlId) {
           <div class="mypf-role-label" style="color:${roleColor}">${roleName}</div>
           <h1 class="mypf-name">${displayName}</h1>
           ${user.discordTag ? `<div class="mypf-tag">@${user.discordTag}</div>` : ""}
+          ${(() => {
+            const t = user.title ? TITLES[user.title] : null;
+            if (!t) return "";
+            return `<div style="display:inline-flex;align-items:center;gap:7px;margin-top:6px;margin-bottom:4px;
+              padding:5px 13px;border-radius:20px;
+              background:${t.bg};border:1px solid ${t.border};
+              font-size:10px;font-weight:800;letter-spacing:2px;color:${t.color};text-transform:uppercase;">
+              ${t.icon}&nbsp;${user.title}
+            </div>`;
+          })()}
           <div class="mypf-bio" id="mypfBioDisplay">${user.bio || '<em style="color:rgba(255,255,255,0.2)">Нет описания — нажми «Редактировать»</em>'}</div>
           ${user.statusText ? `<div class="mypf-status-text"><i class="fa-solid fa-circle-dot" style="color:${roleColor}"></i> ${user.statusText}</div>` : ""}
         </div>
+        ${isOwn ? `
         <div class="mypf-actions">
           <button class="mypf-edit-btn" id="openEditModal">
             <i class="fa-solid fa-pen-to-square"></i> Редактировать
@@ -585,7 +621,7 @@ if (!urlId) {
           <button class="mypf-logout-btn" onclick="fetch('/api/auth/logout',{method:'POST'}).then(()=>location.href='/')">
             <i class="fa-solid fa-right-from-bracket"></i> Выйти
           </button>
-        </div>
+        </div>` : ""}
       </div>
     </div>
 
@@ -682,7 +718,8 @@ if (!urlId) {
     });
   });
 
-  // ── Edit Modal ────────────────────────────────────────────
+  // ── Edit Modal (только для своего профиля) ──────────────────
+  if (isOwn) {
   const modalHtml = `
   <div class="pf-modal-overlay" id="editModalOverlay">
     <div class="pf-modal">
@@ -690,14 +727,9 @@ if (!urlId) {
         <span class="pf-modal-title"><i class="fa-solid fa-pen-to-square" style="margin-right:10px;color:#ff2a2a"></i>Редактировать профиль</span>
         <button class="pf-modal-close" id="closeEditModal"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="pf-modal-tabs">
-        <button class="pf-modal-tab active" data-mpanel="profile">Профиль</button>
-        <button class="pf-modal-tab" data-mpanel="stats">Статистика</button>
-        <button class="pf-modal-tab" data-mpanel="achievements">Достижения</button>
-      </div>
       <div class="pf-modal-body">
 
-        <!-- Panel: Профиль -->
+        <!-- Panel: Профиль (единственная вкладка) -->
         <div class="pf-modal-panel active" id="mpanel-profile">
           <div class="pf-field">
             <label class="pf-label">Отображаемое имя</label>
@@ -711,62 +743,12 @@ if (!urlId) {
             <label class="pf-label">Статус / Цитата <span style="color:rgba(255,255,255,0.2);font-size:9px">(макс 60 символов)</span></label>
             <input class="pf-input" id="edit_status" value="${user.statusText||""}" placeholder="Что у тебя на уме...">
           </div>
+          <div style="padding:12px 14px;border-radius:9px;background:rgba(255,180,0,0.05);border:1px solid rgba(255,180,0,0.15);margin-bottom:16px;font-size:11px;color:rgba(255,180,0,0.6);letter-spacing:1px;">
+            <i class="fa-solid fa-shield-halved" style="margin-right:7px"></i>
+            Статистика, достижения и титул редактируются только через администрацию
+          </div>
           <button class="pf-save-btn" id="saveProfile">
             <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить профиль
-          </button>
-        </div>
-
-        <!-- Panel: Статистика -->
-        <div class="pf-modal-panel" id="mpanel-stats">
-          <div class="pf-stats-grid">
-            ${STAT_DEFS.map(s => `
-              <div class="pf-field">
-                <label class="pf-label" style="display:flex;align-items:center;gap:6px;">
-                  <i class="fa-solid ${s.icon}" style="color:${s.color}"></i> ${s.label}
-                </label>
-                <div class="pf-stat-input-wrap">
-                  <input class="pf-input" type="number" min="0" id="edit_stat_${s.key}" value="${st[s.key]||0}">
-                </div>
-              </div>
-            `).join("")}
-          </div>
-          <button class="pf-save-btn" id="saveStats">
-            <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить статистику
-          </button>
-        </div>
-
-        <!-- Panel: Достижения -->
-        <div class="pf-modal-panel" id="mpanel-achievements">
-          <div style="margin-bottom:14px;font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px;">
-            Отметь достижения которые ты получил
-          </div>
-          ${Object.keys(RARITIES).map(tier => {
-              const tierAchs = ALL_ACH.filter(a => a.rare === tier);
-              if (!tierAchs.length) return "";
-              const r = RARITIES[tier];
-              return `
-              <div style="margin-bottom:4px;margin-top:14px;font-size:8px;font-weight:800;letter-spacing:2px;
-                color:${r.color};text-transform:uppercase;display:flex;align-items:center;gap:8px;">
-                <span style="flex:1;height:1px;background:${r.color}30"></span>
-                ${tier}
-                <span style="flex:1;height:1px;background:${r.color}30"></span>
-              </div>
-              <div class="pf-ach-check-grid">
-                ${tierAchs.map(a => {
-                  const on = (user.achievements||[]).includes(a.id);
-                  return `
-                  <label class="pf-ach-check${on?" checked":""}" data-ach="${a.id}" style="${on?`border-color:${r.color}44;background:${r.color}08`:``}">
-                    <input type="checkbox" ${on?"checked":""}>
-                    <div class="pf-ach-check-box" style="${on?`background:${r.color};border-color:${r.color}`:``}">${on?'<i class="fa-solid fa-check"></i>':""}</div>
-                    <span class="pf-ach-check-icon">${a.icon}</span>
-                    <span class="pf-ach-check-name" style="color:${on?r.color:'rgba(255,255,255,0.5)'}">${a.name}</span>
-                  </label>`;
-                }).join("")}
-              </div>`;
-            }).join("")}
-          <div id="achCheckGrid" style="display:none"></div>
-          <button class="pf-save-btn" style="margin-top:20px" id="saveAch">
-            <i class="fa-solid fa-floppy-disk"></i>&nbsp; Сохранить достижения
           </button>
         </div>
 
@@ -780,37 +762,6 @@ if (!urlId) {
   document.getElementById("closeEditModal").onclick = () => document.getElementById("editModalOverlay").classList.remove("open");
   document.getElementById("editModalOverlay").addEventListener("click", e => {
     if (e.target === e.currentTarget) e.currentTarget.classList.remove("open");
-  });
-
-  // Modal tabs
-  document.querySelectorAll(".pf-modal-tab").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".pf-modal-tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".pf-modal-panel").forEach(p => p.classList.remove("active"));
-      btn.classList.add("active");
-      document.getElementById("mpanel-" + btn.dataset.mpanel)?.classList.add("active");
-    });
-  });
-
-  // Achievement checkboxes
-  document.getElementById("mpanel-achievements").addEventListener("change", e => {
-    const cb  = e.target;
-    if (cb.type !== "checkbox") return;
-    const lbl = cb.closest(".pf-ach-check");
-    if (!lbl) return;
-    const ach = ALL_ACH.find(a => a.id === lbl.dataset.ach);
-    const r   = ach ? RARITIES[ach.rare] : null;
-    // cb.checked уже обновлён браузером — не трогаем его
-    lbl.classList.toggle("checked", cb.checked);
-    lbl.querySelector(".pf-ach-check-box").innerHTML = cb.checked ? '<i class="fa-solid fa-check"></i>' : "";
-    if (r) {
-      lbl.querySelector(".pf-ach-check-box").style.cssText = cb.checked
-        ? `background:${r.color};border-color:${r.color}`
-        : "";
-      lbl.style.borderColor = cb.checked ? r.color + "44" : "";
-      lbl.style.background  = cb.checked ? r.color + "08" : "";
-      lbl.querySelector(".pf-ach-check-name").style.color = cb.checked ? r.color : "rgba(255,255,255,0.5)";
-    }
   });
 
   async function save(payload, btn) {
@@ -846,20 +797,7 @@ if (!urlId) {
       statusText: document.getElementById("edit_status").value.trim().substring(0,60),
     }, this);
   };
-
-  // Save stats
-  document.getElementById("saveStats").onclick = async function() {
-    const stats = {};
-    STAT_DEFS.forEach(s => { stats[s.key] = parseInt(document.getElementById("edit_stat_"+s.key).value)||0; });
-    await save({ stats }, this);
-  };
-
-  // Save achievements
-  document.getElementById("saveAch").onclick = async function() {
-    const achievements = [...document.querySelectorAll("#mpanel-achievements .pf-ach-check input:checked")]
-      .map(cb => cb.closest(".pf-ach-check").dataset.ach);
-    await save({ achievements }, this);
-  };
+  }
 
 } else {
 

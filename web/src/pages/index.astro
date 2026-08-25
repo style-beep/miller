@@ -1,0 +1,1042 @@
+---
+import MainHeader from '../components/MainHeader.astro';
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <script is:inline>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MILLER FAMILY | DEL PERRO RP</title>
+
+  <meta name="description" content="Официальный сайт Miller Family — элитная игровая семья сервера Del Perro RP (GTA 5 Roleplay). Власть. Деньги. Уважение."/>
+  <meta name="keywords" content="Miller Family, Del Perro RP, GTA 5 RP, GTA roleplay, Miller"/>
+  <meta name="robots" content="index, follow"/>
+
+  <meta property="og:type"        content="website"/>
+  <meta property="og:title"       content="MILLER FAMILY | DEL PERRO RP"/>
+  <meta property="og:description" content="Элитная семья сервера Del Perro RP. Власть. Деньги. Уважение."/>
+  <meta property="og:image"       content="/images/miller-emblem.png"/>
+  <meta property="og:site_name"   content="Miller Family"/>
+
+  <meta name="twitter:card"        content="summary_large_image"/>
+  <meta name="twitter:title"       content="MILLER FAMILY | DEL PERRO RP"/>
+  <meta name="twitter:description" content="Элитная семья сервера Del Perro RP. Власть. Деньги. Уважение."/>
+  <meta name="twitter:image"       content="/images/miller-emblem.png"/>
+
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#ff2a2a"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Miller Family"/>
+
+  <link rel="icon" type="image/png" href="/images/family-logo.jpeg" />
+  <link rel="apple-touch-icon"      href="/images/family-logo.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="/images/miller-emblem.png" as="image"/>
+  <link rel="preload" href="/images/background.png"    as="image"/>
+  <link rel="preload" href="/css/style.css"            as="style"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/extras.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <link rel="stylesheet" href="/css/lite.css"/>
+</head>
+<body>
+  <div id="introOverlay" style="display:none;position:fixed;inset:0;z-index:999999;background:#020000;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s">
+    <div class="intro-logo" style="opacity:0;transform:translateY(20px);transition:opacity 0.8s,transform 0.8s;text-align:center">
+      <img src="/images/miller-emblem.png" alt="" style="width:100px;height:100px;object-fit:contain;margin-bottom:24px;filter:drop-shadow(0 0 20px rgba(255,42,42,0.4))">
+      <div style="font-size:36px;font-weight:900;letter-spacing:8px;color:#fff;font-family:'Montserrat',sans-serif">MILLER FAMILY</div>
+      <div style="font-size:11px;letter-spacing:6px;color:rgba(255,42,42,0.7);margin-top:8px;text-transform:uppercase">Del Perro RP · GTA 5 Roleplay</div>
+    </div>
+    <div class="intro-tagline" style="opacity:0;transition:opacity 0.8s 0.3s;margin-top:32px;font-size:13px;letter-spacing:6px;color:rgba(255,255,255,0.3);text-transform:uppercase;font-family:'Montserrat',sans-serif">
+      Power &nbsp;·&nbsp; Loyalty &nbsp;·&nbsp; Respect
+    </div>
+    <div style="width:240px;height:2px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:32px;overflow:hidden">
+      <div class="intro-bar-fill" style="height:100%;width:0%;background:linear-gradient(90deg,#8a0000,#ff2a2a);border-radius:2px;transition:width 2.5s ease"></div>
+    </div>
+    <button class="intro-skip" style="position:absolute;bottom:32px;right:32px;background:none;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.2);padding:8px 20px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer">ПРОПУСТИТЬ</button>
+  </div>
+  <style>
+    .intro-logo.intro-visible { opacity:1 !important; transform:translateY(0) !important; }
+    .intro-tagline.intro-visible { opacity:1 !important; }
+    #introOverlay.intro-exit { opacity:0 !important; pointer-events:none; }
+  </style>
+
+  <div class="scroll-progress"></div>
+  <div class="cursor-outer" id="cursorOuter"></div>
+  <div class="cursor-inner" id="cursorInner"></div>
+
+  <div class="bg-overlay"></div>
+  <div class="particles">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="cursor-glow"></div>
+
+  <div id="loader">
+    <div class="loader-text">MILLER FAMILY</div>
+  </div>
+
+  <MainHeader />
+
+  <div class="live-clock">00:00:00</div>
+
+  <div class="music-player" id="musicPlayer">
+    <div class="player-header">
+      <span class="music-label">NOW PLAYING</span>
+      <button id="minimizeBtn" class="minimize-btn">−</button>
+    </div>
+
+    <div class="player-content">
+      <div class="music-art">
+        <img src="/images/covers/cover1.png" alt="Cover" id="albumArt">
+      </div>
+
+      <div class="music-info">
+        <h3 id="songTitle">GTA NIGHT DRIVE</h3>
+        <p id="songArtist">DEL PERRO RP Theme</p>
+      </div>
+
+      <div class="music-progress">
+        <input type="range" id="progressBar" value="0" max="100">
+      </div>
+
+      <div class="time-box">
+        <span id="currentTime">0:00</span>
+        <span id="duration">0:00</span>
+      </div>
+
+      <div class="music-controls">
+        <button id="prevBtn">⏮</button>
+        <button id="playBtn">▶</button>
+        <button id="nextBtn">⏭</button>
+      </div>
+
+      <div class="volume-box">
+        <span>🔊</span>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.65">
+      </div>
+      <div class="playlist">
+        <div class="playlist-title">PLAYLIST</div>
+        <ul id="playlist"></ul>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audioPlayer"></audio>
+
+  <section class="hero" id="home">
+    <div class="hero-left">
+      <p class="hero-subtitle">DEL PERRO GTA 5 ROLEPLAY</p>
+
+      <h1 class="hero-title">
+        RULE THE<br>
+        <span>CITY</span>
+      </h1>
+
+      <p class="hero-text">
+        Элитная семья сервера DEL PERRO RP.<br>Власть. Деньги. Уважение.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="/power.html" class="hero-nav-btn"><i class="fa-solid fa-sitemap" style="margin-right:8px;font-size:12px"></i>СТРУКТУРА ВЛАСТИ</a>
+        <a href="/trophies.html" class="discord-btn"><i class="fa-solid fa-trophy" style="margin-right:8px;font-size:12px"></i>ТРОФЕИ</a>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card premium-stat">
+        <div class="stat-header">
+          <div class="stat-icon">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="stat-title">FAMILY NETWORK</div>
+        </div>
+        <div class="stat-number" data-target="70">0</div>
+
+        <div class="stat-description">
+          Trusted members of the organization
+        </div>
+
+        <div class="stat-trend positive">
+          ▲ +8 THIS MONTH
+        </div>
+      </div>
+
+      <div class="stat-card premium-stat">
+        <div class="stat-header">
+          <div class="stat-icon">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div class="stat-title">ESTABLISHED</div>
+        </div>
+
+        <div class="stat-number" data-target="2023">0</div>
+
+        <div class="stat-description">
+          Building a legacy since day one
+        </div>
+
+        <div class="stat-trend">
+          LEGACY CONTINUES
+        </div>
+      </div>
+
+      <div class="stat-card premium-stat">
+        <div class="stat-header">
+          <div class="stat-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div class="stat-title">ENGAGEMENT</div>
+        </div>
+
+        <div class="stat-number percent" data-target="95">0</div>
+
+        <div class="stat-description">
+          Weekly operational activity
+        </div>
+
+        <div class="stat-trend positive">
+          ▲ +5%
+        </div>
+      </div>
+
+      <div class="stat-card premium-stat">
+        <div class="stat-header">
+          <div class="stat-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="stat-title">INFLUENCE</div>
+        </div>
+
+        <div class="stat-number percent" data-target="87">0</div>
+
+        <div class="stat-description">
+          Control over key districts
+        </div>
+
+        <div class="stat-trend positive">
+          ▲ +12%
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="family-emblem">
+
+    <div class="emblem-particles"></div>
+
+    <div class="background-word">
+      MILLER
+    </div>
+
+    <div class="family-side"></div>
+    <div class="family-info-block">
+
+      <div class="panel-title">REQUIREMENTS</div>
+
+      <div class="info-row">
+        <span class="info-icon">
+          <i class="fa-brands fa-discord"></i>
+        </span>
+        <span>Discord Required</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon">
+          <i class="fa-solid fa-microphone"></i>
+        </span>
+        <span>Microphone</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon">
+          <i class="fa-solid fa-gamepad"></i>
+        </span>
+        <span>RP Experience</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon">
+          <i class="fa-solid fa-bolt"></i>
+        </span>
+        <span>Activity</span>
+      </div>
+
+    </div>
+
+    <div class="emblem-container" id="emblemContainer">
+      <canvas id="fireCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
+      <div class="orbit orbit-1"></div>
+      <div class="orbit orbit-2"></div>
+      <div class="orbit orbit-3"></div>
+      <img src="/images/miller-emblem.png"
+        alt="Miller Family"
+        class="emblem-image"
+        id="emblemImg"
+        style="position:relative;z-index:1">
+    </div>
+
+    <div class="family-side"></div>
+    <div class="family-info-block">
+
+      <div class="panel-title">BENEFITS</div>
+
+      <div class="info-row">
+        <span class="info-icon benefit">
+          <i class="fa-solid fa-shield-halved"></i>
+        </span>
+        <span>Family Support</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon benefit">
+          <i class="fa-solid fa-calendar-days"></i>
+        </span>
+        <span>Daily Events</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon benefit">
+          <i class="fa-solid fa-trophy"></i>
+        </span>
+        <span>Reputation</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-icon benefit">
+          <i class="fa-solid fa-sack-dollar"></i>
+        </span>
+        <span>Opportunities</span>
+      </div>
+
+    </div>
+
+  </section>
+  <section class="about" id="about">
+    <div class="background-title">
+      MILLER
+    </div>
+    <div class="section-title">О НАС</div>
+    <div class="glass-card">
+      <p>Miller Family — это не просто организация. Это семья нового поколения, которая диктует правила на улицах Los Santos. Строгая иерархия, железная дисциплина и абсолютный контроль.</p>
+    </div>
+  </section>
+
+  <div class="structure" id="structure">
+    <div class="section-title">СТРУКТУРА</div>
+    <div class="structure-grid">
+      <div class="rank-card" data-leader-slot="boss">
+        <div class="rank-header">
+          <div class="rank-icon boss-icon"><i class="fa-solid fa-crown"></i></div>
+          <div class="rank-text">
+            <h2 data-leader-name>EDDIE MILLER</h2>
+            <span>FAMILY BOSS</span>
+          </div>
+        </div>
+        <div class="leader-photo">
+          <div class="leader-photo-bg"></div>
+          <img loading="lazy" src="/images/eddie.jpg" class="leader-photo-avatar" data-leader-avatar alt="Eddie Miller">
+        </div>
+        <div class="structure-info">
+          <div class="structure-box"><span>CAPITAL</span><h3>$520M</h3></div>
+          <div class="structure-box"><span>STATUS</span><h3>ELITE</h3></div>
+          <div class="structure-box"><span>FAMILY</span><h3>70</h3></div>
+          <div class="structure-box"><span>POWER</span><h3>98%</h3></div>
+        </div>
+        <div class="rank-description">Основатель и глава семьи. Стратегия, финансы и долгосрочное развитие.</div>
+        <div class="card-status">CREATOR ACCESS</div>
+        <a href="/profile.html?id=eddie" data-leader-profile class="rank-profile-btn"><i class="fa-solid fa-user"></i> Войти в профиль</a>
+      </div>
+
+      <div class="rank-card" data-leader-slot="director">
+        <div class="rank-header">
+          <div class="rank-icon deputy-icon"><i class="fa-solid fa-chess-king"></i></div>
+          <div class="rank-text">
+            <h2 data-leader-name>ADAM MILLER</h2>
+            <span>DIRECTOR</span>
+          </div>
+        </div>
+        <div class="leader-photo">
+          <div class="leader-photo-bg"></div>
+          <img loading="lazy" src="/images/adam.jpg" class="leader-photo-avatar" data-leader-avatar alt="Adam Miller">
+        </div>
+        <div class="structure-info">
+          <div class="structure-box"><span>CONTROL</span><h3>94%</h3></div>
+          <div class="structure-box"><span>BUSINESS</span><h3>12</h3></div>
+          <div class="structure-box"><span>AUTHORITY</span><h3>MAX</h3></div>
+          <div class="structure-box"><span>SECURITY</span><h3>HIGH</h3></div>
+        </div>
+        <div class="rank-description">Управление внутренними процессами и персоналом.</div>
+        <div class="card-status">DIRECTOR ACCESS</div>
+        <a href="/profile.html?id=adam" data-leader-profile class="rank-profile-btn"><i class="fa-solid fa-user"></i> Войти в профиль</a>
+      </div>
+
+      <div class="rank-card" data-leader-slot="deputy">
+        <div class="rank-header">
+          <div class="rank-icon commander-icon"><i class="fa-solid fa-bolt"></i></div>
+          <div class="rank-text">
+            <h2 data-leader-name>ROY MILLER</h2>
+            <span>DEPUTY DIRECTOR</span>
+          </div>
+        </div>
+        <div class="leader-photo">
+          <div class="leader-photo-bg"></div>
+          <img loading="lazy" src="/images/roy.jpg" class="leader-photo-avatar" data-leader-avatar alt="Roy Miller">
+        </div>
+        <div class="structure-info">
+          <div class="structure-box"><span>WARS</span><h3>84%</h3></div>
+          <div class="structure-box"><span>COMBAT</span><h3>96%</h3></div>
+          <div class="structure-box"><span>CONTROL</span><h3>TOP</h3></div>
+          <div class="structure-box"><span>GARAGE</span><h3>18</h3></div>
+        </div>
+        <div class="rank-description">Руководитель силовых операций и территориального контроля.</div>
+        <div class="card-status">TACTICAL ACCESS</div>
+        <a href="/profile.html?id=roy" data-leader-profile class="rank-profile-btn"><i class="fa-solid fa-user"></i> Войти в профиль</a>
+      </div>
+    </div>
+
+    <div class="soldiers-wrapper">
+      <div class="rank-card soldiers-card">
+        <div class="soldiers-top">
+          <div class="soldiers-left">
+
+            <div class="soldiers-badge">
+              <i class="fa-solid fa-users"></i>
+            </div>
+
+            <div class="soldiers-info">
+              <h2>SOLDIER</h2>
+              <p>Основная сила семьи</p>
+            </div>
+          </div>
+
+          <div class="soldiers-count">
+            <span id="memberCount">0</span>
+            MEMBERS
+          </div>
+        </div>
+
+        <div class="soldiers-divider"></div>
+        <div class="members-list" id="discordMembers">
+          <div class="member-item">
+            <span class="member-name">Loading Discord...</span>
+          </div>
+        </div>
+        <div class="soldiers-footer">
+          ACTIVE FORCES • MILLER FAMILY
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="composition" id="members">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">СОСТАВ</div>
+    <p class="section-sub">Структура семьи Miller Family</p>
+
+    <div class="departments-grid">
+
+      <div class="dept-card dept-leadership">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#ff2a2a">
+            <i class="dept-icon fa-solid fa-crown"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">РУКОВОДСТВО</h3>
+            <p class="dept-subtitle">Высшее командование семьи</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
+        </div>
+        <div class="dept-line" style="--dept-color:#ff2a2a"></div>
+        <div class="dept-members" id="dept-leadership"></div>
+      </div>
+
+      <div class="dept-card dept-senior-admin">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#c9a227">
+            <i class="dept-icon fa-solid fa-star"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">СТАРШАЯ АДМИНИСТРАЦИЯ</h3>
+            <p class="dept-subtitle">Координация и надзор</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
+        </div>
+        <div class="dept-line" style="--dept-color:#c9a227"></div>
+        <div class="dept-members" id="dept-senior-admin"></div>
+      </div>
+
+      <div class="dept-card dept-tech-admin">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#4a9eff">
+            <i class="dept-icon fa-solid fa-microchip"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">ТЕХНИЧЕСКАЯ АДМИНИСТРАЦИЯ</h3>
+            <p class="dept-subtitle">Техническая поддержка и дизайн</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
+        </div>
+        <div class="dept-line" style="--dept-color:#4a9eff"></div>
+        <div class="dept-members" id="dept-tech-admin"></div>
+      </div>
+
+      <div class="dept-card dept-moderation">
+        <div class="dept-header">
+          <div class="dept-icon-wrap" style="--dept-color:#43b581">
+            <i class="dept-icon fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="dept-title-wrap">
+            <h3 class="dept-title">МОДЕРАЦИЯ</h3>
+            <p class="dept-subtitle">Поддержание порядка в семье</p>
+          </div>
+          <div class="dept-count-wrap">
+            <span class="dept-count">—</span>
+            <span class="dept-count-label">чел.</span>
+          </div>
+        </div>
+        <div class="dept-line" style="--dept-color:#43b581"></div>
+        <div class="dept-members" id="dept-moderation"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="countdown-section" id="countdown">
+    <div class="countdown-inner">
+      <div class="cd-left">
+        <div class="cd-label countdown-label-top">СЛЕДУЮЩЕЕ СОБЫТИЕ</div>
+        <div class="cd-event-name" id="countdownEventName">СЕМЕЙНЫЙ СБОР</div>
+        <div class="cd-event-desc" id="countdownEventDesc"></div>
+      </div>
+      <div class="cd-right">
+        <div class="cd-units">
+          <div class="cd-unit">
+            <div class="cd-num" id="cdDays">00</div>
+            <div class="cd-lbl">дней</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num" id="cdHours">00</div>
+            <div class="cd-lbl">часов</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num" id="cdMinutes">00</div>
+            <div class="cd-lbl">минут</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num" id="cdSeconds">00</div>
+            <div class="cd-lbl">секунд</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hof-section" id="fame">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ДОСКА ПОЧЁТА</div>
+    <p class="hof-subtitle">Лучшие участники Miller Family этого месяца</p>
+    <div class="hof-grid" id="hofGrid"></div>
+  </section>
+
+  <section class="classified-section" id="classified">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ЗАКРЫТЫЕ РАЗДЕЛЫ</div>
+    <p class="classified-sub">Доступ по коду. Каждый раздел защищён уникальным паролем</p>
+    <div class="classified-grid">
+
+      <a href="/gallery.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon"><i class="fa-solid fa-images"></i></div>
+        <div class="cc-title">ГАЛЕРЕЯ</div>
+        <div class="cc-desc">Визуальный архив Miller Family. Фото с операций, портреты бойцов и памятные моменты.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·VISUAL·ACCESS·2026</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="/history.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon"><i class="fa-solid fa-scroll"></i></div>
+        <div class="cc-title">ИСТОРИЯ</div>
+        <div class="cc-desc">Хроника Miller Family с момента основания. Войны, победы и ключевые события организации.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·CHRONICLE·CLASSIFIED</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="/rules.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+        <div class="cc-title">ПРАВИЛА</div>
+        <div class="cc-desc">Кодекс Miller Family. Обязателен к исполнению каждым членом организации без исключений.</div>
+        <div class="cc-meta">
+          <span class="cc-code">CODEX·FAMILIA·ALPHA</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="/game.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon"><i class="fa-solid fa-crosshairs"></i></div>
+        <div class="cc-title">ИГРА</div>
+        <div class="cc-desc">Захвати все 20 районов Los Santos. 4 фракции, AI противники, реальное время.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·TACTICAL·GAME·2026</span>
+          <span class="cc-enter">ИГРАТЬ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="/allies.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon"><i class="fa-solid fa-handshake"></i></div>
+        <div class="cc-title">СОЮЗНИКИ</div>
+        <div class="cc-desc">Организации с пактом о ненападении. Союзные кланы и дружественные структуры Del Perro RP.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·ALLIANCE·PACT·2026</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+      <a href="/media.html" class="classified-card">
+        <div class="cc-lock"><i class="fa-solid fa-lock"></i></div>
+        <div class="cc-glow"></div>
+        <div class="cc-icon"><i class="fa-solid fa-clapperboard"></i></div>
+        <div class="cc-title">МЕДИА</div>
+        <div class="cc-desc">Видео, стримы и клипы Miller Family. YouTube, Twitch и эксклюзивные записи операций.</div>
+        <div class="cc-meta">
+          <span class="cc-code">MF·MEDIA·ARCHIVE·2026</span>
+          <span class="cc-enter">ВОЙТИ <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="appstatus-section" id="status">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">СТАТУС ЗАЯВКИ</div>
+    <p class="appstatus-sub">Проверь статус своей заявки по Discord тегу</p>
+    <div class="appstatus-wrap">
+      <form class="appstatus-form" id="statusForm">
+        <div class="appstatus-input-wrap">
+          <i class="fa-brands fa-discord"></i>
+          <input type="text" id="statusDiscord" placeholder="Введи Discord username" required>
+          <button type="submit">ПРОВЕРИТЬ <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </form>
+      <div class="status-result" id="statusResult" style="display:none"></div>
+    </div>
+  </section>
+
+  <section class="video-section" id="video">
+    <div class="background-title">MILLER</div>
+    <div class="section-title">ТРЕЙЛЕР</div>
+    <div class="video-frame">
+      <div class="video-wrapper">
+        <video id="mainVideo" class="main-video" preload="metadata" poster="/images/miller-emblem.png">
+          <source src="/video/millers.mp4" type="video/mp4">
+        </video>
+
+        <div class="video-badge"><span>MILLER</span> FAMILY • DEL PERRO RP</div>
+
+        <div class="video-overlay" id="videoOverlay">
+          <button class="video-play-btn" id="videoPlayBtn">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          <div class="video-overlay-label">нажми для просмотра</div>
+        </div>
+
+        <div class="video-controls" id="videoControls">
+          <div class="vc-progress-wrap">
+            <input type="range" class="vc-progress" id="vcProgress" value="0" min="0" max="100" step="0.1">
+          </div>
+          <div class="vc-bottom">
+            <div class="vc-left">
+              <button class="vc-btn" id="vcPlay"><i class="fa-solid fa-play"></i></button>
+              <div class="vc-time">
+                <span id="vcCurrent">0:00</span>
+                <span>/</span>
+                <span id="vcDuration">0:00</span>
+              </div>
+            </div>
+            <div class="vc-right">
+              <div class="vc-volume-wrap">
+                <button class="vc-btn" id="vcMute"><i class="fa-solid fa-volume-high"></i></button>
+                <input type="range" class="vc-volume" id="vcVolume" min="0" max="1" step="0.01" value="1">
+              </div>
+              <button class="vc-btn" id="vcFullscreen"><i class="fa-solid fa-expand"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="join" id="join">
+    <div class="join-box">
+      <h2>ХОЧЕШЬ В MILLER FAMILY?</h2>
+      <p>Стань частью элиты DEL PERRO RP</p>
+      <button class="main-btn">ПОДАТЬ ЗАЯВКУ</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+
+    <div class="footer-top">
+
+      <div class="footer-brand">
+        <img loading="lazy" src="/images/background.png" alt="Miller Family" class="footer-logo-img">
+        <div>
+          <div class="footer-brand-name">MILLER FAMILY</div>
+          <div class="footer-brand-sub">GTA 5 Roleplay · Del Perro RP</div>
+          <p class="footer-brand-desc">
+            Элитная организация сервера Del Perro RP.<br>
+            Власть. Деньги. Уважение.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Навигация</div>
+        <a href="#home">Главная</a>
+        <a href="#about">О нас</a>
+        <a href="#structure">Структура</a>
+        <a href="#members">Состав</a>
+        <a href="#video">Трейлер</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Организация</div>
+        <a href="/map.html">Карта территорий</a>
+        <a href="/dossier.html">Досье</a>
+        <a href="https://www.twitch.tv/eddiemi11er" target="_blank">Трансляции</a>
+        <a href="https://youtube.com/@eddiealta" target="_blank">YouTube канал</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-title">Сообщество</div>
+        <div class="footer-socials-grid">
+          <a href="https://discord.gg/SaCXzgckS" target="_blank" class="footer-social-btn">
+            <i class="fa-brands fa-discord"></i>
+            <span>Discord</span>
+          </a>
+          <a href="https://youtube.com/@eddiealta" target="_blank" class="footer-social-btn">
+            <i class="fa-brands fa-youtube"></i>
+            <span>YouTube</span>
+          </a>
+          <a href="https://www.twitch.tv/eddiemi11er" target="_blank" class="footer-social-btn">
+            <i class="fa-brands fa-twitch"></i>
+            <span>Twitch</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <span>© 2023–2026 Miller Family. All rights reserved.</span>
+        <span class="footer-dot">·</span>
+        <span>Del Perro RP · GTA 5 Roleplay</span>
+      </div>
+      <div class="footer-bottom-right">
+        <span class="footer-motto">POWER · LOYALTY · RESPECT</span>
+        <span class="footer-dev-inline">dev by <span>donskoyy</span></span>
+      </div>
+    </div>
+
+  </footer>
+
+  <div id="auth-wall" style="display:none">
+    <div class="aw-card">
+      <span class="aw-icon">🔒</span>
+      <div class="aw-title">Закрытая зона</div>
+      <div class="aw-sub">
+        Этот раздел доступен только членам Miller Family.<br>
+        Войдите в аккаунт, чтобы видеть структуру, участников,<br>
+        события, карту и всё остальное.
+      </div>
+      <div class="aw-btns">
+        <a href="/auth.html" class="aw-btn-login"><i class="fa-solid fa-key"></i>ВОЙТИ</a>
+        <a href="#join" class="aw-btn-join"><i class="fa-solid fa-file-pen"></i>ПОДАТЬ ЗАЯВКУ</a>
+      </div>
+    </div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#8a0000"/>
+        <stop offset="100%" stop-color="#ff4040"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="alert-container" id="alertContainer"></div>
+  <div class="modal-overlay" id="applyModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">✕</button>
+
+      <h2>ПОДАТЬ ЗАЯВКУ В MILLER FAMILY</h2>
+      <p class="modal-subtitle">Элитная семья DEL PERRO RP</p>
+
+      <div id="draftHint" style="display:none;align-items:center;gap:10px;padding:10px 14px;margin-bottom:14px;background:rgba(255,180,0,0.08);border:1px solid rgba(255,180,0,0.2);border-radius:8px;font-size:12px;color:rgba(255,180,0,0.8);">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <span>Черновик восстановлен</span>
+      </div>
+
+      <form id="applyForm">
+        <div class="form-group">
+          <label>Никнейм в игре</label>
+          <input
+            type="text"
+            id="nickname"
+            name="nickname"
+            placeholder="Например: Eddie_Miller"
+            required
+          >
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Возраст</label>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              placeholder="18+"
+              min="16"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Discord</label>
+            <input
+              type="text"
+              id="discord"
+              name="discord"
+              placeholder="username#0000"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Опыт в RP (сколько месяцев/лет)</label>
+          <input
+            type="text"
+            id="experience"
+            name="experience"
+            placeholder="1.5 года на DEL PERRO RP"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Почему хочешь вступить в Miller Family?</label>
+          <textarea
+            id="reason"
+            name="reason"
+            rows="4"
+            placeholder="Напиши честно..."
+            required
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <span>ОТПРАВИТЬ ЗАЯВКУ</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  <script type="module" src="/js/main.js" is:inline></script>
+  <script is:inline>
+    document.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'Z' || e.key === 'z')) {
+        e.preventDefault();
+        window.location.href = '/admin.html';
+      }
+    });
+  </script>
+
+  <script is:inline>
+  (function() {
+    const canvas = document.getElementById('fireCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const img  = document.getElementById('emblemImg');
+
+    let W, H, cx, cy, IR;
+    let particles = [];
+    let embers = [];
+    let drips = [];
+    let raf;
+
+    function setup() {
+      const wrap = canvas.parentElement;
+      W = wrap.offsetWidth;
+      H = wrap.offsetHeight;
+      canvas.width  = W;
+      canvas.height = H;
+      cx = W / 2;
+      cy = H / 2;
+      IR = Math.min(W, H) * 0.34;
+    }
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    function spawnFire() {
+      const angle = rand(Math.PI * 0.55, Math.PI * 0.95);
+      const r = IR * rand(0.85, 1.05);
+      const x = cx + Math.cos(angle) * r;
+      const y = cy + Math.sin(angle) * r;
+      particles.push({
+        x, y,
+        vx: rand(-0.6, 0.6),
+        vy: rand(-2.8, -1.2),
+        life: rand(0.6, 1.0),
+        maxLife: 1,
+        size: rand(4, 11),
+      });
+    }
+
+    function spawnEmber() {
+      const angle = rand(Math.PI * 0.5, Math.PI);
+      const r = IR * rand(0.9, 1.1);
+      embers.push({
+        x: cx + Math.cos(angle) * r,
+        y: cy + Math.sin(angle) * r,
+        vx: rand(-1.2, 1.2),
+        vy: rand(-3, -1),
+        life: rand(0.4, 0.9),
+        size: rand(1.5, 3.5),
+      });
+    }
+
+    function spawnDrip() {
+      const angle = rand(Math.PI * 0.6, Math.PI * 0.92);
+      const r = IR * rand(0.92, 1.0);
+      drips.push({
+        x: cx + Math.cos(angle) * r,
+        y: cy + Math.sin(angle) * r,
+        vy: rand(1.5, 3.5),
+        len: rand(10, 35),
+        life: rand(0.7, 1.2),
+        maxLife: 1,
+        w: rand(2, 5),
+      });
+    }
+
+    let t = 0;
+    function frame() {
+      raf = requestAnimationFrame(frame);
+      t += 0.016;
+
+      ctx.clearRect(0, 0, W, H);
+
+      if (Math.random() < 0.55) spawnFire();
+      if (Math.random() < 0.18) spawnEmber();
+      if (Math.random() < 0.06) spawnDrip();
+
+      const DT = 0.018;
+
+      particles.forEach((p, i) => {
+        p.x  += p.vx; p.y  += p.vy;
+        p.vx += rand(-0.15, 0.15);
+        p.life -= DT * 1.1;
+        if (p.life <= 0) { particles.splice(i, 1); return; }
+        const a = p.life;
+        const pct = 1 - p.life;
+        let r2, g, b;
+        if (pct < 0.25)      { r2=255; g=Math.round(200+55*(1-pct/0.25)); b=Math.round(180*(1-pct/0.25)); }
+        else if (pct < 0.55) { r2=255; g=Math.round(160*(1-(pct-0.25)/0.3)); b=0; }
+        else                  { r2=Math.round(255*(1-(pct-0.55)/0.45)); g=0; b=0; }
+
+        ctx.globalAlpha = a * 0.85;
+        ctx.shadowBlur  = 14; ctx.shadowColor = `rgba(255,60,0,${a})`;
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+        grad.addColorStop(0, `rgba(${r2},${g},${b},${a})`);
+        grad.addColorStop(1, `rgba(${r2},0,0,0)`);
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      embers.forEach((e, i) => {
+        e.x += e.vx; e.y += e.vy; e.vy += 0.04;
+        e.life -= DT * 1.4;
+        if (e.life <= 0) { embers.splice(i, 1); return; }
+        ctx.globalAlpha = e.life;
+        ctx.shadowBlur  = 8; ctx.shadowColor = '#ff6600';
+        ctx.fillStyle = `rgba(255,${Math.round(100+e.life*100)},0,1)`;
+        ctx.beginPath(); ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      drips.forEach((d, i) => {
+        d.y  += d.vy; d.len += d.vy * 0.5;
+        d.life -= DT * 0.9;
+        if (d.life <= 0) { drips.splice(i, 1); return; }
+        const a = Math.min(d.life, 0.85);
+        ctx.globalAlpha = a;
+        ctx.shadowBlur  = 6; ctx.shadowColor = 'rgba(180,0,0,0.8)';
+        ctx.strokeStyle = `rgba(160,0,0,${a})`;
+        ctx.lineWidth   = d.w;
+        ctx.lineCap     = 'round';
+        ctx.beginPath(); ctx.moveTo(d.x, d.y - d.len * 0.3); ctx.lineTo(d.x, d.y + d.len);
+        ctx.stroke();
+        ctx.fillStyle = `rgba(140,0,0,${a})`;
+        ctx.beginPath(); ctx.arc(d.x, d.y + d.len, d.w * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.shadowBlur = 0; ctx.globalAlpha = 1; ctx.lineCap = 'butt';
+    }
+
+    function start() {
+      setup();
+      window.addEventListener('resize', setup);
+      frame();
+    }
+
+    if (img.complete) start();
+    else img.addEventListener('load', start);
+  })();
+  </script>
+</body>
+</html>

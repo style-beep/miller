@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <script>if(localStorage.getItem("miller_lite_mode")==="1")document.documentElement.classList.add("lite-mode-early");</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>ТРЕВОГА | MILLER FAMILY</title>
+  <link rel="icon" type="image/png" href="images/family-logo.jpeg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/page.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <style>
+    /* ── HERO STATUS BANNER ── */
+    .alert-hero {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px 52px;
+      margin-bottom: 48px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--ac, rgba(255,255,255,0.06));
+      background: rgba(0,0,0,0.55);
+      transition: border-color 0.6s, box-shadow 0.6s;
+    }
+    .alert-hero.armed {
+      box-shadow: 0 0 60px -10px var(--ac);
+    }
+
+    /* scanline overlay */
+    .alert-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.08) 3px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none; z-index: 1;
+    }
+    /* colour wash */
+    .alert-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, var(--ac-glow, transparent) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+      transition: background 0.6s;
+    }
+
+    .alert-hero > * { position: relative; z-index: 2; }
+
+    /* Corner brackets */
+    .ah-corner {
+      position: absolute; width: 24px; height: 24px; z-index: 3;
+    }
+    .ah-corner::before, .ah-corner::after { content: ''; position: absolute; background: var(--ac, rgba(255,255,255,0.15)); }
+    .ah-corner::before { width: 2px; height: 24px; }
+    .ah-corner::after  { width: 24px; height: 2px; }
+    .ah-corner.tl { top: 16px; left: 16px; }
+    .ah-corner.tl::before { top: 0; left: 0; }
+    .ah-corner.tl::after  { top: 0; left: 0; }
+    .ah-corner.tr { top: 16px; right: 16px; }
+    .ah-corner.tr::before { top: 0; right: 0; }
+    .ah-corner.tr::after  { top: 0; right: 0; }
+    .ah-corner.bl { bottom: 16px; left: 16px; }
+    .ah-corner.bl::before { bottom: 0; left: 0; }
+    .ah-corner.bl::after  { bottom: 0; left: 0; }
+    .ah-corner.br { bottom: 16px; right: 16px; }
+    .ah-corner.br::before { bottom: 0; right: 0; }
+    .ah-corner.br::after  { bottom: 0; right: 0; }
+
+    /* Pulse rings */
+    .ah-rings {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+    }
+    @keyframes ringPulse {
+      0%   { transform: scale(0.6); opacity: 0.5; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    .ah-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 220px; height: 220px;
+      margin: -110px 0 0 -110px;
+      border-radius: 50%;
+      border: 1px solid var(--ac, rgba(255,255,255,0.1));
+      animation: ringPulse 3s ease-out infinite;
+      display: none;
+    }
+    .ah-ring:nth-child(2) { animation-delay: 1s; }
+    .ah-ring:nth-child(3) { animation-delay: 2s; }
+    .armed .ah-ring { display: block; }
+
+    /* Icon circle */
+    .ah-icon-wrap {
+      width: 100px; height: 100px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 42px;
+      border: 2px solid var(--ac, rgba(255,255,255,0.1));
+      background: rgba(0,0,0,0.5);
+      margin-bottom: 24px;
+      transition: border-color 0.6s, box-shadow 0.6s;
+      box-shadow: 0 0 0 0 var(--ac, transparent);
+    }
+    .armed .ah-icon-wrap {
+      box-shadow: 0 0 30px -4px var(--ac), inset 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .ah-label {
+      font-size: 9px; font-weight: 800; letter-spacing: 5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 10px;
+    }
+    .ah-status-name {
+      font-size: 52px; font-weight: 900; letter-spacing: 6px;
+      text-transform: uppercase; color: var(--ac, #fff);
+      text-shadow: 0 0 40px var(--ac, transparent);
+      margin-bottom: 10px; line-height: 1;
+      transition: color 0.6s, text-shadow 0.6s;
+    }
+    .ah-status-desc {
+      font-size: 12px; letter-spacing: 3px; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+
+    /* Pulse indicator */
+    .ah-indicator {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 20px; border-radius: 30px;
+      border: 1px solid var(--ac, rgba(255,255,255,0.08));
+      background: rgba(0,0,0,0.4);
+    }
+    .ah-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--ac, #555);
+      box-shadow: 0 0 8px var(--ac, transparent);
+      animation: dotBlink 1.6s ease-in-out infinite;
+    }
+    @keyframes dotBlink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .ah-ind-text {
+      font-size: 9px; font-weight: 800; letter-spacing: 3px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+    }
+    .ah-updated {
+      font-size: 9px; color: rgba(255,255,255,0.18); letter-spacing: 1px; margin-top: 14px;
+    }
+
+    /* ── GRID ── */
+    .alert-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 720px) { .alert-grid { grid-template-columns: 1fr; } }
+
+    .alert-block {
+      padding: 24px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      position: relative; overflow: hidden;
+    }
+    .alert-block::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--ab-c, rgba(255,255,255,0.08));
+    }
+    .ab-head {
+      font-size: 9px; font-weight: 800; letter-spacing: 3px;
+      color: rgba(255,255,255,0.22); text-transform: uppercase;
+      margin-bottom: 18px; display: flex; align-items: center; gap: 9px;
+    }
+    .ab-head i { color: var(--ab-c); font-size: 11px; }
+
+    /* Threat list */
+    .threat-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .threat-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .threat-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+    }
+    .threat-dot.high   { background:#ff2a2a; box-shadow:0 0 6px #ff2a2a; }
+    .threat-dot.medium { background:#ff8800; box-shadow:0 0 6px #ff8800; }
+    .threat-dot.low    { background:#44ff88; box-shadow:0 0 6px #44ff88; }
+    .threat-name { font-size:13px; font-weight:700; color:#fff; margin-bottom:3px; }
+    .threat-meta { font-size:10px; color:rgba(255,255,255,0.3); letter-spacing:0.8px; }
+
+    /* Log */
+    .log-item {
+      display: flex; gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .log-item:last-child { border-bottom: none; }
+    .log-time { font-size:9px; font-weight:700; color:rgba(255,255,255,0.2); letter-spacing:1px; min-width:38px; margin-top:2px; }
+    .log-text { font-size:12px; color:rgba(255,255,255,0.45); line-height:1.5; }
+    .log-text strong { color:rgba(255,255,255,0.8); }
+
+    /* Districts */
+    .district-row {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .district-row:last-child { border-bottom:none; }
+    .dr-name { font-size:12px; font-weight:700; color:rgba(255,255,255,0.65); }
+    .dr-badge {
+      font-size:8px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase;
+      padding:3px 10px; border-radius:20px;
+    }
+    .dr-badge.secure { background:rgba(68,255,136,0.08); color:#44ff88; border:1px solid rgba(68,255,136,0.2); }
+    .dr-badge.watch  { background:rgba(255,136,0,0.08);  color:#ff8800; border:1px solid rgba(255,136,0,0.2);  }
+    .dr-badge.danger { background:rgba(255,42,42,0.08);   color:#ff4444; border:1px solid rgba(255,42,42,0.2);  }
+
+    /* Orders */
+    .order-item {
+      display:flex; gap:14px; padding:12px 0;
+      border-bottom:1px solid rgba(255,255,255,0.04); align-items:flex-start;
+    }
+    .order-item:last-child { border-bottom:none; }
+    .order-num {
+      width:26px; height:26px; border-radius:7px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; font-weight:900;
+      background:rgba(255,42,42,0.1); color:#ff4444; border:1px solid rgba(255,42,42,0.22);
+    }
+    .order-text { font-size:12px; color:rgba(255,255,255,0.45); line-height:1.6; }
+    .order-text strong { color:#fff; }
+  </style>
+  <link rel="stylesheet" href="css/lite.css"/>
+</head>
+<body>
+<div class="bg-overlay"></div>
+<div class="particles"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<div id="pageLoaderOverlay">
+  <div class="loader-terminal">
+    <div class="loader-titlebar">
+      <div class="loader-dot red"></div><div class="loader-dot yellow"></div><div class="loader-dot green"></div>
+      <div class="loader-title">MILLER FAMILY · THREAT SYSTEM</div>
+    </div>
+    <div class="loader-body">
+      <div class="loader-logo">
+        <div class="loader-logo-text">MILLER FAMILY</div>
+        <div class="loader-logo-sub">Tactical Alert System</div>
+      </div>
+      <div class="loader-divider"></div>
+      <div class="loader-row">Система: <span>УРОВЕНЬ УГРОЗЫ</span></div>
+      <div id="loaderLabel">Проверка статуса...</div>
+      <div class="loader-pw-line">
+        <span class="loader-prompt">&gt;_</span>
+        <span id="loaderPassword"></span>
+        <span class="loader-cursor"></span>
+      </div>
+      <div class="loader-bar-wrap"><div id="loaderBar"></div></div>
+      <div class="loader-bar-meta"><span>ЗАГРУЗКА ДАННЫХ</span><span id="loaderBarPct">0%</span></div>
+      <div class="loader-status" id="loaderStatus">ОЖИДАНИЕ...</div>
+    </div>
+  </div>
+</div>
+
+<header class="page-header">
+  <a href="index.html" class="page-logo">MILLER <span>FAMILY</span></a>
+  <nav class="page-nav">
+    <a href="map.html">Карта</a>
+    <a href="power.html">Структура</a>
+    <a href="trophies.html">Трофеи</a>
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> На главную</a>
+  </nav>
+</header>
+
+<main id="pageContent">
+  <section class="page-section">
+    <div class="page-bg-title">ALERT</div>
+    <h1 class="page-section-title">Уровень угрозы</h1>
+    <p class="page-section-sub">Тактическая система мониторинга · Miller Family</p>
+
+    <!-- Главный баннер -->
+    <div class="alert-hero" id="alertHero">
+      <div class="ah-corner tl"></div>
+      <div class="ah-corner tr"></div>
+      <div class="ah-corner bl"></div>
+      <div class="ah-corner br"></div>
+      <div class="ah-rings">
+        <div class="ah-ring"></div>
+        <div class="ah-ring"></div>
+        <div class="ah-ring"></div>
+      </div>
+      <div class="ah-icon-wrap" id="ahIcon">🟢</div>
+      <div class="ah-label">Текущий статус</div>
+      <div class="ah-status-name" id="ahName">МИР</div>
+      <div class="ah-status-desc" id="ahDesc">Угроз не обнаружено · Режим ожидания</div>
+      <div class="ah-indicator">
+        <div class="ah-dot" id="ahDot"></div>
+        <span class="ah-ind-text" id="ahIndText">СИСТЕМА АКТИВНА</span>
+      </div>
+      <div class="ah-updated" id="ahUpdated"></div>
+    </div>
+
+    <!-- Информационная сетка -->
+    <div class="alert-grid">
+
+      <div class="alert-block" style="--ab-c:#ff2a2a">
+        <div class="ab-head"><i class="fa-solid fa-skull"></i>Активные угрозы</div>
+        <div class="threat-item">
+          <span class="threat-dot medium"></span>
+          <div><div class="threat-name">Los Diablos</div><div class="threat-meta">Активность на севере · Blaine County</div></div>
+        </div>
+        <div class="threat-item">
+          <span class="threat-dot low"></span>
+          <div><div class="threat-name">Vagos</div><div class="threat-meta">Провокации в Davis · Под наблюдением</div></div>
+        </div>
+        <div class="threat-item">
+          <span class="threat-dot low"></span>
+          <div><div class="threat-name">Неизвестная группировка</div><div class="threat-meta">Замечены в La Mesa · Идентификация</div></div>
+        </div>
+      </div>
+
+      <div class="alert-block" style="--ab-c:#5090f0">
+        <div class="ab-head"><i class="fa-solid fa-list-ul"></i>Журнал событий</div>
+        <div class="log-item"><span class="log-time">02:14</span><div class="log-text"><strong>Патруль</strong> сообщает о подозрительных в Harmony</div></div>
+        <div class="log-item"><span class="log-time">23:47</span><div class="log-text"><strong>Rockford Hills</strong> — инцидент урегулирован</div></div>
+        <div class="log-item"><span class="log-time">21:30</span><div class="log-text">Объявлен режим <strong>повышенной готовности</strong> в Downtown</div></div>
+        <div class="log-item"><span class="log-time">18:00</span><div class="log-text"><strong>Del Perro</strong> — усилена охрана штаба</div></div>
+        <div class="log-item"><span class="log-time">15:22</span><div class="log-text">Подписан пакт о нейтралитете с <strong>Ballas</strong></div></div>
+      </div>
+
+      <div class="alert-block" style="--ab-c:#f0c040">
+        <div class="ab-head"><i class="fa-solid fa-map-location-dot"></i>Статус районов</div>
+        <div class="district-row"><span class="dr-name">Del Perro</span><span class="dr-badge secure">ЗАЩИЩЁН</span></div>
+        <div class="district-row"><span class="dr-name">Downtown LS</span><span class="dr-badge secure">ЗАЩИЩЁН</span></div>
+        <div class="district-row"><span class="dr-name">Rockford Hills</span><span class="dr-badge secure">ЗАЩИЩЁН</span></div>
+        <div class="district-row"><span class="dr-name">Harmony</span><span class="dr-badge watch">НАБЛЮДЕНИЕ</span></div>
+        <div class="district-row"><span class="dr-name">Davis</span><span class="dr-badge danger">ОПАСНОСТЬ</span></div>
+        <div class="district-row"><span class="dr-name">East LS</span><span class="dr-badge watch">НАБЛЮДЕНИЕ</span></div>
+      </div>
+
+      <div class="alert-block" style="--ab-c:#b06fe8">
+        <div class="ab-head"><i class="fa-solid fa-bullhorn"></i>Текущие приказы</div>
+        <div class="order-item"><div class="order-num">01</div><div class="order-text"><strong>Усилить патрули</strong> в Harmony и Davis — выход только группами от 3 человек</div></div>
+        <div class="order-item"><div class="order-num">02</div><div class="order-text"><strong>Не вступать в контакт</strong> с Los Diablos без санкции руководства</div></div>
+        <div class="order-item"><div class="order-num">03</div><div class="order-text"><strong>Доложить</strong> о любом подозрительном движении в La Mesa немедленно</div></div>
+        <div class="order-item"><div class="order-num">04</div><div class="order-text"><strong>Штаб Del Perro</strong> — посторонних не впускать, усиленный режим</div></div>
+      </div>
+
+    </div>
+  </section>
+  <footer class="page-footer">© 2023–2026 Miller Family · Del Perro RP · <span>dev by donskoyy</span></footer>
+</main>
+
+<script type="module">
+import { requireAuth }        from "./js/auth-guard.js";
+import { initPageLoader }     from "./js/page-loader.js";
+import { initPageTransition } from "./js/page-transition.js";
+import { initEasterEgg }      from "./js/easter-egg.js";
+
+const LEVELS = {
+  peace: { name:'МИР',        desc:'Угроз не обнаружено · Режим ожидания',          icon:'🟢', color:'#44ff88', glow:'rgba(68,255,136,0.12)',  armed:false },
+  watch: { name:'НАБЛЮДЕНИЕ', desc:'Фиксируется активность врагов · Следим',         icon:'🟡', color:'#f0c040', glow:'rgba(240,192,64,0.14)',   armed:true  },
+  ready: { name:'ГОТОВНОСТЬ', desc:'Возможна атака · Бойцы в боевой готовности',     icon:'🟠', color:'#ff8800', glow:'rgba(255,136,0,0.15)',    armed:true  },
+  war:   { name:'ВОЙНА',      desc:'Идут активные боевые действия · Все на позиции', icon:'🔴', color:'#ff2a2a', glow:'rgba(255,42,42,0.18)',    armed:true  },
+  siege: { name:'ОСАДА',      desc:'Штаб под атакой · Максимальная угроза',          icon:'💀', color:'#ff0000', glow:'rgba(255,0,0,0.22)',      armed:true  },
+};
+
+requireAuth().then(user => {
+  if (!user) return;
+  initPageTransition();
+  initEasterEgg();
+  initPageLoader({
+    password: "MF·THREAT·SYSTEM·2026",
+    label: "ЗАГРУЗКА СИСТЕМЫ ТРЕВОГИ",
+    onComplete: init,
+  });
+});
+
+function init() {
+  const id = localStorage.getItem('mf_alert_level') || 'peace';
+  const l  = LEVELS[id] || LEVELS.peace;
+  const hero = document.getElementById('alertHero');
+
+  hero.style.setProperty('--ac', l.color);
+  hero.style.setProperty('--ac-glow', l.glow);
+  if (l.armed) hero.classList.add('armed');
+
+  document.getElementById('ahIcon').textContent  = l.icon;
+  document.getElementById('ahName').textContent  = l.name;
+  document.getElementById('ahDesc').textContent  = l.desc;
+  document.getElementById('ahDot').style.background     = l.color;
+  document.getElementById('ahDot').style.boxShadow      = `0 0 8px ${l.color}`;
+  document.getElementById('ahIndText').textContent = l.armed ? 'УГРОЗА АКТИВНА' : 'СИСТЕМА АКТИВНА';
+
+  const now = new Date();
+  document.getElementById('ahUpdated').textContent =
+    'Последнее обновление: ' + now.toLocaleDateString('ru-RU') + ' · ' +
+    now.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'});
+}
+</script>
+<script type="module">import { initPerf } from "./js/perf.js"; initPerf();</script>
+</body>
+</html>
